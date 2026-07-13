@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>东东 · 集合符号翻译训练场</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: #f6f8fa;
+            padding: 14px 12px 40px;
+            color: #0b1a2f;
+        }
+        .container {
+            max-width: 540px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 2px;
+            flex-wrap: wrap;
+        }
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #1e4f8a, #2563eb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .sub {
+            font-size: 14px;
+            color: #3b4a5e;
+            margin-bottom: 16px;
+            padding-left: 12px;
+            border-left: 4px solid #2563eb;
+            background: #eef2ff;
+            border-radius: 0 12px 12px 0;
+            padding: 6px 12px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 16px 14px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            border: 1px solid #e6edf4;
+        }
+        .card-title {
+            font-weight: 600;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eef2f6;
+            margin-bottom: 12px;
+        }
+        .badge {
+            font-size: 12px;
+            background: #dbeafe;
+            color: #1e4f8a;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-weight: 500;
+        }
+        .filter-bar {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+        .filter-btn {
+            background: #eef2f6;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #1e293b;
+            cursor: pointer;
+            transition: 0.1s;
+            flex: 1 0 auto;
+        }
+        .filter-btn.active {
+            background: #2563eb;
+            color: white;
+        }
+        .filter-btn.wrong-active {
+            background: #dc2626;
+            color: white;
+        }
+        .layer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+        .layer-item {
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 8px 10px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 500;
+            border: 1px solid #e6edf4;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .layer-item.active-layer {
+            background: #dbeafe;
+            border-color: #2563eb;
+            color: #1e4f8a;
+        }
+        .layer-item .layer-num {
+            font-size: 20px;
+            font-weight: 700;
+            display: block;
+        }
+        .question-box {
+            background: #fafcff;
+            border-radius: 16px;
+            padding: 12px 14px;
+            margin-bottom: 16px;
+            border: 1px solid #eef2f6;
+        }
+        .q-head {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 6px;
+        }
+        .q-tag {
+            display: inline-block;
+            font-size: 11px;
+            background: #e2e8f0;
+            padding: 1px 10px;
+            border-radius: 30px;
+            color: #334155;
+        }
+        .q-tag.gd {
+            background: #dbeafe;
+            color: #1e4f8a;
+        }
+        .q-tag.gaokao {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .q-tag.level1 { background: #d1fae5; color: #065f46; }
+        .q-tag.level2 { background: #fef3c7; color: #92400e; }
+        .q-tag.level3 { background: #fce4ec; color: #b91c1c; }
+        .q-tag.level4 { background: #e0e7ff; color: #3730a3; }
+        .q-text {
+            font-weight: 500;
+            font-size: 16px;
+            margin: 6px 0 10px;
+        }
+        .q-text .symbol-display {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0f172a;
+            background: #eef2ff;
+            padding: 2px 16px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+        .option {
+            display: block;
+            padding: 8px 14px;
+            margin: 4px 0;
+            border-radius: 40px;
+            background: #f1f5f9;
+            font-size: 15px;
+            border: 1px solid transparent;
+            transition: 0.1s;
+            cursor: pointer;
+        }
+        .option.selected {
+            background: #dbeafe;
+            border-color: #3b82f6;
+        }
+        .option.correct-show {
+            background: #bbf7d0;
+            border-color: #22c55e;
+        }
+        .option.wrong-show {
+            background: #fecaca;
+            border-color: #ef4444;
+        }
+        .result-badge {
+            display: inline-block;
+            font-weight: 600;
+            padding: 2px 14px;
+            border-radius: 30px;
+            font-size: 14px;
+            margin-top: 6px;
+        }
+        .result-badge.correct {
+            background: #bbf7d0;
+            color: #065f46;
+        }
+        .result-badge.wrong {
+            background: #fecaca;
+            color: #991b1b;
+        }
+        .explain {
+            background: #f1f5f9;
+            border-radius: 14px;
+            padding: 12px 14px;
+            margin-top: 12px;
+            font-size: 15px;
+            border-left: 4px solid #475569;
+        }
+        .explain .hl {
+            background: #fde047;
+            padding: 0 4px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        .memory-box {
+            background: #f0f9ff;
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin-top: 10px;
+            border-left: 4px solid #0ea5e9;
+            font-size: 14px;
+        }
+        .memory-box strong {
+            color: #0369a1;
+        }
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .btn {
+            border: none;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.15s;
+            background: #eef2f6;
+            color: #1e293b;
+        }
+        .btn-primary {
+            background: #2563eb;
+            color: #fff;
+        }
+        .btn-danger {
+            background: #dc2626;
+            color: #fff;
+        }
+        .btn-success {
+            background: #16a34a;
+            color: #fff;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #cbd5e1;
+        }
+        .btn-sm {
+            padding: 4px 14px;
+            font-size: 12px;
+        }
+        .wrong-tag {
+            background: #fef2f2;
+            color: #b91c1c;
+            font-size: 12px;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-weight: 500;
+        }
+        .freq {
+            font-size: 13px;
+            color: #475569;
+        }
+        .footer {
+            text-align: center;
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 20px;
+        }
+        .memory-tip {
+            background: #f0f9ff;
+            border-radius: 16px;
+            padding: 12px 16px;
+            border-left: 5px solid #0ea5e9;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+        .symbol-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px 10px;
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 10px 12px;
+            margin-top: 6px;
+            font-size: 14px;
+        }
+        .symbol-item {
+            display: flex;
+            gap: 6px;
+            align-items: baseline;
+        }
+        .symbol {
+            font-weight: 600;
+            min-width: 28px;
+            font-size: 18px;
+        }
+        .hl-yellow {
+            background: #fde047;
+            padding: 0 4px;
+            border-radius: 4px;
+        }
+        .level-indicator {
+            display: flex;
+            gap: 8px;
+            font-size: 12px;
+            color: #475569;
+            margin-top: 4px;
+            flex-wrap: wrap;
+        }
+        .encourage {
+            text-align: center;
+            font-size: 15px;
+            color: #1e4f8a;
+            padding: 4px 0;
+            font-weight: 500;
+        }
+        .encourage span {
+            background: #fef3c7;
+            padding: 2px 12px;
+            border-radius: 30px;
+        }
+        .divider {
+            height: 1px;
+            background: #e2e8f0;
+            margin: 14px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <div class="header">
+        <h1>🧩 东东 · 符号翻译场</h1>
+        <span style="font-size:14px; background:#fef3c7; padding:2px 14px; border-radius:30px;">💪 每天进步一点点</span>
+    </div>
+    <div class="sub">📖 点击选项即判对错 · 再看解析强化记忆 · 四层分级 · 错题自动收录</div>
+
+    <!-- 速查卡 -->
+    <div class="card">
+        <div class="card-title">📌 符号速查 · 东东的翻译手册</div>
+        <div class="symbol-grid">
+            <div class="symbol-item"><span class="symbol">∈</span> 属于</div>
+            <div class="symbol-item"><span class="symbol">∉</span> 不属于</div>
+            <div class="symbol-item"><span class="symbol">⊆</span> 子集（包含于）</div>
+            <div class="symbol-item"><span class="symbol">⊂</span> 真子集（真包含于）</div>
+            <div class="symbol-item"><span class="symbol">∩</span> 交集（交）</div>
+            <div class="symbol-item"><span class="symbol">∪</span> 并集（并）</div>
+            <div class="symbol-item"><span class="symbol">∁<sub>U</sub>A</span> A在U中的补集</div>
+            <div class="symbol-item"><span class="symbol">∅</span> 空集</div>
+            <div class="symbol-item"><span class="symbol">∀</span> 任意/所有</div>
+            <div class="symbol-item"><span class="symbol">∃</span> 存在/至少有一个</div>
+            <div class="symbol-item"><span class="symbol">⇒</span> 推出（充分）</div>
+            <div class="symbol-item"><span class="symbol">⇔</span> 等价（充要）</div>
+        </div>
+        <div class="memory-tip">
+            💡 <strong>东东的记忆口诀：</strong><br>
+            <span class="hl-yellow">∈</span> 属于（元素在集合里） · <span class="hl-yellow">∉</span> 不属于（元素不在集合里）<br>
+            <span class="hl-yellow">⊆</span> 子集（可以相等） · <span class="hl-yellow">⊂</span> 真子集（必须小一点）<br>
+            <span class="hl-yellow">∩</span> 交集（共同部分） · <span class="hl-yellow">∪</span> 并集（全部合并）<br>
+            <span class="hl-yellow">∅</span> 空集（啥也没有） · <span class="hl-yellow">∀</span> 所有 · <span class="hl-yellow">∃</span> 存在
+        </div>
+    </div>
+
+    <!-- 层级筛选 + 来源筛选 -->
+    <div class="card" style="padding-bottom: 8px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; margin-bottom:8px;">
+            <span style="font-weight:600; font-size:15px;">📂 按层级筛选</span>
+            <span style="font-size:13px; color:#475569;">点击层级，只显示该层题目</span>
+        </div>
+        <div class="layer-grid">
+            <div class="layer-item" :class="{ 'active-layer': layerFilter === 1 }" @click="layerFilter = (layerFilter===1?null:1)">
+                <span class="layer-num">❶</span> 元素 ↔ 集合
+            </div>
+            <div class="layer-item" :class="{ 'active-layer': layerFilter === 2 }" @click="layerFilter = (layerFilter===2?null:2)">
+                <span class="layer-num">❷</span> 常用数集
+            </div>
+            <div class="layer-item" :class="{ 'active-layer': layerFilter === 3 }" @click="layerFilter = (layerFilter===3?null:3)">
+                <span class="layer-num">❸</span> 集合关系
+            </div>
+            <div class="layer-item" :class="{ 'active-layer': layerFilter === 4 }" @click="layerFilter = (layerFilter===4?null:4)">
+                <span class="layer-num">❹</span> 集合运算
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div class="filter-bar">
+            <button class="filter-btn" :class="{ active: filter === 'all' }" @click="filter='all'">📋 全部</button>
+            <button class="filter-btn" :class="{ active: filter === 'gd' }" @click="filter='gd'">📘 广东期末</button>
+            <button class="filter-btn" :class="{ active: filter === 'gaokao' }" @click="filter='gaokao'">🎯 高考真题</button>
+            <button class="filter-btn" :class="{ 'wrong-active': filter === 'wrong' }" @click="filter='wrong'">❌ 错题集 ({{ wrongIds.length }})</button>
+        </div>
+        <div class="level-indicator">
+            <span>⭐ 频次：<span class="hl-yellow">★★★</span> 高频 · <span class="hl-yellow">★★</span> 中频 · <span class="hl-yellow">★</span> 低频</span>
+        </div>
+    </div>
+
+    <!-- 鼓励语 -->
+    <div class="encourage" v-if="filteredQuestions.length > 0">
+        <span>🌟 东东，今天又攻下了 {{ filteredQuestions.length }} 道题！</span>
+    </div>
+
+    <!-- 题目列表 -->
+    <div v-for="q in filteredQuestions" :key="q.id" class="question-box">
+        <div class="q-head">
+            <span>
+                <span class="q-tag" :class="q.source === 'gd' ? 'gd' : 'gaokao'">{{ q.source === 'gd' ? '广东期末' : '高考' }}</span>
+                <span class="q-tag" :class="'level'+q.level">L{{ q.level }}</span>
+                <span class="freq">⭐ <span v-html="q.freqStars"></span></span>
+                <span v-if="q.type" style="font-size:11px; background:#e0e7ff; padding:0 8px; border-radius:20px; color:#3730a3;">{{ q.type }}</span>
+            </span>
+            <span v-if="wrongIds.includes(q.id)" class="wrong-tag">❌ 错题</span>
+        </div>
+        <div class="q-text" v-html="q.question"></div>
+
+        <!-- 选项 -->
+        <div v-for="(opt, oi) in q.options" :key="oi" class="option"
+             :class="{
+               'selected': selectedMap[q.id] === oi,
+               'correct-show': answeredMap[q.id] && q.correct === oi,
+               'wrong-show': answeredMap[q.id] && selectedMap[q.id] === oi && selectedMap[q.id] !== q.correct
+             }"
+             @click="selectOption(q.id, oi)">
+            {{ String.fromCharCode(65 + oi) }}. {{ opt }}
+        </div>
+
+        <!-- 对错结果 -->
+        <div v-if="answeredMap[q.id]" style="margin-top:6px;">
+            <span class="result-badge" :class="selectedMap[q.id] === q.correct ? 'correct' : 'wrong'">
+                {{ selectedMap[q.id] === q.correct ? '✅ 回答正确！' : '❌ 再想想哦～' }}
+            </span>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn btn-primary btn-sm" @click="showAnswerFor(q.id)">📖 看解析</button>
+            <button class="btn btn-danger btn-sm" @click="toggleWrong(q.id)">📕 错题</button>
+        </div>
+
+        <!-- 解析 + 记忆点 -->
+        <div v-if="answerVisible[q.id]" class="explain" v-html="q.explain"></div>
+        <div v-if="answerVisible[q.id] && q.memory" class="memory-box" v-html="q.memory"></div>
+    </div>
+
+    <div v-if="filteredQuestions.length === 0" style="padding: 24px 0; text-align: center; color: #94a3b8;">
+        🧘 东东，当前筛选无题目，切换筛选试试吧！
+    </div>
+
+    <!-- 随机挑战 -->
+    <div class="card">
+        <div class="card-title">⚡ 东东的随机挑战</div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn btn-primary" @click="randomQuiz('symbol')">🎲 符号→含义</button>
+            <button class="btn btn-outline" @click="randomQuiz('logic')">🔁 逻辑翻译</button>
+            <button class="btn btn-outline" @click="randomQuiz('relation')">🔗 关系翻译</button>
+            <button class="btn btn-outline" @click="randomQuiz('mix')">🧩 综合翻译</button>
+        </div>
+        <div v-if="quizQuestion" style="margin-top: 14px; background: #f1f5f9; border-radius: 20px; padding: 14px 16px;">
+            <div style="font-weight: 500;" v-html="quizQuestion.text"></div>
+            <div class="btn-group" style="margin-top: 8px;">
+                <button v-for="(opt, oi) in quizQuestion.options" :key="oi" class="btn btn-outline btn-sm"
+                        :class="{'btn-primary': quizSelected === oi, 'btn-success': quizAnswered && quizQuestion.correct === oi, 'btn-danger': quizAnswered && quizSelected === oi && quizSelected !== quizQuestion.correct}"
+                        @click="checkQuiz(oi)">
+                    {{ opt }}
+                </button>
+            </div>
+            <div v-if="quizAnswered" style="margin-top: 8px; font-size: 15px;" v-html="quizFeedback"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <span class="hl-yellow">黄标</span> = 重点翻译 &nbsp;·&nbsp; 点击选项立刻判断 &nbsp;·&nbsp; 错题自动收集<br>
+        💪 东东，每做一题，你的数学语言能力就强一分！
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script>
+    (function () {
+        // ========== 题库 ==========
+        const questionBank = [
+            // ===== 第一层：元素 ↔ 集合 =====
+            {
+                id: 'Q1', source: 'gd', level: 1, freqStars: '★★★', type: '直接翻译',
+                question: '符号 <span class="symbol-display">∈</span> 的正确含义是（  ）',
+                options: ['属于', '不属于', '子集', '真子集'],
+                correct: 0,
+                explain: '符号 <span class="hl">∈</span> 读作“属于”，表示 <span class="hl">元素在集合中</span>。例如：2 ∈ {1,2,3}。',
+                memory: '🧠 <strong>记忆点：</strong>“∈”像一只 <span class="hl">小手伸进袋子</span>，表示“元素在集合里”。'
+            },
+            {
+                id: 'Q2', source: 'gd', level: 1, freqStars: '★★★', type: '记忆辨析',
+                question: '以下哪个说法 <span class="hl">正确</span> 描述了“元素与集合”的关系？（  ）',
+                options: ['元素可以属于多个集合', '一个集合只能有1个元素', '元素必须大于集合', '集合不能为空'],
+                correct: 0,
+                explain: '元素可以属于多个集合，比如 2 既属于 {1,2,3} 也属于 {2,3,4}。<span class="hl">“属于”是元素与集合的唯一关系</span>。',
+                memory: '🧠 <strong>记忆点：</strong>元素像 <span class="hl">“小石子”</span>，可以放进不同的“袋子”（集合）里。'
+            },
+            {
+                id: 'Q3', source: 'gaokao', level: 1, freqStars: '★★★', type: '真题翻译',
+                question: '广东真题：已知集合 A = {1, 2, 3}，则“2 ∈ A”翻译成中文是（  ）',
+                options: ['2 属于 A', '2 不属于 A', 'A 包含 2', 'A 不包含 2'],
+                correct: 0,
+                explain: '<span class="hl">“2 ∈ A”</span> 翻译为 <span class="hl">“2 属于 A”</span>，表示元素 2 在集合 A 中。',
+                memory: '🧠 <strong>记忆点：</strong>看到 <span class="hl">∈</span> 就想到 <span class="hl">“在……里面”</span>，元素在左，集合在右。'
+            },
+            {
+                id: 'Q4', source: 'gd', level: 1, freqStars: '★★', type: '直接翻译',
+                question: '符号 <span class="symbol-display">∉</span> 的正确含义是（  ）',
+                options: ['属于', '不属于', '包含于', '真包含于'],
+                correct: 1,
+                explain: '符号 <span class="hl">∉</span> 读作“不属于”，表示 <span class="hl">元素不在集合中</span>。例如：4 ∉ {1,2,3}。',
+                memory: '🧠 <strong>记忆点：</strong>“∉”是 <span class="hl">“∈”加一斜杠</span>，表示“禁止进入”，即“不属于”。'
+            },
+            {
+                id: 'Q5', source: 'gaokao', level: 1, freqStars: '★★★', type: '真题翻译',
+                question: '广东高考改编：若“a ∉ A”为真，则下列说法正确的是（  ）',
+                options: ['a 是 A 的元素', 'a 不是 A 的元素', 'A 是空集', 'a 等于 A'],
+                correct: 1,
+                explain: '<span class="hl">“a ∉ A”</span> 表示 <span class="hl">“a 不属于 A”</span>，即 a 不是 A 的元素。',
+                memory: '🧠 <strong>记忆点：</strong>“∉” = <span class="hl">“不是成员”</span>，就像“校长不是我们班的学生”。'
+            },
+            // ===== 第二层：常用数集 =====
+            {
+                id: 'Q6', source: 'gd', level: 2, freqStars: '★★★', type: '直接翻译',
+                question: '符号 <span class="symbol-display">∅</span> 的正确含义是（  ）',
+                options: ['空集', '自然数集', '整数集', '实数集'],
+                correct: 0,
+                explain: '符号 <span class="hl">∅</span> 表示 <span class="hl">空集</span>，即不含任何元素的集合。',
+                memory: '🧠 <strong>记忆点：</strong>“∅”像一个 <span class="hl">“空袋子”</span>，里面什么糖果都没有。'
+            },
+            {
+                id: 'Q7', source: 'gaokao', level: 2, freqStars: '★★★', type: '直接翻译',
+                question: '符号 <span class="symbol-display">N</span> 表示什么数集？（  ）',
+                options: ['自然数集', '整数集', '有理数集', '实数集'],
+                correct: 0,
+                explain: '符号 <span class="hl">N</span> 表示 <span class="hl">自然数集</span>，包含 0, 1, 2, 3, …',
+                memory: '🧠 <strong>记忆点：</strong>N = <span class="hl">Nature（自然）</span>，从0开始数苹果。'
+            },
+            {
+                id: 'Q8', source: 'gd', level: 2, freqStars: '★★★', type: '记忆辨析',
+                question: '以下哪个数集 <span class="hl">不包含</span> 负数？（  ）',
+                options: ['自然数集 N', '整数集 Z', '有理数集 Q', '实数集 R'],
+                correct: 0,
+                explain: '<span class="hl">自然数集 N</span> 只包含 0, 1, 2, 3, …，<span class="hl">不包含负数</span>。整数集 Z 包含负数。',
+                memory: '🧠 <strong>记忆点：</strong>“自然数”就是 <span class="hl">“天生就有的数”</span>——0、1、2、3……没有负号！'
+            },
+            {
+                id: 'Q9', source: 'gaokao', level: 2, freqStars: '★★★', type: '直接翻译',
+                question: '符号 <span class="symbol-display">Z</span> 表示什么数集？（  ）',
+                options: ['自然数集', '整数集', '有理数集', '实数集'],
+                correct: 1,
+                explain: '符号 <span class="hl">Z</span> 表示 <span class="hl">整数集</span>，包含 … -2, -1, 0, 1, 2, …',
+                memory: '🧠 <strong>记忆点：</strong>Z = <span class="hl">“整”（Zheng）</span>，包括正负整数和0。'
+            },
+            {
+                id: 'Q10', source: 'gd', level: 2, freqStars: '★★★', type: '直接翻译',
+                question: '符号 <span class="symbol-display">Q</span> 表示什么数集？（  ）',
+                options: ['自然数集', '整数集', '有理数集', '实数集'],
+                correct: 2,
+                explain: '符号 <span class="hl">Q</span> 表示 <span class="hl">有理数集</span>，即能写成分数形式的数。',
+                memory: '🧠 <strong>记忆点：</strong>Q = <span class="hl">Quotient（商）</span>，能写成 p/q 的数。'
+            },
+            {
+                id: 'Q11', source: 'gaokao', level: 2, freqStars: '★★★', type: '直接翻译',
+                question: '符号 <span class="symbol-display">R</span> 表示什么数集？（  ）',
+                options: ['自然数集', '整数集', '有理数集', '实数集'],
+                correct: 3,
+                explain: '符号 <span class="hl">R</span> 表示 <span class="hl">实数集</span>，即数轴上所有的数。',
+                memory: '🧠 <strong>记忆点：</strong>R = <span class="hl">Real（真实）</span>，数轴上所有点都是实数。'
+            },
+            {
+                id: 'Q12', source: 'gd', level: 2, freqStars: '★★', type: '记忆辨析',
+                question: '以下哪个数集 <span class="hl">范围最大</span>？（  ）',
+                options: ['自然数集 N', '整数集 Z', '有理数集 Q', '实数集 R'],
+                correct: 3,
+                explain: '数集范围从小到大：<span class="hl">N ⊂ Z ⊂ Q ⊂ R</span>，实数集 R 范围最大。',
+                memory: '🧠 <strong>记忆点：</strong>数集像 <span class="hl">“套娃”</span>：N 在 Z 里，Z 在 Q 里，Q 在 R 里。'
+            },
+            // ===== 第三层：集合关系 =====
+            {
+                id: 'Q13', source: 'gd', level: 3, freqStars: '★★★', type: '直接翻译',
+                question: '符号 <span class="symbol-display">⊆</span> 的正确含义是（  ）',
+                options: ['子集（包含于）', '真子集（真包含于）', '交集', '并集'],
+                correct: 0,
+                explain: '符号 <span class="hl">⊆</span> 表示 <span class="hl">子集</span>，即 A 中所有元素都在 B 中（<span class="hl">可以相等</span>）。',
+                memory: '🧠 <strong>记忆点：</strong>“⊆”像 <span class="hl">“一个袋子放进另一个袋子”</span>，可以完全重合（相等）。'
+            },
+            {
+                id: 'Q14', source: 'gaokao', level: 3, freqStars: '★★★', type: '直接翻译',
+                question: '符号 <span class="symbol-display">⊂</span> 的正确含义是（  ）',
+                options: ['子集（包含于）', '真子集（真包含于）', '交集', '并集'],
+                correct: 1,
+                explain: '符号 <span class="hl">⊂</span> 表示 <span class="hl">真子集</span>，即 A 中所有元素都在 B 中，且 <span class="hl">A ≠ B</span>。',
+                memory: '🧠 <strong>记忆点：</strong>“⊂”是 <span class="hl">“⊆”少了下面一横</span>，表示“不能相等”，必须小一点。'
+            },
+            {
+                id: 'Q15', source: 'gd', level: 3, freqStars: '★★★', type: '真题翻译',
+                question: '广东真题：已知 A = {1, 2}，B = {1, 2, 3}，则“A ⊂ B”翻译为（  ）',
+                options: ['A 是 B 的子集', 'A 是 B 的真子集', 'A 等于 B', 'B 是 A 的子集'],
+                correct: 1,
+                explain: '<span class="hl">A ⊂ B</span> 表示 <span class="hl">“A 是 B 的真子集”</span>，A 中元素都在 B 中，但 A ≠ B。',
+                memory: '🧠 <strong>记忆点：</strong>真子集 = <span class="hl">“真正的部分”</span>，就像“第一组是全班的一部分，但不是全班”。'
+            },
+            {
+                id: 'Q16', source: 'gaokao', level: 3, freqStars: '★★★', type: '记忆辨析',
+                question: '以下关于 <span class="hl">空集 ∅</span> 的说法，<span class="hl">正确</span> 的是（  ）',
+                options: ['∅ 是任何集合的子集', '∅ 不是任何集合的子集', '∅ 只包含一个元素', '∅ 等于 {0}'],
+                correct: 0,
+                explain: '<span class="hl">空集 ∅ 是任何集合的子集</span>，也是任何非空集合的真子集。这是集合论的重要结论！',
+                memory: '🧠 <strong>记忆点：</strong>空集像 <span class="hl">“0元红包”</span>，虽然啥也没有，但可以放进任何一个“袋子”里！'
+            },
+            {
+                id: 'Q17', source: 'gd', level: 3, freqStars: '★★', type: '直接翻译',
+                question: '符号 <span class="symbol-display">=</span> 在集合中表示（  ）',
+                options: ['两个集合元素完全相同', '两个集合有公共元素', '一个集合是另一个的子集', '两个集合没有关系'],
+                correct: 0,
+                explain: '集合相等 <span class="hl">A = B</span> 表示 <span class="hl">A 和 B 的元素完全相同</span>，顺序不影响。',
+                memory: '🧠 <strong>记忆点：</strong>集合相等不看顺序，{1,2} = {2,1}，就像 <span class="hl">“袋子里糖果一样，先放后放都一样”</span>。'
+            },
+            // ===== 第四层：集合运算 =====
+            {
+                id: 'Q18', source: 'gd', level: 4, freqStars: '★★★', type: '直接翻译',
+                question: '符号 <span class="symbol-display">∩</span> 的正确含义是（  ）',
+                options: ['交集（取公共部分）', '并集（全部合并）', '补集（剩下的）', '子集'],
+                correct: 0,
+                explain: '符号 <span class="hl">∩</span> 表示 <span class="hl">交集</span>，取两个集合的 <span class="hl">公共元素</span>。',
+                memory: '🧠 <strong>记忆点：</strong>“∩”像 <span class="hl">“桥洞”</span>，只有同时在两个集合里的元素才能“钻过去”。'
+            },
+            {
+                id: 'Q19', source: 'gaokao', level: 4, freqStars: '★★★', type: '直接翻译',
+                question: '符号 <span class="symbol-display">∪</span> 的正确含义是（  ）',
+                options: ['交集（取公共部分）', '并集（全部合并）', '补集（剩下的）', '子集'],
+                correct: 1,
+                explain: '符号 <span class="hl">∪</span> 表示 <span class="hl">并集</span>，把两个集合的 <span class="hl">所有元素合并</span>（重复只算一次）。',
+                memory: '🧠 <strong>记忆点：</strong>“∪”像 <span class="hl">“两个袋子倒在一起”</span>，所有的糖果都合起来了！'
+            },
+            {
+                id: 'Q20', source: 'gaokao', level: 4, freqStars: '★★★', type: '真题翻译',
+                question: '广东高考改编：“∁<sub>U</sub>A” 翻译成中文是（  ）',
+                options: ['A 在 U 中的补集', 'A 与 U 的交集', 'A 与 U 的并集', 'A 是 U 的子集'],
+                correct: 0,
+                explain: '<span class="hl">∁<sub>U</sub>A</span> 表示 <span class="hl">“A 在全集 U 中的补集”</span>，即 U 中所有不属于 A 的元素。',
+                memory: '🧠 <strong>记忆点：</strong>补集 = <span class="hl">“全集减去自己”</span>，就像“全班同学减去第一组 = 其他组”。'
+            },
+            {
+                id: 'Q21', source: 'gd', level: 4, freqStars: '★★★', type: '直接翻译',
+                question: '符号 <span class="symbol-display">∀</span> 的正确含义是（  ）',
+                options: ['任意/所有', '存在/至少有一个', '推出', '等价'],
+                correct: 0,
+                explain: '符号 <span class="hl">∀</span> 表示 <span class="hl">“任意”或“所有”</span>，如 ∀x∈R 表示“对任意实数 x”。',
+                memory: '🧠 <strong>记忆点：</strong>“∀”像倒过来的 <span class="hl">“A”（All）</span>，表示“所有的”。'
+            },
+            {
+                id: 'Q22', source: 'gaokao', level: 4, freqStars: '★★★', type: '直接翻译',
+                question: '符号 <span class="symbol-display">∃</span> 的正确含义是（  ）',
+                options: ['任意/所有', '存在/至少有一个', '推出', '等价'],
+                correct: 1,
+                explain: '符号 <span class="hl">∃</span> 表示 <span class="hl">“存在”或“至少有一个”</span>，如 ∃x∈R 表示“存在一个实数 x”。',
+                memory: '🧠 <strong>记忆点：</strong>“∃”像 <span class="hl">“E”（Exist）</span> 反过来，表示“至少有一个”。'
+            },
+            {
+                id: 'Q23', source: 'gd', level: 4, freqStars: '★★', type: '直接翻译',
+                question: '符号 <span class="symbol-display">⇒</span> 的正确含义是（  ）',
+                options: ['推出（充分条件）', '等价（充要条件）', '交集', '并集'],
+                correct: 0,
+                explain: '符号 <span class="hl">⇒</span> 表示 <span class="hl">“推出”</span>，即 p⇒q 表示 p 是 q 的充分条件。',
+                memory: '🧠 <strong>记忆点：</strong>“⇒”像 <span class="hl">“箭头”</span>，从 p 指向 q，表示“有了 p 就一定有 q”。'
+            },
+            {
+                id: 'Q24', source: 'gaokao', level: 4, freqStars: '★★', type: '记忆辨析',
+                question: '以下关于“补集”的说法，<span class="hl">正确</span> 的是（  ）',
+                options: ['补集必须在全集下才有意义', '补集就是交集', '补集就是把两个集合合并', '补集和全集无关'],
+                correct: 0,
+                explain: '<span class="hl">补集必须在给定全集 U 下才有意义</span>，同一个集合在不同全集下补集不同。',
+                memory: '🧠 <strong>记忆点：</strong>补集像 <span class="hl">“班级里的其他组”</span>——必须先知道“全班”是哪个班！'
+            },
+            {
+                id: 'Q25', source: 'gaokao', level: 3, freqStars: '★★★', type: '真题翻译',
+                question: '广东高考真题：“∅ ⊆ A” 翻译成中文是（  ）',
+                options: ['空集是 A 的子集', '空集是 A 的真子集', 'A 是空集的子集', 'A 是空集的真子集'],
+                correct: 0,
+                explain: '<span class="hl">∅ ⊆ A</span> 表示 <span class="hl">“空集是 A 的子集”</span>（空集是任何集合的子集）。',
+                memory: '🧠 <strong>记忆点：</strong>空集是 <span class="hl">“万能小袋”</span>，可以放进任何“大袋”里！'
+            },
+            {
+                id: 'Q26', source: 'gd', level: 4, freqStars: '★★', type: '记忆辨析',
+                question: '以下哪个符号表示 <span class="hl">“存在至少一个”</span>？（  ）',
+                options: ['∀', '∃', '⇒', '⇔'],
+                correct: 1,
+                explain: '<span class="hl">∃</span> 表示“存在至少一个”，∀ 表示“所有”，⇒ 表示“推出”，⇔ 表示“等价”。',
+                memory: '🧠 <strong>记忆点：</strong>“∃”像 <span class="hl">“E”（Exist）</span>，表示“有东西存在”。'
+            },
+        ];
+
+        new Vue({
+            el: '#app',
+            data: {
+                filter: 'all',
+                layerFilter: null,
+                selectedMap: {},
+                answeredMap: {},
+                answerVisible: {},
+                wrongIds: [],
+                quizQuestion: null,
+                quizSelected: null,
+                quizAnswered: false,
+                quizFeedback: '',
+                questions: questionBank,
+            },
+            computed: {
+                filteredQuestions() {
+                    let result = this.questions;
+                    if (this.layerFilter) {
+                        result = result.filter(q => q.level === this.layerFilter);
+                    }
+                    const f = this.filter;
+                    if (f === 'gd') result = result.filter(q => q.source === 'gd');
+                    else if (f === 'gaokao') result = result.filter(q => q.source === 'gaokao');
+                    else if (f === 'wrong') result = result.filter(q => this.wrongIds.includes(q.id));
+                    return result;
+                }
+            },
+            methods: {
+                selectOption(qid, oi) {
+                    this.$set(this.selectedMap, qid, oi);
+                    this.$set(this.answeredMap, qid, true);
+                    // 自动显示解析？不自动显示，让用户点击“看解析”按钮
+                },
+                showAnswerFor(qid) {
+                    // 如果还没选，提示先选
+                    if (!this.answeredMap[qid]) {
+                        alert('东东，先选一个答案吧！');
+                        return;
+                    }
+                    this.$set(this.answerVisible, qid, !this.answerVisible[qid]);
+                },
+                toggleWrong(qid) {
+                    const idx = this.wrongIds.indexOf(qid);
+                    if (idx > -1) this.wrongIds.splice(idx, 1);
+                    else this.wrongIds.push(qid);
+                },
+                randomQuiz(type) {
+                    let pool = [];
+                    if (type === 'symbol') {
+                        pool = [
+                            { text: '符号 <b>∈</b> 的含义是？', options: ['属于', '不属于', '子集', '真子集'], correct: 0 },
+                            { text: '符号 <b>∉</b> 的含义是？', options: ['属于', '不属于', '包含于', '真包含于'], correct: 1 },
+                            { text: '符号 <b>⊆</b> 的含义是？', options: ['子集（可相等）', '真子集（不能相等）', '交集', '并集'], correct: 0 },
+                            { text: '符号 <b>⊂</b> 的含义是？', options: ['子集（可相等）', '真子集（不能相等）', '交集', '并集'], correct: 1 },
+                            { text: '符号 <b>∩</b> 的含义是？', options: ['交集（公共部分）', '并集（全部合并）', '补集（剩下的）', '子集'], correct: 0 },
+                            { text: '符号 <b>∪</b> 的含义是？', options: ['交集（公共部分）', '并集（全部合并）', '补集（剩下的）', '子集'], correct: 1 },
+                            { text: '符号 <b>∅</b> 的含义是？', options: ['空集', '自然数集', '整数集', '实数集'], correct: 0 },
+                            { text: '符号 <b>∀</b> 的含义是？', options: ['任意/所有', '存在/至少有一个', '推出', '等价'], correct: 0 },
+                            { text: '符号 <b>∃</b> 的含义是？', options: ['任意/所有', '存在/至少有一个', '推出', '等价'], correct: 1 },
+                            { text: '符号 <b>⇒</b> 的含义是？', options: ['推出（充分条件）', '等价（充要条件）', '交集', '并集'], correct: 0 },
+                            { text: '符号 <b>⇔</b> 的含义是？', options: ['推出（充分条件）', '等价（充要条件）', '交集', '并集'], correct: 1 },
+                            { text: '符号 <b>∁<sub>U</sub>A</b> 的含义是？', options: ['A在U中的补集', 'A与U的交集', 'A与U的并集', 'A是U的子集'], correct: 0 },
+                        ];
+                    } else if (type === 'logic') {
+                        pool = [
+                            { text: '“p ⇒ q” 翻译成中文是？', options: ['p 推出 q（p是q的充分条件）', 'q 推出 p（q是p的充分条件）', 'p 和 q 等价', 'p 和 q 无关'], correct: 0 },
+                            { text: '“p ⇔ q” 翻译成中文是？', options: ['p 推出 q', 'q 推出 p', 'p 和 q 等价（充要条件）', 'p 和 q 无关'], correct: 2 },
+                            { text: '“∀x∈R，x²≥0” 翻译成中文是？', options: ['对任意实数x，x²≥0', '存在实数x，x²≥0', '对任意实数x，x²<0', '存在实数x，x²<0'], correct: 0 },
+                            { text: '“∃x∈R，x²=4” 翻译成中文是？', options: ['对所有实数x，x²=4', '存在一个实数x，使x²=4', '所有实数x都不满足x²=4', '不存在实数x使x²=4'], correct: 1 },
+                        ];
+                    } else if (type === 'relation') {
+                        pool = [
+                            { text: '“A ⊆ B” 翻译成中文是？', options: ['A 是 B 的子集', 'A 是 B 的真子集', 'A 等于 B', 'B 是 A 的子集'], correct: 0 },
+                            { text: '“A ⊂ B” 翻译成中文是？', options: ['A 是 B 的子集', 'A 是 B 的真子集', 'A 等于 B', 'B 是 A 的子集'], correct: 1 },
+                            { text: '“∅ ⊆ A” 翻译成中文是？', options: ['空集是 A 的子集', '空集是 A 的真子集', 'A 是空集的子集', 'A 是非空集合'], correct: 0 },
+                            { text: '“A = B” 翻译成中文是？', options: ['A 和 B 的元素完全相同', 'A 是 B 的子集', 'A 是 B 的真子集', 'A 和 B 没有公共元素'], correct: 0 },
+                        ];
+                    } else {
+                        pool = [
+                            { text: '“2 ∈ {1,2,3}” 翻译成中文是？', options: ['2 属于 {1,2,3}', '2 不属于 {1,2,3}', '{1,2,3} 包含 2', '{1,2,3} 不包含 2'], correct: 0 },
+                            { text: '“∅ ⊂ {1,2}” 翻译成中文是？', options: ['空集是 {1,2} 的真子集', '空集是 {1,2} 的子集', '{1,2} 是空集的子集', '空集等于 {1,2}'], correct: 0 },
+                            { text: '“A ∩ B = ∅” 翻译成中文是？', options: ['A 和 B 没有公共元素', 'A 和 B 有公共元素', 'A 和 B 合并为空集', 'A 和 B 相等'], correct: 0 },
+                            { text: '“A ∪ B = U” 翻译成中文是？', options: ['A 和 B 的并集等于全集U', 'A 和 B 的交集等于全集U', 'A 和 B 没有公共元素', 'A 和 B 都是空集'], correct: 0 },
+                        ];
+                    }
+                    const pick = pool[Math.floor(Math.random() * pool.length)];
+                    this.quizQuestion = { ...pick, options: [...pick.options] };
+                    this.quizSelected = null;
+                    this.quizAnswered = false;
+                    this.quizFeedback = '';
+                },
+                checkQuiz(oi) {
+                    if (this.quizAnswered) return;
+                    this.quizSelected = oi;
+                    this.quizAnswered = true;
+                    const q = this.quizQuestion;
+                    if (q.correct === oi) {
+                        this.quizFeedback = '✅ 东东真棒！翻译正确！';
+                    } else {
+                        this.quizFeedback = '❌ 东东再想想，这个符号的含义是？';
+                    }
+                }
+            },
+            mounted() {
+                this.randomQuiz('symbol');
+            }
+        });
+    })();
+</script>
+</body>
+</html>

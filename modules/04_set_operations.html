@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>集合运算 · 真题实战</title>
+
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: #f6f8fa;
+            padding: 14px 12px 40px;
+            color: #0b1a2f;
+        }
+        .container { max-width: 540px; margin: 0 auto; }
+        .header h1 {
+            font-size: 22px;
+            font-weight: 700;
+        }
+        .sub {
+            font-size: 14px;
+            color: #3b4a5e;
+            margin-bottom: 16px;
+            padding-left: 12px;
+            border-left: 4px solid #2563eb;
+            background: #eef2ff;
+            border-radius: 0 12px 12px 0;
+            padding: 6px 12px;
+        }
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            border-radius: 12px;
+            padding: 10px 16px;
+            margin-bottom: 12px;
+            border: 1px solid #e6edf4;
+            font-size: 14px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .stats-bar .wrong-count { color: #dc2626; font-weight: 600; }
+        .stats-bar .total-count { color: #2563eb; font-weight: 600; }
+        .filter-bar {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+        .filter-btn {
+            background: #eef2f6;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.1s;
+            flex: 1 0 auto;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .filter-btn:active { transform: scale(0.97); }
+        .filter-btn.active { background: #2563eb; color: white; }
+        .filter-btn.wrong-active { background: #dc2626; color: white; }
+        .question-box {
+            background: #fff;
+            border-radius: 16px;
+            padding: 12px 14px;
+            margin-bottom: 14px;
+            border: 1px solid #e6edf4;
+        }
+        .q-head {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+        .q-tag {
+            font-size: 11px;
+            background: #e2e8f0;
+            padding: 1px 10px;
+            border-radius: 30px;
+            color: #334155;
+        }
+        .q-tag.exam { background: #dbeafe; color: #1e4f8a; }
+        .q-tag.gaokao { background: #fef3c7; color: #92400e; }
+        .q-tag.diff-1 { background: #d1fae5; color: #065f46; }
+        .q-tag.diff-2 { background: #fef3c7; color: #92400e; }
+        .q-tag.diff-3 { background: #fce4ec; color: #b91c1c; }
+        .q-text {
+            font-weight: 500;
+            font-size: 16px;
+            margin: 6px 0 10px;
+        }
+        .option {
+            display: block;
+            padding: 10px 16px;
+            margin: 4px 0;
+            border-radius: 40px;
+            background: #f1f5f9;
+            font-size: 15px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            transition: 0.1s;
+        }
+        .option:active {
+            transform: scale(0.97);
+            background: #e2e8f0;
+        }
+        .option.selected { background: #dbeafe; border-color: #3b82f6; }
+        .option.correct-show { background: #bbf7d0; border-color: #22c55e; }
+        .option.wrong-show { background: #fecaca; border-color: #ef4444; }
+        .result-area {
+            margin-top: 8px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            display: none;
+        }
+        .result-area.correct {
+            display: block;
+            background: #bbf7d0;
+            color: #065f46;
+            border-left: 4px solid #22c55e;
+        }
+        .result-area.wrong {
+            display: block;
+            background: #fecaca;
+            color: #991b1b;
+            border-left: 4px solid #ef4444;
+        }
+        .result-area .hl { background: #fde047; padding: 0 4px; border-radius: 4px; font-weight: 500; }
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+        .btn {
+            border: none;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            background: #eef2f6;
+            transition: 0.15s;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn-primary { background: #2563eb; color: #fff; }
+        .btn-danger { background: #dc2626; color: #fff; }
+        .footer {
+            text-align: center;
+            font-size: 13px;
+            color: #94a3b8;
+            margin-top: 20px;
+        }
+        .hl-yellow { background: #fde047; padding: 0 4px; border-radius: 4px; }
+        .encourage {
+            text-align: center;
+            font-size: 15px;
+            color: #1e4f8a;
+            padding: 4px 0;
+            font-weight: 500;
+        }
+        .encourage span { background: #fef3c7; padding: 2px 12px; border-radius: 30px; }
+        .question-list { display: flex; flex-direction: column; gap: 4px; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="header">
+        <h1>🧮 集合运算 · 真题实战</h1>
+    </div>
+    <div class="sub">📖 交集 · 并集 · 补集 · Venn 图 · 广东期中/期末/高考真题</div>
+
+    <!-- 统计栏 -->
+    <div class="stats-bar">
+        <span>📊 总题：<span class="total-count" id="totalCount">12</span></span>
+        <span>❌ 错题：<span class="wrong-count" id="wrongCount">0</span></span>
+        <button class="btn btn-danger" onclick="resetWrong()" style="padding:4px 12px; font-size:12px;">🔄 清空错题</button>
+    </div>
+
+    <!-- 筛选栏 -->
+    <div class="filter-bar">
+        <button class="filter-btn active" id="filterAll" onclick="setFilter('all')">📋 全部</button>
+        <button class="filter-btn" id="filterWrong" onclick="setFilter('wrong')">❌ 错题</button>
+        <button class="filter-btn" id="filterExam" onclick="setFilter('exam')">📘 期中/期末</button>
+        <button class="filter-btn" id="filterGaokao" onclick="setFilter('gaokao')">🎯 高考真题</button>
+    </div>
+
+    <div class="encourage" id="encourageMsg">
+        <span>🌟 东东，今天要挑战 12 道真题！</span>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 题目列表 -->
+    <!-- ============================================================ -->
+    <div class="question-list">
+
+        <!-- ===== q1 ===== -->
+        <div class="question-box" data-qindex="0" data-source="exam">
+            <div class="q-head">
+                <span><span class="q-tag exam">📘 期中/期末</span><span class="q-tag diff-1">★ 基础</span></span>
+            </div>
+            <div class="q-text">（2024 广州期末）已知集合 \(A = \{1, 2, 3\}\)，\(B = \{2, 3, 4\}\)，则 \(A \cap B = \)（  ）</div>
+            <div class="option" onclick="selectOption(event, 0)">A. \(\{1, 2, 3, 4\}\)</div>
+            <div class="option" onclick="selectOption(event, 1)">B. \(\{2, 3\}\)</div>
+            <div class="option" onclick="selectOption(event, 2)">C. \(\{1, 2, 3\}\)</div>
+            <div class="option" onclick="selectOption(event, 3)">D. \(\{3, 4\}\)</div>
+            <div class="result-area" id="result_0"></div>
+        </div>
+
+        <!-- ===== q2 ===== -->
+        <div class="question-box" data-qindex="1" data-source="exam">
+            <div class="q-head">
+                <span><span class="q-tag exam">📘 期中/期末</span><span class="q-tag diff-1">★ 基础</span></span>
+            </div>
+            <div class="q-text">（2023 深圳期末）已知集合 \(A = \{1, 2, 3\}\)，\(B = \{2, 3, 4\}\)，则 \(A \cup B = \)（  ）</div>
+            <div class="option" onclick="selectOption(event, 0)">A. \(\{1, 2, 3, 4\}\)</div>
+            <div class="option" onclick="selectOption(event, 1)">B. \(\{2, 3\}\)</div>
+            <div class="option" onclick="selectOption(event, 2)">C. \(\{1, 2, 3\}\)</div>
+            <div class="option" onclick="selectOption(event, 3)">D. \(\{3, 4\}\)</div>
+            <div class="result-area" id="result_1"></div>
+        </div>
+
+        <!-- ===== q3 ===== -->
+        <div class="question-box" data-qindex="2" data-source="exam">
+            <div class="q-head">
+                <span><span class="q-tag exam">📘 期中/期末</span><span class="q-tag diff-1">★ 基础</span></span>
+            </div>
+            <div class="q-text">（2024 佛山期末）设全集 \(U = \{1, 2, 3, 4, 5\}\)，\(A = \{1, 2, 3\}\)，则 \(\complement_U A = \)（  ）</div>
+            <div class="option" onclick="selectOption(event, 0)">A. \(\{1, 2, 3\}\)</div>
+            <div class="option" onclick="selectOption(event, 1)">B. \(\{4, 5\}\)</div>
+            <div class="option" onclick="selectOption(event, 2)">C. \(\{1, 2, 3, 4, 5\}\)</div>
+            <div class="option" onclick="selectOption(event, 3)">D. \(\varnothing\)</div>
+            <div class="result-area" id="result_2"></div>
+        </div>
+
+        <!-- ===== q4 ===== -->
+        <div class="question-box" data-qindex="3" data-source="gaokao">
+            <div class="q-head">
+                <span><span class="q-tag gaokao">🎯 高考</span><span class="q-tag diff-1">★ 基础</span></span>
+            </div>
+            <div class="q-text">（2022 广东高考改编）已知集合 \(A = \{x \mid -2 < x < 3\}\)，\(B = \{x \mid x \geq 1\}\)，则 \(A \cap B = \)（  ）</div>
+            <div class="option" onclick="selectOption(event, 0)">A. \(\{x \mid -2 < x < 1\}\)</div>
+            <div class="option" onclick="selectOption(event, 1)">B. \(\{x \mid 1 \leq x < 3\}\)</div>
+            <div class="option" onclick="selectOption(event, 2)">C. \(\{x \mid -2 < x \leq 1\}\)</div>
+            <div class="option" onclick="selectOption(event, 3)">D. \(\{x \mid 1 < x < 3\}\)</div>
+            <div class="result-area" id="result_3"></div>
+        </div>
+
+        <!-- ===== q5 ===== -->
+        <div class="question-box" data-qindex="4" data-source="exam">
+            <div class="q-head">
+                <span><span class="q-tag exam">📘 期中/期末</span><span class="q-tag diff-1">★ 基础</span></span>
+            </div>
+            <div class="q-text">（2024 东莞期末）已知全集 \(U = \mathbb{R}\)，集合 \(A = \{x \mid x > 2\}\)，则 \(\complement_U A = \)（  ）</div>
+            <div class="option" onclick="selectOption(event, 0)">A. \(\{x \mid x < 2\}\)</div>
+            <div class="option" onclick="selectOption(event, 1)">B. \(\{x \mid x \leq 2\}\)</div>
+            <div class="option" onclick="selectOption(event, 2)">C. \(\{x \mid x > 2\}\)</div>
+            <div class="option" onclick="selectOption(event, 3)">D. \(\{x \mid x \geq 2\}\)</div>
+            <div class="result-area" id="result_4"></div>
+        </div>
+
+        <!-- ===== q6 ===== -->
+        <div class="question-box" data-qindex="5" data-source="exam">
+            <div class="q-head">
+                <span><span class="q-tag exam">📘 期中/期末</span><span class="q-tag diff-2">★★ 中档</span></span>
+            </div>
+            <div class="q-text">（2023 广州期末）已知集合 \(A = \{x \mid -2 < x < 3\}\)，\(B = \{x \mid x \geq 1\}\)，则 \(A \cup B = \)（  ）</div>
+            <div class="option" onclick="selectOption(event, 0)">A. \(\{x \mid -2 < x < 3\}\)</div>
+            <div class="option" onclick="selectOption(event, 1)">B. \(\{x \mid -2 < x < 3 \text{ 或 } x \geq 1\}\)</div>
+            <div class="option" onclick="selectOption(event, 2)">C. \(\{x \mid -2 < x \leq 3\}\)</div>
+            <div class="option" onclick="selectOption(event, 3)">D. \(\{x \mid x > -2\}\)</div>
+            <div class="result-area" id="result_5"></div>
+        </div>
+
+        <!-- ===== q7 ===== -->
+        <div class="question-box" data-qindex="6" data-source="exam">
+            <div class="q-head">
+                <span><span class="q-tag exam">📘 期中/期末</span><span class="q-tag diff-2">★★ 中档</span></span>
+            </div>
+            <div class="q-text">（2024 珠海期末）已知全集 \(U = \{1, 2, 3, 4, 5, 6\}\)，\(A = \{1, 3, 5\}\)，\(B = \{2, 4, 6\}\)，则 \(\complement_U (A \cup B) = \)（  ）</div>
+            <div class="option" onclick="selectOption(event, 0)">A. \(\{1, 2, 3, 4, 5, 6\}\)</div>
+            <div class="option" onclick="selectOption(event, 1)">B. \(\varnothing\)</div>
+            <div class="option" onclick="selectOption(event, 2)">C. \(\{1, 3, 5\}\)</div>
+            <div class="option" onclick="selectOption(event, 3)">D. \(\{2, 4, 6\}\)</div>
+            <div class="result-area" id="result_6"></div>
+        </div>
+
+        <!-- ===== q8 ===== -->
+        <div class="question-box" data-qindex="7" data-source="gaokao">
+            <div class="q-head">
+                <span><span class="q-tag gaokao">🎯 高考</span><span class="q-tag diff-2">★★ 中档</span></span>
+            </div>
+            <div class="q-text">（2021 广东高考）已知集合 \(A = \{x \mid x^2 - 4x + 3 < 0\}\)，\(B = \{x \mid 2 < x < 4\}\)，则 \(A \cap B = \)（  ）</div>
+            <div class="option" onclick="selectOption(event, 0)">A. \(\{x \mid 1 < x < 2\}\)</div>
+            <div class="option" onclick="selectOption(event, 1)">B. \(\{x \mid 2 < x < 3\}\)</div>
+            <div class="option" onclick="selectOption(event, 2)">C. \(\{x \mid 1 < x < 4\}\)</div>
+            <div class="option" onclick="selectOption(event, 3)">D. \(\{x \mid 3 < x < 4\}\)</div>
+            <div class="result-area" id="result_7"></div>
+        </div>
+
+        <!-- ===== q9 ===== -->
+        <div class="question-box" data-qindex="8" data-source="exam">
+            <div class="q-head">
+                <span><span class="q-tag exam">📘 期中/期末</span><span class="q-tag diff-2">★★ 中档</span></span>
+            </div>
+            <div class="q-text">（2024 中山期末）已知集合 \(A = \{x \mid -1 < x < 3\}\)，\(B = \{x \mid x \leq 0 \text{ 或 } x \geq 2\}\)，则 \(A \cap B = \)（  ）</div>
+            <div class="option" onclick="selectOption(event, 0)">A. \(\{x \mid -1 < x \leq 0\}\)</div>
+            <div class="option" onclick="selectOption(event, 1)">B. \(\{x \mid 2 \leq x < 3\}\)</div>
+            <div class="option" onclick="selectOption(event, 2)">C. \(\{x \mid -1 < x \leq 0 \text{ 或 } 2 \leq x < 3\}\)</div>
+            <div class="option" onclick="selectOption(event, 3)">D. \(\{x \mid x < -1 \text{ 或 } x \geq 3\}\)</div>
+            <div class="result-area" id="result_8"></div>
+        </div>
+
+        <!-- ===== q10 ===== -->
+        <div class="question-box" data-qindex="9" data-source="gaokao">
+            <div class="q-head">
+                <span><span class="q-tag gaokao">🎯 高考</span><span class="q-tag diff-3">★★★ 综合</span></span>
+            </div>
+            <div class="q-text">（2020 广东高考改编）已知集合 \(A = \{x \mid x^2 - 5x + 6 = 0\}\)，\(B = \{x \mid x^2 - 4x + 3 = 0\}\)，则 \(A \cup B = \)（  ）</div>
+            <div class="option" onclick="selectOption(event, 0)">A. \(\{1, 2, 3\}\)</div>
+            <div class="option" onclick="selectOption(event, 1)">B. \(\{1, 2\}\)</div>
+            <div class="option" onclick="selectOption(event, 2)">C. \(\{2, 3\}\)</div>
+            <div class="option" onclick="selectOption(event, 3)">D. \(\{1, 3\}\)</div>
+            <div class="result-area" id="result_9"></div>
+        </div>
+
+        <!-- ===== q11 ===== -->
+        <div class="question-box" data-qindex="10" data-source="gaokao">
+            <div class="q-head">
+                <span><span class="q-tag gaokao">🎯 高考</span><span class="q-tag diff-3">★★★ 综合</span></span>
+            </div>
+            <div class="q-text">（2019 全国卷改编）已知全集 \(U = \mathbb{R}\)，集合 \(A = \{x \mid x^2 - 4x + 3 > 0\}\)，则 \(\complement_U A = \)（  ）</div>
+            <div class="option" onclick="selectOption(event, 0)">A. \(\{x \mid 1 < x < 3\}\)</div>
+            <div class="option" onclick="selectOption(event, 1)">B. \(\{x \mid 1 \leq x \leq 3\}\)</div>
+            <div class="option" onclick="selectOption(event, 2)">C. \(\{x \mid x < 1 \text{ 或 } x > 3\}\)</div>
+            <div class="option" onclick="selectOption(event, 3)">D. \(\{x \mid x \leq 1 \text{ 或 } x \geq 3\}\)</div>
+            <div class="result-area" id="result_10"></div>
+        </div>
+
+        <!-- ===== q12 ===== -->
+        <div class="question-box" data-qindex="11" data-source="gaokao">
+            <div class="q-head">
+                <span><span class="q-tag gaokao">🎯 高考</span><span class="q-tag diff-3">★★★ 综合</span></span>
+            </div>
+            <div class="q-text">（2023 广东高考模拟）已知集合 \(A = \{x \mid x = 2n, n \in \mathbb{Z}\}\)，\(B = \{x \mid x = 3n, n \in \mathbb{Z}\}\)，则 \(A \cap B = \)（  ）</div>
+            <div class="option" onclick="selectOption(event, 0)">A. \(\{x \mid x = 6n, n \in \mathbb{Z}\}\)</div>
+            <div class="option" onclick="selectOption(event, 1)">B. \(\{x \mid x = 5n, n \in \mathbb{Z}\}\)</div>
+            <div class="option" onclick="selectOption(event, 2)">C. \(\{x \mid x = n, n \in \mathbb{Z}\}\)</div>
+            <div class="option" onclick="selectOption(event, 3)">D. \(\varnothing\)</div>
+            <div class="result-area" id="result_11"></div>
+        </div>
+
+    </div><!-- end question-list -->
+
+    <div class="footer">
+        <span class="hl-yellow">黄标</span> = 重点知识 &nbsp;·&nbsp; 点击选项立刻判断
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 核心 JavaScript -->
+<!-- ============================================================ -->
+<script>
+    // ================================================================
+    // 全局状态
+    // ================================================================
+    var STORAGE_KEY = 'dongdong_04_wrong';
+    var wrongIds = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    var selectedMap = {};
+    var answeredMap = {};
+    var currentFilter = 'all';
+
+    var correctMap = {
+        0: 1, 1: 0, 2: 1, 3: 1, 4: 1,
+        5: 3, 6: 1, 7: 1, 8: 2, 9: 0,
+        10: 1, 11: 0
+    };
+
+    var explainMap = [
+        '交集是 <span class="hl">公共元素</span>，A 和 B 共有的元素是 2 和 3，所以 \(A \cap B = \{2, 3\}\)。',
+        '并集是 <span class="hl">所有元素合并（去重）</span>，得到 \(\{1, 2, 3, 4\}\)。',
+        '补集是 <span class="hl">全集中不属于 A 的元素</span>，U 中去掉 1、2、3 剩下 \(\{4, 5\}\)。',
+        '\(A = \{x \mid -2 < x < 3\}\)，\(B = \{x \mid x \geq 1\}\)，交集取公共部分，得到 <span class="hl">\(\{x \mid 1 \leq x < 3\}\)</span>。',
+        '补集 = 不满足 \(x > 2\) 的实数 = <span class="hl">\(\{x \mid x \leq 2\}\)</span>。⚠️ 注意：2 不在 A 里，所以在补集里，要取等号。',
+        '并集合并所有范围：\(A\) 是 \(-2 < x < 3\)，\(B\) 是 \(x \geq 1\)，合并后为 <span class="hl">\(\{x \mid x > -2\}\)</span>（因为 1 已经包含在 A 里）。',
+        '\(A \cup B = \{1, 2, 3, 4, 5, 6\} = U\)，所以补集为 <span class="hl">\(\varnothing\)</span>。',
+        '解 \(A\)：\(x^2 - 4x + 3 < 0\) → \((x-1)(x-3) < 0\) → \(1 < x < 3\)。<br>与 \(B = \{x \mid 2 < x < 4\}\) 取交集，得到 <span class="hl">\(\{x \mid 2 < x < 3\}\)</span>。',
+        'A 是 \(-1 < x < 3\)，B 是 \(x \leq 0\) 或 \(x \geq 2\)。<br>交集取公共部分：<span class="hl">\(\{x \mid -1 < x \leq 0 \text{ 或 } 2 \leq x < 3\}\)</span>。',
+        '解 \(A\)：\(x^2 - 5x + 6 = 0\) → \((x-2)(x-3)=0\) → \(A = \{2, 3\}\)。<br>解 \(B\)：\(x^2 - 4x + 3 = 0\) → \((x-1)(x-3)=0\) → \(B = \{1, 3\}\)。<br>并集为 <span class="hl">\(\{1, 2, 3\}\)</span>。',
+        '解不等式 \(x^2 - 4x + 3 > 0\) → \((x-1)(x-3) > 0\)。<br>> 0 取两边 → \(x < 1\) 或 \(x > 3\)。<br>补集 = 不满足 A 的实数 = <span class="hl">\(\{x \mid 1 \leq x \leq 3\}\)</span>。⚠️ 注意端点！',
+        'A 是偶数，B 是 3 的倍数，交集是 <span class="hl">6 的倍数</span>，即 \(\{x \mid x = 6n, n \in \mathbb{Z}\}\)。'
+    ];
+
+    var correctAnswerText = ['B', 'A', 'B', 'B', 'B', 'D', 'B', 'B', 'C', 'A', 'B', 'A'];
+
+    // ================================================================
+    // 核心交互
+    // ================================================================
+
+    function selectOption(event, oi) {
+        var container = event.target.closest('.question-box');
+        if (!container) return;
+
+        var qIndex = parseInt(container.getAttribute('data-qindex'), 10);
+        if (isNaN(qIndex)) return;
+
+        if (answeredMap[qIndex]) return;
+
+        var isCorrect = (oi === correctMap[qIndex]);
+        selectedMap[qIndex] = oi;
+        answeredMap[qIndex] = true;
+
+        var options = container.querySelectorAll('.option');
+        options.forEach(function(el, idx) {
+            el.classList.remove('selected', 'correct-show', 'wrong-show');
+            if (idx === oi) el.classList.add('selected');
+            if (idx === correctMap[qIndex]) el.classList.add('correct-show');
+            if (idx === oi && !isCorrect) el.classList.add('wrong-show');
+        });
+
+        var resultArea = document.getElementById('result_' + qIndex);
+        if (resultArea) {
+            var correctLetter = correctAnswerText[qIndex];
+            if (isCorrect) {
+                resultArea.className = 'result-area correct';
+                resultArea.innerHTML = '✅ 回答正确！' + explainMap[qIndex];
+            } else {
+                resultArea.className = 'result-area wrong';
+                resultArea.innerHTML = '❌ 再想想哦～ 正确答案是 <strong>' + correctLetter + '</strong>。<br>' + explainMap[qIndex];
+            }
+        }
+
+        var idx = wrongIds.indexOf(qIndex);
+        if (!isCorrect) {
+            if (idx === -1) wrongIds.push(qIndex);
+        } else {
+            if (idx !== -1) wrongIds.splice(idx, 1);
+        }
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(wrongIds));
+        updateStats();
+        updateFilter();
+
+        if (window.MathJax && MathJax.typesetPromise) {
+            MathJax.typesetPromise();
+        }
+    }
+
+    function resetWrong() {
+        if (confirm('确定要清空所有错题记录吗？')) {
+            wrongIds = [];
+            localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+            updateStats();
+            updateFilter();
+        }
+    }
+
+    // ================================================================
+    // 筛选
+    // ================================================================
+
+    function setFilter(filter) {
+        currentFilter = filter;
+        updateFilter();
+        var btns = document.querySelectorAll('.filter-btn');
+        btns.forEach(function(el) {
+            el.classList.remove('active', 'wrong-active');
+        });
+        if (filter === 'all') document.getElementById('filterAll').classList.add('active');
+        else if (filter === 'wrong') document.getElementById('filterWrong').classList.add('wrong-active');
+        else if (filter === 'exam') document.getElementById('filterExam').classList.add('active');
+        else if (filter === 'gaokao') document.getElementById('filterGaokao').classList.add('active');
+    }
+
+    function updateFilter() {
+        var allQuestions = document.querySelectorAll('.question-box');
+        var visibleCount = 0;
+        allQuestions.forEach(function(q) {
+            var source = q.getAttribute('data-source') || 'exam';
+            var show = true;
+            var idx = parseInt(q.getAttribute('data-qindex'), 10);
+            if (isNaN(idx)) return;
+            if (currentFilter === 'wrong') {
+                show = wrongIds.includes(idx);
+            } else if (currentFilter === 'exam') {
+                show = (source === 'exam');
+            } else if (currentFilter === 'gaokao') {
+                show = (source === 'gaokao');
+            }
+            q.style.display = show ? '' : 'none';
+            if (show) visibleCount++;
+        });
+        document.getElementById('encourageMsg').innerHTML =
+            '<span>🌟 东东，今天要挑战 ' + visibleCount + ' 道真题！</span>';
+    }
+
+    // ================================================================
+    // 统计
+    // ================================================================
+
+    function updateStats() {
+        var total = document.querySelectorAll('.question-box').length;
+        document.getElementById('totalCount').textContent = total;
+        document.getElementById('wrongCount').textContent = wrongIds.length;
+    }
+
+    // ================================================================
+    // 初始化
+    // ================================================================
+
+    function init() {
+        updateStats();
+        setFilter('all');
+        if (window.MathJax && MathJax.typesetPromise) {
+            MathJax.typesetPromise();
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+</script>
+
+</body>
+</html>

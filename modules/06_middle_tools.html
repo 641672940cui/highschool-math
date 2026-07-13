@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>初中工具补漏 · 东东数学</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: #f6f8fa;
+            padding: 16px 14px 40px;
+            color: #0b1a2f;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .back {
+            display: inline-block;
+            margin-bottom: 12px;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+        .sub {
+            font-size: 14px;
+            color: #475569;
+            margin-bottom: 16px;
+            padding-left: 12px;
+            border-left: 4px solid #2563eb;
+            background: #eef2ff;
+            border-radius: 0 12px 12px 0;
+            padding: 6px 12px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid #e6edf4;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+        .card-title {
+            font-weight: 600;
+            font-size: 17px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-title .tag {
+            font-size: 12px;
+            background: #dbeafe;
+            color: #1e4f8a;
+            padding: 0 12px;
+            border-radius: 30px;
+            font-weight: 500;
+        }
+        .tool-tip {
+            background: #f0f9ff;
+            border-left: 4px solid #0ea5e9;
+            padding: 12px 14px;
+            border-radius: 0 12px 12px 0;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        .tool-tip strong {
+            color: #0369a1;
+        }
+        .hl {
+            background: #fde047;
+            padding: 0 4px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        .formula-box {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin: 8px 0 12px;
+            font-size: 15px;
+            text-align: center;
+            font-weight: 500;
+        }
+        .formula-box .big {
+            font-size: 20px;
+        }
+        .memory-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin: 8px 0 12px;
+        }
+        .memory-grid .mg-item {
+            background: #fef3c7;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 13px;
+            text-align: center;
+            border: 1px solid #fde68a;
+        }
+        .memory-grid .mg-item .mg-formula {
+            font-weight: 700;
+            font-size: 15px;
+        }
+        .memory-grid .mg-item.mg-highlight {
+            background: #dbeafe;
+            border-color: #93c5fd;
+        }
+        .question-box {
+            background: #fafcff;
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            border: 1px solid #eef2f6;
+        }
+        .q-text {
+            font-weight: 500;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+        .q-text .math {
+            font-size: 17px;
+        }
+        .option {
+            display: block;
+            padding: 8px 14px;
+            margin: 4px 0;
+            border-radius: 40px;
+            background: #f1f5f9;
+            font-size: 15px;
+            border: 1px solid transparent;
+            transition: 0.1s;
+            cursor: pointer;
+        }
+        .option.selected {
+            background: #dbeafe;
+            border-color: #3b82f6;
+        }
+        .option.correct-show {
+            background: #bbf7d0;
+            border-color: #22c55e;
+        }
+        .option.wrong-show {
+            background: #fecaca;
+            border-color: #ef4444;
+        }
+        .result-badge {
+            display: inline-block;
+            font-weight: 600;
+            padding: 2px 14px;
+            border-radius: 30px;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        .result-badge.correct {
+            background: #bbf7d0;
+            color: #065f46;
+        }
+        .result-badge.wrong {
+            background: #fecaca;
+            color: #991b1b;
+        }
+        .explain {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-top: 10px;
+            font-size: 14px;
+            border-left: 4px solid #475569;
+            display: none;
+        }
+        .explain .step {
+            font-weight: 600;
+            color: #0b1a2f;
+        }
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+        .btn {
+            border: none;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.15s;
+            background: #eef2f6;
+            color: #1e293b;
+        }
+        .btn-primary {
+            background: #2563eb;
+            color: #fff;
+        }
+        .btn-primary:active {
+            background: #1e4f8a;
+        }
+        .btn-done {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: 0.15s;
+        }
+        .btn-done:active {
+            background: #1e4f8a;
+            transform: scale(0.98);
+        }
+        .btn-done.completed {
+            background: #22c55e;
+        }
+        .footer {
+            text-align: center;
+            font-size: 13px;
+            color: #94a3b8;
+            margin-top: 24px;
+        }
+        .divider {
+            height: 1px;
+            background: #e2e8f0;
+            margin: 16px 0;
+        }
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin: 8px 0 12px;
+        }
+        .two-col .item {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 10px 12px;
+            text-align: center;
+            font-size: 14px;
+            border: 1px solid #e6edf4;
+        }
+        .two-col .item .big {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .tip-box {
+            background: #fef2f2;
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin: 6px 0 12px;
+            border-left: 4px solid #ef4444;
+            font-size: 14px;
+        }
+        .tip-box.green {
+            background: #f0fdf4;
+            border-left-color: #22c55e;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a href="../index.html" class="back">← 返回工具箱</a>
+    <h1>🛠️ 初中工具 · 补漏</h1>
+    <div class="sub">
+        因式分解 · 韦达定理 · 端点判断 —— 高考集合题的“三大基石”
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 模块一：因式分解 -->
+    <!-- ============================================================ -->
+    <div class="card">
+        <div class="card-title">① 因式分解 <span class="tag">拆快递</span></div>
+
+        <!-- 生活比喻 -->
+        <div class="tool-tip" style="border-left-color: #f59e0b; background: #fffbeb;">
+            <strong>🧸 生活比喻：</strong>因式分解 = <span class="hl">“拆快递”</span>
+            <br>
+            x² + bx + c = 一个快递箱，里面装了 <span class="hl">两个小盒子</span>
+            <br>
+            <span class="hl">两个数的和 = b</span>（盒子的宽度），<span class="hl">两个数的积 = c</span>（盒子的面积）
+            <br>
+            <strong>任务：</strong>找到两个数，让它们 <span class="hl">相加 = b</span>，<span class="hl">相乘 = c</span>
+        </div>
+
+        <!-- Part A：十字相乘 -->
+        <div style="font-weight:600; font-size:15px; margin: 4px 0 6px;">📌 Part A · 十字相乘（5种必背模板）</div>
+        <div class="memory-grid">
+            <div class="mg-item"><div class="mg-formula">x²+5x+6</div>(x+2)(x+3)</div>
+            <div class="mg-item"><div class="mg-formula">x²−5x+6</div>(x−2)(x−3)</div>
+            <div class="mg-item"><div class="mg-formula">x²+x−6</div>(x+3)(x−2)</div>
+            <div class="mg-item"><div class="mg-formula">x²−x−6</div>(x−3)(x+2)</div>
+            <div class="mg-item" style="grid-column: span 2;"><div class="mg-formula">x²+2x−3</div>(x+3)(x−1)</div>
+        </div>
+
+        <div class="tip-box green">
+            <strong>💡 验算小习惯：</strong>写完后 <span class="hl">展开回去</span>，3 秒验算，避免 80% 的错误。
+        </div>
+
+        <!-- 十字相乘练习 5题 -->
+        <div class="question-box" id="q1_1">
+            <div class="q-text">分解因式：<span class="math">x² − 5x + 6</span></div>
+            <div class="option" data-q="q1_1" data-oi="0" onclick="selectOption('q1_1', 0)">A. (x − 2)(x − 3)</div>
+            <div class="option" data-q="q1_1" data-oi="1" onclick="selectOption('q1_1', 1)">B. (x − 1)(x − 6)</div>
+            <div class="option" data-q="q1_1" data-oi="2" onclick="selectOption('q1_1', 2)">C. (x + 2)(x + 3)</div>
+            <div class="option" data-q="q1_1" data-oi="3" onclick="selectOption('q1_1', 3)">D. (x − 3)(x − 2)</div>
+            <div class="result-badge" id="r_q1_1"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="showExplain('q1_1')">📖 看解析</button>
+            </div>
+            <div class="explain" id="e_q1_1">
+                <span class="hl">(x − 2)(x − 3)</span><br>
+                <span class="step">步骤：</span>找两个数，<span class="hl">和为 5，积为 6</span> → 2 和 3。<br>
+                ⚠️ (x − 2)(x − 3) 和 (x − 3)(x − 2) 等价，顺序不影响。
+            </div>
+        </div>
+
+        <div class="question-box" id="q1_2">
+            <div class="q-text">分解因式：<span class="math">x² − 7x + 12</span></div>
+            <div class="option" data-q="q1_2" data-oi="0" onclick="selectOption('q1_2', 0)">A. (x − 3)(x − 4)</div>
+            <div class="option" data-q="q1_2" data-oi="1" onclick="selectOption('q1_2', 1)">B. (x − 2)(x − 6)</div>
+            <div class="option" data-q="q1_2" data-oi="2" onclick="selectOption('q1_2', 2)">C. (x + 3)(x + 4)</div>
+            <div class="option" data-q="q1_2" data-oi="3" onclick="selectOption('q1_2', 3)">D. (x − 4)(x − 3)</div>
+            <div class="result-badge" id="r_q1_2"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="showExplain('q1_2')">📖 看解析</button>
+            </div>
+            <div class="explain" id="e_q1_2">
+                <span class="hl">(x − 3)(x − 4)</span><br>
+                <span class="step">步骤：</span>找两个数，<span class="hl">和为 7，积为 12</span> → 3 和 4。
+            </div>
+        </div>
+
+        <div class="question-box" id="q1_3">
+            <div class="q-text">分解因式：<span class="math">x² − 2x − 3</span></div>
+            <div class="option" data-q="q1_3" data-oi="0" onclick="selectOption('q1_3', 0)">A. (x − 3)(x + 1)</div>
+            <div class="option" data-q="q1_3" data-oi="1" onclick="selectOption('q1_3', 1)">B. (x − 1)(x + 3)</div>
+            <div class="option" data-q="q1_3" data-oi="2" onclick="selectOption('q1_3', 2)">C. (x + 3)(x − 1)</div>
+            <div class="option" data-q="q1_3" data-oi="3" onclick="selectOption('q1_3', 3)">D. (x − 2)(x + 1)</div>
+            <div class="result-badge" id="r_q1_3"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="showExplain('q1_3')">📖 看解析</button>
+            </div>
+            <div class="explain" id="e_q1_3">
+                <span class="hl">(x − 3)(x + 1)</span><br>
+                <span class="step">步骤：</span>找两个数，<span class="hl">和为 2，积为 −3</span> → 3 和 −1。<br>
+                ⚠️ 常数项为负 → 两根异号，大的为正。
+            </div>
+        </div>
+
+        <div class="question-box" id="q1_4">
+            <div class="q-text">分解因式：<span class="math">x² + 5x + 6</span></div>
+            <div class="option" data-q="q1_4" data-oi="0" onclick="selectOption('q1_4', 0)">A. (x + 2)(x + 3)</div>
+            <div class="option" data-q="q1_4" data-oi="1" onclick="selectOption('q1_4', 1)">B. (x − 2)(x − 3)</div>
+            <div class="option" data-q="q1_4" data-oi="2" onclick="selectOption('q1_4', 2)">C. (x + 1)(x + 6)</div>
+            <div class="option" data-q="q1_4" data-oi="3" onclick="selectOption('q1_4', 3)">D. (x − 1)(x − 6)</div>
+            <div class="result-badge" id="r_q1_4"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="showExplain('q1_4')">📖 看解析</button>
+            </div>
+            <div class="explain" id="e_q1_4">
+                <span class="hl">(x + 2)(x + 3)</span><br>
+                <span class="step">步骤：</span>找两个数，<span class="hl">和为 5，积为 6</span> → 2 和 3。<br>
+                ⚠️ 一次项为正，常数项为正 → 两根都为正。
+            </div>
+        </div>
+
+        <div class="question-box" id="q1_5">
+            <div class="q-text">分解因式：<span class="math">x² + x − 6</span></div>
+            <div class="option" data-q="q1_5" data-oi="0" onclick="selectOption('q1_5', 0)">A. (x + 3)(x − 2)</div>
+            <div class="option" data-q="q1_5" data-oi="1" onclick="selectOption('q1_5', 1)">B. (x − 3)(x + 2)</div>
+            <div class="option" data-q="q1_5" data-oi="2" onclick="selectOption('q1_5', 2)">C. (x + 6)(x − 1)</div>
+            <div class="option" data-q="q1_5" data-oi="3" onclick="selectOption('q1_5', 3)">D. (x − 6)(x + 1)</div>
+            <div class="result-badge" id="r_q1_5"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="showExplain('q1_5')">📖 看解析</button>
+            </div>
+            <div class="explain" id="e_q1_5">
+                <span class="hl">(x + 3)(x − 2)</span><br>
+                <span class="step">步骤：</span>找两个数，<span class="hl">和为 1，积为 −6</span> → 3 和 −2。
+            </div>
+        </div>
+
+        <!-- Part B：平方差公式 -->
+        <div style="font-weight:600; font-size:15px; margin: 16px 0 6px;">📌 Part B · 平方差公式</div>
+        <div class="formula-box">
+            <span class="big">a² − b² = (a − b)(a + b)</span>
+        </div>
+        <div class="tool-tip" style="border-left-color: #22c55e; background: #f0fdf4;">
+            <strong>🧸 生活比喻：</strong>边长为 a 的大正方形，挖掉边长为 b 的小正方形，
+            <span class="hl">剩下的 L 形</span> 可以拼成一个 <span class="hl">长方形</span>：长 (a+b)，宽 (a−b)。
+            <br>
+            <strong>识别特征：</strong><span class="hl">两项</span> · <span class="hl">都是平方</span> · <span class="hl">中间是减号</span>
+        </div>
+
+        <div class="question-box" id="q1_6">
+            <div class="q-text">分解因式：<span class="math">x² − 9</span></div>
+            <div class="option" data-q="q1_6" data-oi="0" onclick="selectOption('q1_6', 0)">A. (x − 3)(x + 3)</div>
+            <div class="option" data-q="q1_6" data-oi="1" onclick="selectOption('q1_6', 1)">B. (x − 9)(x + 1)</div>
+            <div class="option" data-q="q1_6" data-oi="2" onclick="selectOption('q1_6', 2)">C. (x − 3)²</div>
+            <div class="option" data-q="q1_6" data-oi="3" onclick="selectOption('q1_6', 3)">D. (x + 3)²</div>
+            <div class="result-badge" id="r_q1_6"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="showExplain('q1_6')">📖 看解析</button>
+            </div>
+            <div class="explain" id="e_q1_6">
+                <span class="hl">(x − 3)(x + 3)</span><br>
+                <span class="step">识别：</span>x² − 3² → a = x，b = 3 → (x−3)(x+3)
+            </div>
+        </div>
+
+        <div class="question-box" id="q1_7">
+            <div class="q-text">分解因式：<span class="math">4x² − 25</span></div>
+            <div class="option" data-q="q1_7" data-oi="0" onclick="selectOption('q1_7', 0)">A. (2x − 5)(2x + 5)</div>
+            <div class="option" data-q="q1_7" data-oi="1" onclick="selectOption('q1_7', 1)">B. (4x − 5)(x + 5)</div>
+            <div class="option" data-q="q1_7" data-oi="2" onclick="selectOption('q1_7', 2)">C. (2x − 5)²</div>
+            <div class="option" data-q="q1_7" data-oi="3" onclick="selectOption('q1_7', 3)">D. (2x + 5)²</div>
+            <div class="result-badge" id="r_q1_7"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="showExplain('q1_7')">📖 看解析</button>
+            </div>
+            <div class="explain" id="e_q1_7">
+                <span class="hl">(2x − 5)(2x + 5)</span><br>
+                <span class="step">识别：</span>(2x)² − 5² → a = 2x，b = 5 → (2x−5)(2x+5)
+            </div>
+        </div>
+
+        <div class="question-box" id="q1_8">
+            <div class="q-text">分解因式：<span class="math">x⁴ − 1</span></div>
+            <div class="option" data-q="q1_8" data-oi="0" onclick="selectOption('q1_8', 0)">A. (x²−1)(x²+1)</div>
+            <div class="option" data-q="q1_8" data-oi="1" onclick="selectOption('q1_8', 1)">B. (x²−1)²</div>
+            <div class="option" data-q="q1_8" data-oi="2" onclick="selectOption('q1_8', 2)">C. (x²+1)²</div>
+            <div class="option" data-q="q1_8" data-oi="3" onclick="selectOption('q1_8', 3)">D. (x−1)(x+1)</div>
+            <div class="result-badge" id="r_q1_8"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="showExplain('q1_8')">📖 看解析</button>
+            </div>
+            <div class="explain" id="e_q1_8">
+                <span class="hl">(x²−1)(x²+1) = (x−1)(x+1)(x²+1)</span><br>
+                <span class="step">识别：</span>(x²)² − 1² → a = x²，b = 1。<br>
+                ⚠️ 注意：<span class="hl">x²−1 还可以继续分解</span>！
+            </div>
+        </div>
+
+        <!-- Part C：完全平方公式 -->
+        <div style="font-weight:600; font-size:15px; margin: 16px 0 6px;">📌 Part C · 完全平方公式</div>
+        <div class="formula-box">
+            <span class="big">a² + 2ab + b² = (a + b)²</span><br>
+            <span class="big">a² − 2ab + b² = (a − b)²</span>
+        </div>
+        <div class="tool-tip" style="border-left-color: #8b5cf6; background: #f5f3ff;">
+            <strong>🧸 生活比喻：</strong>边长为 (a+b) 的大正方形，拆成 <span class="hl">两个小正方形 + 两个长方形</span>。
+            <br>
+            <strong>识别特征：</strong><span class="hl">三项</span> · <span class="hl">首尾两项是平方</span> · 中间项 = <span class="hl">±2 × 首项底数 × 尾项底数</span>
+            <br>
+            <strong>独家技巧：</strong>中间项 ÷ 2，再开平方 → 就知道另一个数
+        </div>
+
+        <div class="question-box" id="q1_9">
+            <div class="q-text">分解因式：<span class="math">x² + 6x + 9</span></div>
+            <div class="option" data-q="q1_9" data-oi="0" onclick="selectOption('q1_9', 0)">A. (x + 3)²</div>
+            <div class="option" data-q="q1_9" data-oi="1" onclick="selectOption('q1_9', 1)">B. (x − 3)²</div>
+            <div class="option" data-q="q1_9" data-oi="2" onclick="selectOption('q1_9', 2)">C. (x + 3)(x − 3)</div>
+            <div class="option" data-q="q1_9" data-oi="3" onclick="selectOption('q1_9', 3)">D. (x + 9)(x + 1)</div>
+            <div class="result-badge" id="r_q1_9"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="showExplain('q1_9')">📖 看解析</button>
+            </div>
+            <div class="explain" id="e_q1_9">
+                <span class="hl">(x + 3)²</span><br>
+                <span class="step">识别：</span>首项 x²，尾项 9 = 3²，中间项 6x = <span class="hl">2 × x × 3</span> → (x+3)²
+            </div>
+        </div>
+
+        <div class="question-box" id="q1_10">
+            <div class="q-text">分解因式：<span class="math">x² − 8x + 16</span></div>
+            <div class="option" data-q="q1_10" data-oi="0" onclick="selectOption('q1_10', 0)">A. (x − 4)²</div>
+            <div class="option" data-q="q1_10" data-oi="1" onclick="selectOption('q1_10', 1)">B. (x + 4)²</div>
+            <div class="option" data-q="q1_10" data-oi="2" onclick="selectOption('q1_10', 2)">C. (x − 4)(x + 4)</div>
+            <div class="option" data-q="q1_10" data-oi="3" onclick="selectOption('q1_10', 3)">D. (x − 8)(x + 2)</div>
+            <div class="result-badge" id="r_q1_10"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="showExplain('q1_10')">📖 看解析</button>
+            </div>
+            <div class="explain" id="e_q1_10">
+                <span class="hl">(x − 4)²</span><br>
+                <span class="step">识别：</span>首项 x²，尾项 16 = 4²，中间项 −8x = <span class="hl">−2 × x × 4</span> → (x−4)²
+            </div>
+        </div>
+
+        <div class="question-box" id="q1_11">
+            <div class="q-text">分解因式：<span class="math">4x² + 12x + 9</span></div>
+            <div class="option" data-q="q1_11" data-oi="0" onclick="selectOption('q1_11', 0)">A. (2x + 3)²</div>
+            <div class="option" data-q="q1_11" data-oi="1" onclick="selectOption('q1_11', 1)">B. (2x − 3)²</div>
+            <div class="option" data-q="q1_11" data-oi="2" onclick="selectOption('q1_11', 2)">C. (4x + 3)(x + 3)</div>
+            <div class="option" data-q="q1_11" data-oi="3" onclick="selectOption('q1_11', 3)">D. (2x + 3)(2x − 3)</div>
+            <div class="result-badge" id="r_q1_11"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="showExplain('q1_11')">📖 看解析</button>
+            </div>
+            <div class="explain" id="e_q1_11">
+                <span class="hl">(2x + 3)²</span><br>
+                <span class="step">识别：</span>首项 (2x)²，尾项 9 = 3²，中间项 12x = <span class="hl">2 × 2x × 3</span> → (2x+3)²
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 模块二：韦达定理 -->
+    <!-- ============================================================ -->
+    <div class="card">
+        <div class="card-title">② 韦达定理 <span class="tag">根与系数</span></div>
+        <div class="tool-tip">
+            <strong>🧠 记忆口诀：</strong>“<span class="hl">两根和 = −b/a</span>，<span class="hl">两根积 = c/a</span>”<br>
+            含参集合题中，韦达定理是 <span class="hl">“连接参数 a 和两根”</span> 的唯一桥梁。
+        </div>
+
+        <div class="question-box" id="q2_1">
+            <div class="q-text">方程 x² − 5x + 6 = 0 的两根之和为（ ）</div>
+            <div class="option" data-q="q2_1" data-oi="0" onclick="selectOption('q2_1', 0)">A. 5</div>
+            <div class="option" data-q="q2_1" data-oi="1" onclick="selectOption('q2_1', 1)">B. 6</div>
+            <div class="option" data-q="q2_1" data-oi="2" onclick="selectOption('q2_1', 2)">C. −5</div>
+            <div class="option" data-q="q2_1" data-oi="3" onclick="selectOption('q2_1', 3)">D. −6</div>
+            <div class="result-badge" id="r_q2_1"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="showExplain('q2_1')">📖 看解析</button>
+            </div>
+            <div class="explain" id="e_q2_1">
+                <span class="hl">A. 5</span><br>
+                由韦达定理：两根和 = <span class="hl">−b/a = −(−5)/1 = 5</span>。
+            </div>
+        </div>
+
+        <div class="question-box" id="q2_2">
+            <div class="q-text">方程 x² − 5x + 6 = 0 的两根之积为（ ）</div>
+            <div class="option" data-q="q2_2" data-oi="0" onclick="selectOption('q2_2', 0)">A. 5</div>
+            <div class="option" data-q="q2_2" data-oi="1" onclick="selectOption('q2_2', 1)">B. 6</div>
+            <div class="option" data-q="q2_2" data-oi="2" onclick="selectOption('q2_2', 2)">C. −5</div>
+            <div class="option" data-q="q2_2" data-oi="3" onclick="selectOption('q2_2', 3)">D. −6</div>
+            <div class="result-badge" id="r_q2_2"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="showExplain('q2_2')">📖 看解析</button>
+            </div>
+            <div class="explain" id="e_q2_2">
+                <span class="hl">B. 6</span><br>
+                由韦达定理：两根积 = <span class="hl">c/a = 6/1 = 6</span>。
+            </div>
+        </div>
+
+        <div class="question-box" id="q2_3">
+            <div class="q-text">若方程 x² − ax + 4 = 0 的两根分别为 x₁、x₂，则 x₁ + x₂ =（ ）</div>
+            <div class="option" data-q="q2_3" data-oi="0" onclick="selectOption('q2_3', 0)">A. a</div>
+            <div class="option" data-q="q2_3" data-oi="1" onclick="selectOption('q2_3', 1)">B. −a</div>
+            <div class="option" data-q="q2_3" data-oi="2" onclick="selectOption('q2_3', 2)">C. 4</div>
+            <div class="option" data-q="q2_3" data-oi="3" onclick="selectOption('q2_3', 3)">D. −4</div>
+            <div class="result-badge" id="r_q2_3"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="showExplain('q2_3')">📖 看解析</button>
+            </div>
+            <div class="explain" id="e_q2_3">
+                <span class="hl">A. a</span><br>
+                由韦达定理：两根和 = <span class="hl">−b/a = −(−a)/1 = a</span>。<br>
+                ⚠️ 注意：<span class="hl">a 是参数</span>，不是常数。
+            </div>
+        </div>
+
+        <div class="question-box" id="q2_4">
+            <div class="q-text">若方程 x² − ax + 4 = 0 的两根分别为 x₁、x₂，则 x₁ · x₂ =（ ）</div>
+            <div class="option" data-q="q2_4" data-oi="0" onclick="selectOption('q2_4', 0)">A. a</div>
+            <div class="option" data-q="q2_4" data-oi="1" onclick="selectOption('q2_4', 1)">B. −a</div>
+            <div class="option" data-q="q2_4" data-oi="2" onclick="selectOption('q2_4', 2)">C. 4</div>
+            <div class="option" data-q="q2_4" data-oi="3" onclick="selectOption('q2_4', 3)">D. −4</div>
+            <div class="result-badge" id="r_q2_4"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="showExplain('q2_4')">📖 看解析</button>
+            </div>
+            <div class="explain" id="e_q2_4">
+                <span class="hl">C. 4</span><br>
+                由韦达定理：两根积 = <span class="hl">c/a = 4/1 = 4</span>。<br>
+                ⚠️ 注意：<span class="hl">a 在 b 的位置</span>，所以两根积与 a 无关。
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 模块三：端点判断 -->
+    <!-- ============================================================ -->
+    <div class="card">
+        <div class="card-title">③ 端点判断 <span class="tag">开闭区间</span></div>
+        <div class="tool-tip">
+            <strong>🧠 记忆口诀：</strong>“<span class="hl">有等号 → 闭区间（能取）</span>，<span class="hl">无等号 → 开区间（不能取）</span>”<br>
+            高考集合题中，<span class="hl">端点取不取</span>是区分“会做”和“做对”的关键。
+        </div>
+
+        <div class="question-box" id="q3_1">
+            <div class="q-text">集合 A = {x | x > 2}，则 2（ ）A</div>
+            <div class="option" data-q="q3_1" data-oi="0" onclick="selectOption('q3_1', 0)">A. ∈</div>
+            <div class="option" data-q="q3_1" data-oi="1" onclick="selectOption('q3_1', 1)">B. ∉</div>
+            <div class="result-badge" id="r_q3_1"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="showExplain('q3_1')">📖 看解析</button>
+            </div>
+            <div class="explain" id="e_q3_1">
+                <span class="hl">B. ∉</span><br>
+                x > 2 是 <span class="hl">开区间</span>，2 本身不在集合里。
+            </div>
+        </div>
+
+        <div class="question-box" id="q3_2">
+            <div class="q-text">集合 A = {x | x ≥ 2}，则 2（ ）A</div>
+            <div class="option" data-q="q3_2" data-oi="0" onclick="selectOption('q3_2', 0)">A. ∈</div>
+            <div class="option" data-q="q3_2" data-oi="1" onclick="selectOption('q3_2', 1)">B. ∉</div>
+            <div class="result-badge" id="r_q3_2"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="showExplain('q3_2')">📖 看解析</button>
+            </div>
+            <div class="explain" id="e_q3_2">
+                <span class="hl">A. ∈</span><br>
+                x ≥ 2 是 <span class="hl">闭区间</span>，2 在集合里。
+            </div>
+        </div>
+
+        <div class="question-box" id="q3_3">
+            <div class="q-text">已知 U = R，A = {x | x > 2}，则 ∁<sub>U</sub>A =（ ）</div>
+            <div class="option" data-q="q3_3" data-oi="0" onclick="selectOption('q3_3', 0)">A. {x | x < 2}</div>
+            <div class="option" data-q="q3_3" data-oi="1" onclick="selectOption('q3_3', 1)">B. {x | x ≤ 2}</div>
+            <div class="result-badge" id="r_q3_3"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="showExplain('q3_3')">📖 看解析</button>
+            </div>
+            <div class="explain" id="e_q3_3">
+                <span class="hl">B. {x | x ≤ 2}</span><br>
+                x > 2 的补集：<span class="hl">x ≤ 2</span>。<br>
+                ⚠️ 注意：<span class="hl">2 不在 A 里，所以在补集里</span>，要取等号。
+            </div>
+        </div>
+
+        <div class="question-box" id="q3_4">
+            <div class="q-text">已知 U = R，A = {x | x ≥ 2}，则 ∁<sub>U</sub>A =（ ）</div>
+            <div class="option" data-q="q3_4" data-oi="0" onclick="selectOption('q3_4', 0)">A. {x | x < 2}</div>
+            <div class="option" data-q="q3_4" data-oi="1" onclick="selectOption('q3_4', 1)">B. {x | x ≤ 2}</div>
+            <div class="result-badge" id="r_q3_4"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="showExplain('q3_4')">📖 看解析</button>
+            </div>
+            <div class="explain" id="e_q3_4">
+                <span class="hl">A. {x | x < 2}</span><br>
+                x ≥ 2 的补集：<span class="hl">x < 2</span>。<br>
+                ⚠️ 注意：<span class="hl">2 在 A 里，所以不在补集里</span>，不能取等号。
+            </div>
+        </div>
+
+        <div class="question-box" id="q3_5">
+            <div class="q-text">已知 A = {x | −1 < x ≤ 3}，则以下说法正确的是（ ）</div>
+            <div class="option" data-q="q3_5" data-oi="0" onclick="selectOption('q3_5', 0)">A. −1 ∈ A 且 3 ∈ A</div>
+            <div class="option" data-q="q3_5" data-oi="1" onclick="selectOption('q3_5', 1)">B. −1 ∉ A 且 3 ∈ A</div>
+            <div class="option" data-q="q3_5" data-oi="2" onclick="selectOption('q3_5', 2)">C. −1 ∈ A 且 3 ∉ A</div>
+            <div class="option" data-q="q3_5" data-oi="3" onclick="selectOption('q3_5', 3)">D. −1 ∉ A 且 3 ∉ A</div>
+            <div class="result-badge" id="r_q3_5"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="showExplain('q3_5')">📖 看解析</button>
+            </div>
+            <div class="explain" id="e_q3_5">
+                <span class="hl">B. −1 ∉ A 且 3 ∈ A</span><br>
+                −1 是 <span class="hl">开区间</span>（不取），3 是 <span class="hl">闭区间</span>（取）。<br>
+                ⚠️ 这是高考最爱的 <span class="hl">“混合区间”</span> 陷阱！
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 完成按钮 -->
+    <!-- ============================================================ -->
+    <button class="btn-done" id="markDone">✅ 标记为已完成</button>
+
+    <div class="footer">🛠️ 初中工具 · 东东专属 · 持续更新</div>
+</div>
+
+<script>
+    // ================================================================
+    // 模块 ID
+    // ================================================================
+    const MODULE_ID = '06_middle_tools';
+
+    // ================================================================
+    // 正确答案映射
+    // ================================================================
+    const correctMap = {
+        'q1_1': 0,
+        'q1_2': 0,
+        'q1_3': 0,
+        'q1_4': 0,
+        'q1_5': 0,
+        'q1_6': 0,
+        'q1_7': 0,
+        'q1_8': 0,
+        'q1_9': 0,
+        'q1_10': 0,
+        'q1_11': 0,
+        'q2_1': 0,
+        'q2_2': 1,
+        'q2_3': 0,
+        'q2_4': 2,
+        'q3_1': 1,
+        'q3_2': 0,
+        'q3_3': 1,
+        'q3_4': 0,
+        'q3_5': 1
+    };
+
+    const selectedMap = {};
+
+    // ================================================================
+    // 选择逻辑
+    // ================================================================
+    function selectOption(qId, oi) {
+        if (selectedMap[qId] !== undefined) return;
+        selectedMap[qId] = oi;
+
+        const container = document.getElementById(qId);
+        const options = container.querySelectorAll('.option');
+        options.forEach(el => el.classList.remove('selected', 'correct-show', 'wrong-show'));
+
+        options[oi].classList.add('selected');
+        const isCorrect = (correctMap[qId] === oi);
+        const resultBadge = document.getElementById('r_' + qId);
+
+        if (isCorrect) {
+            options[oi].classList.add('correct-show');
+            resultBadge.textContent = '✅ 正确！';
+            resultBadge.className = 'result-badge correct';
+        } else {
+            options[oi].classList.add('wrong-show');
+            options[correctMap[qId]].classList.add('correct-show');
+            resultBadge.textContent = '❌ 正确答案是 ' + String.fromCharCode(65 + correctMap[qId]);
+            resultBadge.className = 'result-badge wrong';
+        }
+    }
+
+    // ================================================================
+    // 解析显示
+    // ================================================================
+    function showExplain(qId) {
+        const el = document.getElementById('e_' + qId);
+        el.style.display = (el.style.display === 'none' || el.style.display === '') ? 'block' : 'none';
+    }
+
+    // ================================================================
+    // 完成状态
+    // ================================================================
+    function markCompleted() {
+        let completed = JSON.parse(localStorage.getItem('dongdong_modules') || '[]');
+        if (!completed.includes(MODULE_ID)) {
+            completed.push(MODULE_ID);
+            localStorage.setItem('dongdong_modules', JSON.stringify(completed));
+            localStorage.setItem('dongdong_update', Date.now().toString());
+        }
+        const btn = document.getElementById('markDone');
+        btn.textContent = '✅ 已标记完成！';
+        btn.classList.add('completed');
+    }
+
+    function checkStatus() {
+        const completed = JSON.parse(localStorage.getItem('dongdong_modules') || '[]');
+        const btn = document.getElementById('markDone');
+        if (completed.includes(MODULE_ID)) {
+            btn.textContent = '✅ 已完成';
+            btn.classList.add('completed');
+        }
+    }
+
+    document.getElementById('markDone').addEventListener('click', markCompleted);
+    window.addEventListener('load', checkStatus);
+    window.addEventListener('storage', checkStatus);
+</script>
+</body>
+</html>

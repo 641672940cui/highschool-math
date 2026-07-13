@@ -57,6 +57,11 @@
             background: #f1f5f9;
             transform: scale(0.98);
         }
+        .module-card.disabled {
+            opacity: 0.6;
+            cursor: default;
+            pointer-events: none;
+        }
         .module-info {
             display: flex;
             flex-direction: column;
@@ -157,12 +162,12 @@
 
 <script>
     // ================================================================
-    // 模块配置（02 已更新为“数集与元素 · 真题实战”）
+    // 模块配置
     // ================================================================
     const modules = [
         { id: '01_symbol_translate', title: '🔤 符号翻译训练场', desc: '∈、∉、⊆、⊂、∩、∪、∁ 翻译训练', tag: '核心', tagClass: 'tag-core' },
         { id: '02_number_sets',      title: '🔢 数集与元素 · 真题实战', desc: '广东期中/期末/高考真题 · 含错题集', tag: '真题', tagClass: 'tag-exam' },
-        { id: '03_set_relations',    title: '📐 集合关系 · 真题实战', desc: '子集、真子集、空集 · 含错题集（待上线）', tag: '真题', tagClass: 'tag-exam' },
+        { id: '03_set_relations',    title: '📐 集合关系 · 真题实战', desc: '子集、真子集、空集、子集个数 · 含错题集', tag: '真题', tagClass: 'tag-exam' },
         { id: '04_set_operations',   title: '🧮 集合运算 · 真题实战', desc: '交集、并集、补集 · 含错题集（待上线）', tag: '真题', tagClass: 'tag-exam' },
         { id: '05_logic_quantifiers',title: '🔁 充分条件与量词 · 真题实战', desc: '充分/必要、∀/∃、命题否定（待上线）', tag: '真题', tagClass: 'tag-exam' },
         { id: '06_middle_tools',     title: '🛠️ 初中工具补漏', desc: '因式分解 · 韦达定理 · 端点判断', tag: '工具', tagClass: 'tag-tool' },
@@ -192,19 +197,21 @@
 
         let doneCount = 0;
 
+        // 已上线的模块 ID 列表（可点击）
+        const availableModules = ['01_symbol_translate', '02_number_sets', '03_set_relations', '06_middle_tools'];
+
         modules.forEach(m => {
             const isDone = completed.includes(m.id);
             if (isDone) doneCount++;
 
             const card = document.createElement('a');
             card.className = 'module-card';
-            // 如果 id 是待上线的（03-05、07），暂时不可点击
-            const isAvailable = ['01_symbol_translate', '02_number_sets', '06_middle_tools'].includes(m.id);
+
+            // 检查是否已上线
+            const isAvailable = availableModules.includes(m.id);
             if (!isAvailable) {
-                card.style.opacity = '0.6';
-                card.style.cursor = 'default';
+                card.classList.add('disabled');
                 card.href = '#';
-                card.onclick = (e) => { e.preventDefault(); alert('🧘 东东，这个模块还在编写中，请先完成已上线的模块！'); };
             } else {
                 card.href = `modules/${m.id}.html`;
             }

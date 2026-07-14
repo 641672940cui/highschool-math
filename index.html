@@ -35,15 +35,94 @@
             border-radius: 0 12px 12px 0;
             padding: 6px 12px;
         }
-        .module-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+
+        /* 章节折叠 */
+        .chapter-section {
+            margin-bottom: 16px;
         }
-        .module-card {
+        .chapter-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             background: #fff;
             border-radius: 16px;
             padding: 14px 16px;
+            border: 1px solid #e6edf4;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: 0.15s;
+            user-select: none;
+        }
+        .chapter-header:active {
+            background: #f1f5f9;
+            transform: scale(0.98);
+        }
+        .chapter-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .chapter-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        .ch1-icon {
+            background: #eef2ff;
+        }
+        .ch2-icon {
+            background: #f3e8ff;
+        }
+        .chapter-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .chapter-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: #0b1a2f;
+        }
+        .chapter-progress {
+            font-size: 12px;
+            color: #64748b;
+        }
+        .chapter-arrow {
+            font-size: 16px;
+            color: #94a3b8;
+            transition: transform 0.3s;
+            flex-shrink: 0;
+            margin-left: 8px;
+        }
+        .chapter-arrow.open {
+            transform: rotate(90deg);
+        }
+
+        /* 模块列表 */
+        .module-list {
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.4s ease;
+            padding: 0 4px;
+        }
+        .module-list.open {
+            max-height: 2000px;
+        }
+        .module-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-top: 8px;
+        }
+
+        .module-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 12px 14px;
             border: 1px solid #e6edf4;
             display: flex;
             justify-content: space-between;
@@ -51,7 +130,7 @@
             text-decoration: none;
             color: #0b1a2f;
             transition: 0.15s;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
         }
         .module-card:active {
             background: #f1f5f9;
@@ -64,53 +143,48 @@
         }
         .module-title {
             font-weight: 600;
-            font-size: 16px;
+            font-size: 15px;
         }
         .module-desc {
-            font-size: 13px;
+            font-size: 12px;
             color: #64748b;
         }
         .module-tag {
-            font-size: 12px;
-            background: #dbeafe;
-            color: #1e4f8a;
-            padding: 2px 12px;
+            font-size: 11px;
+            padding: 2px 10px;
             border-radius: 30px;
             font-weight: 500;
             white-space: nowrap;
+            flex-shrink: 0;
+            margin-left: 8px;
         }
         .module-tag.done {
             background: #bbf7d0;
             color: #065f46;
         }
-        .module-tag.tag-core {
-            background: #dbeafe;
-            color: #1e4f8a;
-        }
-        .module-tag.tag-exam {
-            background: #fef3c7;
-            color: #92400e;
-        }
-        .module-tag.tag-tool {
-            background: #e0e7ff;
-            color: #3730a3;
-        }
-        .module-tag.tag-hard {
-            background: #fce4ec;
-            color: #b91c1c;
-        }
+        .tag-core { background: #dbeafe; color: #1e4f8a; }
+        .tag-exam { background: #fef3c7; color: #92400e; }
+        .tag-tool { background: #e0e7ff; color: #3730a3; }
+        .tag-hard { background: #fce4ec; color: #b91c1c; }
+        .tag-basic { background: #dbeafe; color: #1e4f8a; }
+        .tag-advance { background: #fef3c7; color: #92400e; }
+
         .footer {
             text-align: center;
             font-size: 13px;
             color: #94a3b8;
             margin-top: 28px;
         }
+
+        /* 总进度 */
+        .total-progress-wrap {
+            margin-bottom: 16px;
+        }
         .progress-bar {
             width: 100%;
             height: 6px;
             background: #e2e8f0;
             border-radius: 10px;
-            margin-top: 16px;
             overflow: hidden;
         }
         .progress-fill {
@@ -131,43 +205,72 @@
             color: #2563eb;
             font-weight: 600;
         }
-        .stats-row .total-count {
-            color: #64748b;
-        }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>🧩 东东 · 数学工具箱</h1>
-    <div class="sub">📖 点击模块开始训练 · 进度自动保存</div>
+    <div class="sub">📖 点击章节展开模块 · 进度自动保存</div>
 
-    <!-- 进度条 -->
-    <div class="progress-bar">
-        <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
-    </div>
-    <div class="stats-row">
-        <span>📊 已完成：<span class="done-count" id="doneCount">0</span> / <span class="total-count" id="totalCount">0</span></span>
-        <span id="celebration" style="display:none;">🎉 全部通关！</span>
+    <!-- 总进度条 -->
+    <div class="total-progress-wrap">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+        </div>
+        <div class="stats-row">
+            <span>📊 已完成：<span class="done-count" id="doneCount">0</span> / <span id="totalCount">0</span></span>
+            <span id="celebration" style="display:none;">🎉 全部通关！</span>
+        </div>
     </div>
 
-    <div class="module-grid" id="moduleGrid" style="margin-top:16px;"></div>
+    <!-- 章节由JS动态生成 -->
+    <div id="chaptersContainer"></div>
 
     <div class="footer">💪 每天进步一点点 · 东东专属</div>
 </div>
 
 <script>
     // ================================================================
-    // 模块配置（01～07 全部可点击）
+    // 模块数据
     // ================================================================
-    const modules = [
-        { id: '01_symbol_translate', title: '🔤 符号翻译训练场', desc: '∈、∉、⊆、⊂、∩、∪、∁ 翻译训练', tag: '核心', tagClass: 'tag-core' },
-        { id: '02_number_sets',      title: '🔢 数集与元素 · 真题实战', desc: '广东期中/期末/高考真题 · 含错题集', tag: '真题', tagClass: 'tag-exam' },
-        { id: '03_set_relations',    title: '📐 集合关系 · 真题实战', desc: '子集、真子集、空集、子集个数 · 含错题集', tag: '真题', tagClass: 'tag-exam' },
-        { id: '04_set_operations',   title: '🧮 集合运算 · 真题实战', desc: '交集、并集、补集 · 含错题集', tag: '真题', tagClass: 'tag-exam' },
-        { id: '05_logic_quantifiers',title: '🔁 逻辑量词与条件 · 真题实战', desc: '充分/必要、∀/∃、命题否定 · 含错题集', tag: '真题', tagClass: 'tag-exam' },
-        { id: '06_middle_tools',     title: '🛠️ 初中工具补漏', desc: '因式分解 · 韦达定理 · 端点判断', tag: '工具', tagClass: 'tag-tool' },
-        { id: '07_param_subset',     title: '⭐ 含参子集 · 压轴实战', desc: '分类讨论 · 空集陷阱 · 区间端点 · 含错题集', tag: '压轴', tagClass: 'tag-hard' },
+    const chapters = [
+        {
+            id: 'ch1',
+            icon: '📚',
+            iconClass: 'ch1-icon',
+            title: '第一章 · 集合与常用逻辑用语',
+            modules: [
+                { id: '01_symbol_translate', title: '🔤 符号翻译训练场', desc: '∈、∉、⊆、⊂、∩、∪、∁ 翻译训练', tag: '核心', tagClass: 'tag-core' },
+                { id: '02_number_sets',      title: '🔢 数集与元素 · 真题实战', desc: '广东期中/期末/高考真题 · 含错题集', tag: '真题', tagClass: 'tag-exam' },
+                { id: '03_set_relations',    title: '📐 集合关系 · 真题实战', desc: '子集、真子集、空集、子集个数 · 含错题集', tag: '真题', tagClass: 'tag-exam' },
+                { id: '04_set_operations',   title: '🧮 集合运算 · 真题实战', desc: '交集、并集、补集 · 含错题集', tag: '真题', tagClass: 'tag-exam' },
+                { id: '05_logic_quantifiers',title: '🔁 逻辑量词与条件 · 真题实战', desc: '充分/必要、∀/∃、命题否定 · 含错题集', tag: '真题', tagClass: 'tag-exam' },
+                { id: '06_middle_tools',     title: '🛠️ 初中工具补漏', desc: '因式分解 · 韦达定理 · 端点判断', tag: '工具', tagClass: 'tag-tool' },
+                { id: '07_param_subset',     title: '⭐ 含参子集 · 压轴实战', desc: '分类讨论 · 空集陷阱 · 区间端点 · 含错题集', tag: '压轴', tagClass: 'tag-hard' },
+            ]
+        },
+        {
+            id: 'ch2',
+            icon: '📖',
+            iconClass: 'ch2-icon',
+            title: '第二章 · 一元二次函数、方程和不等式',
+            modules: [
+                { id: '08_equality_property',    title: '⚖️ 等式与不等式的性质', desc: '性质·作差法·倒数·秒答+基础强化+真题', tag: '基础', tagClass: 'tag-basic' },
+                { id: '09_basic_inequality_1',   title: '📏 基本不等式（上）· 公式与应用', desc: '积定和最小·和定积最大·对勾函数', tag: '核心', tagClass: 'tag-core' },
+                { id: '10_basic_inequality_2',   title: '🧩 基本不等式（下）· 配凑与拓展', desc: '配凑·"1"的代换·不等式链·建模', tag: '进阶', tagClass: 'tag-advance' },
+                { id: '11_quadratic_equation',   title: '📈 二次函数与方程', desc: '系数识别·判别式·韦达定理·三种形式', tag: '核心', tagClass: 'tag-core' },
+                { id: '12_quadratic_inequality', title: '🎯 一元二次不等式', desc: '解法流程·开口陷阱·恒成立·含参讨论', tag: '核心', tagClass: 'tag-core' },
+            ]
+        }
     ];
+
+    // 所有模块的扁平列表（用于进度计算）
+    const allModules = [];
+    chapters.forEach(ch => {
+        ch.modules.forEach(m => {
+            allModules.push(m.id);
+        });
+    });
 
     // ================================================================
     // 进度管理
@@ -178,50 +281,102 @@
         } catch { return []; }
     }
 
-    function saveCompleted(list) {
-        localStorage.setItem('dongdong_modules', JSON.stringify(list));
-    }
-
     // ================================================================
     // 渲染
     // ================================================================
     function render() {
         const completed = getCompleted();
-        const grid = document.getElementById('moduleGrid');
-        grid.innerHTML = '';
+        const container = document.getElementById('chaptersContainer');
+        container.innerHTML = '';
 
-        let doneCount = 0;
+        let totalDone = 0;
 
-        modules.forEach(m => {
-            const isDone = completed.includes(m.id);
-            if (isDone) doneCount++;
+        chapters.forEach(ch => {
+            // 计算本章完成数
+            let chDone = 0;
+            ch.modules.forEach(m => {
+                if (completed.includes(m.id)) chDone++;
+            });
+            totalDone += chDone;
 
-            const card = document.createElement('a');
-            card.className = 'module-card';
-            card.href = `modules/${m.id}.html`;
+            // 章节容器
+            const section = document.createElement('div');
+            section.className = 'chapter-section';
 
-            const tagClass = isDone ? 'done' : (m.tagClass || '');
-            const tagText = isDone ? '✅ 已完成' : m.tag;
-
-            card.innerHTML = `
-                <div class="module-info">
-                    <div class="module-title">${m.title}</div>
-                    <div class="module-desc">${m.desc}</div>
+            // 章节头部
+            const header = document.createElement('div');
+            header.className = 'chapter-header';
+            header.innerHTML = `
+                <div class="chapter-left">
+                    <div class="chapter-icon ${ch.iconClass}">${ch.icon}</div>
+                    <div class="chapter-info">
+                        <div class="chapter-title">${ch.title}</div>
+                        <div class="chapter-progress">✅ ${chDone} / ${ch.modules.length} 模块完成</div>
+                    </div>
                 </div>
-                <span class="module-tag ${tagClass}">${tagText}</span>
+                <span class="chapter-arrow" id="arrow_${ch.id}">▶</span>
             `;
-            grid.appendChild(card);
+
+            // 模块列表
+            const list = document.createElement('div');
+            list.className = 'module-list';
+            list.id = 'list_' + ch.id;
+
+            const grid = document.createElement('div');
+            grid.className = 'module-grid';
+
+            ch.modules.forEach(m => {
+                const isDone = completed.includes(m.id);
+                const card = document.createElement('a');
+                card.className = 'module-card';
+                card.href = `modules/${m.id}.html`;
+
+                const tagClass = isDone ? 'done' : (m.tagClass || '');
+                const tagText = isDone ? '✅ 已完成' : m.tag;
+
+                card.innerHTML = `
+                    <div class="module-info">
+                        <div class="module-title">${m.title}</div>
+                        <div class="module-desc">${m.desc}</div>
+                    </div>
+                    <span class="module-tag ${tagClass}">${tagText}</span>
+                `;
+                grid.appendChild(card);
+            });
+
+            list.appendChild(grid);
+            section.appendChild(header);
+            section.appendChild(list);
+            container.appendChild(section);
+
+            // 点击展开/收起
+            header.addEventListener('click', () => {
+                const arrow = document.getElementById('arrow_' + ch.id);
+                const isOpen = list.classList.contains('open');
+                if (isOpen) {
+                    list.classList.remove('open');
+                    arrow.classList.remove('open');
+                } else {
+                    list.classList.add('open');
+                    arrow.classList.add('open');
+                }
+            });
+
+            // 默认第一章展开，第二章收起
+            if (ch.id === 'ch1') {
+                list.classList.add('open');
+                document.getElementById('arrow_' + ch.id).classList.add('open');
+            }
         });
 
-        // 更新进度
-        const total = modules.length;
-        document.getElementById('doneCount').textContent = doneCount;
+        // 更新总进度
+        const total = allModules.length;
+        document.getElementById('doneCount').textContent = totalDone;
         document.getElementById('totalCount').textContent = total;
-        document.getElementById('progressFill').style.width = `${(doneCount/total)*100}%`;
+        document.getElementById('progressFill').style.width = `${(totalDone/total)*100}%`;
 
-        // 全部完成彩蛋
         const celebration = document.getElementById('celebration');
-        if (doneCount === total) {
+        if (totalDone === total) {
             celebration.style.display = 'inline';
             celebration.textContent = '🎉 全部通关！东东太棒了！';
         } else {
@@ -230,7 +385,7 @@
     }
 
     // ================================================================
-    // 监听存储变化
+    // 监听
     // ================================================================
     window.addEventListener('storage', render);
     window.addEventListener('load', render);

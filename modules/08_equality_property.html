@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>模块08 · 等式与不等式的性质</title>
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            startup: {
+                ready() {
+                    MathJax.startup.defaultReady();
+                    MathJax.startup.promise.then(() => {
+                        if (typeof window.renderMath === 'function') window.renderMath();
+                    });
+                }
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        :root {
+            --bg: #f8fafc; --card: #ffffff; --text: #0f172a; --sub: #64748b;
+            --blue: #3b82f6; --blue-light: #eff6ff; --green: #10b981; --green-light: #ecfdf5;
+            --red: #ef4444; --red-light: #fef2f2; --yellow: #fde047; --orange: #f59e0b;
+            --purple: #8b5cf6; --purple-light: #f5f3ff;
+            --border: #e2e8f0; --shadow: 0 4px 12px rgba(0,0,0,0.04); --radius: 20px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg); padding: 16px 12px 80px; display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; -webkit-tap-highlight-color: transparent;
+        }
+        .container { max-width: 500px; width: 100%; }
+
+        .top-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+        .back-btn {
+            width: 40px; height: 40px; border-radius: 50%; background: var(--card); border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer;
+            text-decoration: none; color: var(--text); box-shadow: var(--shadow); flex-shrink: 0;
+        }
+        .top-title { font-size: 1rem; font-weight: 700; color: var(--text); }
+
+        .section-title {
+            font-size: 1rem; font-weight: 700; color: var(--text); margin: 18px 0 10px;
+            padding-left: 12px; border-left: 4px solid var(--blue); display: flex; align-items: center; gap: 6px;
+        }
+        .section-title.s2 { border-left-color: var(--purple); }
+        .section-title.s3 { border-left-color: #06b6d4; }
+        .section-title.s4 { border-left-color: var(--orange); }
+
+        .knowledge-card {
+            background: var(--card); border-radius: var(--radius); padding: 14px 16px;
+            margin-bottom: 10px; box-shadow: var(--shadow); border: 1px solid var(--border);
+        }
+        .knowledge-card h3 { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+        .knowledge-card p { font-size: 0.85rem; color: #334155; line-height: 1.6; margin-bottom: 3px; }
+        .knowledge-card table {
+            width: 100%; border-collapse: collapse; font-size: 0.78rem; margin: 6px 0;
+        }
+        .knowledge-card th { background: #f1f5f9; padding: 7px 5px; text-align: left; font-weight: 600; }
+        .knowledge-card td { padding: 7px 5px; border-bottom: 1px solid var(--border); }
+
+        .memory-box {
+            background: #f5f3ff; border-left: 4px solid var(--purple); padding: 10px 14px;
+            border-radius: 0 14px 14px 0; margin: 10px 0; font-size: 0.85rem; font-weight: 600;
+        }
+        .metaphor-box {
+            background: #ecfdf5; border-left: 4px solid var(--green); padding: 10px 14px;
+            border-radius: 0 14px 14px 0; margin: 10px 0; font-size: 0.85rem;
+        }
+
+        /* 通用题目样式 */
+        .quiz-item {
+            background: var(--card); border-radius: 16px; padding: 12px 14px;
+            margin-bottom: 8px; box-shadow: var(--shadow); border: 1px solid var(--border);
+        }
+        .quiz-item .q-text { font-size: 0.85rem; font-weight: 500; margin-bottom: 6px; }
+        .q-opts { display: flex; flex-wrap: wrap; gap: 6px; }
+        .q-opt {
+            padding: 7px 12px; border-radius: 18px; font-size: 0.8rem; font-weight: 500;
+            background: #f1f5f9; border: 1px solid var(--border); cursor: pointer; transition: 0.15s;
+        }
+        .q-opt.selected { background: #dbeafe; border-color: var(--blue); }
+        .q-opt.correct { background: #dcfce7; border-color: var(--green); }
+        .q-opt.wrong { background: #fee2e2; border-color: var(--red); }
+        .q-exp {
+            margin-top: 6px; padding: 8px 10px; background: #fffbeb; border-radius: 10px;
+            font-size: 0.78rem; display: none; line-height: 1.5;
+        }
+        .q-exp.show { display: block; }
+        .yellow-hl { background: #fde047; font-weight: 600; padding: 0 3px; border-radius: 3px; }
+
+        .diff-badge {
+            display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.7rem;
+            font-weight: 700; margin-bottom: 6px;
+        }
+        .diff-badge.basic { background: #dcfce7; color: #166534; }
+        .diff-badge.middle { background: #fef3c7; color: #92400e; }
+        .diff-badge.advanced { background: #fee2e2; color: #991b1b; }
+
+        .submit-btn {
+            display: block; width: 100%; padding: 14px; background: #0f172a; color: white;
+            border: none; border-radius: 30px; font-size: 1rem; font-weight: 600; margin: 16px 0;
+            cursor: pointer; transition: 0.2s;
+        }
+        .submit-btn:active { transform: scale(0.97); }
+        .submit-btn:disabled { background: #94a3b8; }
+
+        .bottom-nav { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+        .bottom-nav a {
+            flex: 1; text-align: center; padding: 12px 8px; background: var(--card);
+            border-radius: 16px; text-decoration: none; color: var(--text); font-size: 0.82rem;
+            font-weight: 500; border: 1px solid var(--border); min-width: 60px;
+        }
+        .score-display {
+            text-align: center; font-size: 1rem; font-weight: 700; padding: 10px;
+            border-radius: 16px; margin: 10px 0;
+        }
+        .drill-controls {
+            display: flex; gap: 8px; margin-bottom: 10px; align-items: center;
+        }
+        .drill-controls button {
+            padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border);
+            background: var(--card); font-size: 0.82rem; cursor: pointer; font-weight: 500;
+        }
+        .drill-controls button:active { background: #f1f5f9; }
+        .drill-score {
+            font-size: 0.85rem; font-weight: 600; color: var(--sub);
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <div class="top-bar">
+        <a href="../index.html" class="back-btn">←</a>
+        <span class="top-title">模块08 · 等式与不等式的性质</span>
+    </div>
+
+    <!-- ============ 一、知识点讲解区 ============ -->
+    <div class="section-title">📖 知识点讲解</div>
+    <div class="knowledge-card">
+        <h3>一、不等式的基本性质</h3>
+        <table>
+            <tr><th>性质</th><th>内容</th><th>⚠️易错</th></tr>
+            <tr><td>传递性</td><td>$a>b$且$b>c \Rightarrow a>c$</td><td>同向可传递</td></tr>
+            <tr><td>可加性</td><td>$a>b \Rightarrow a+c>b+c$</td><td>方向不变</td></tr>
+            <tr><td>可乘性(正)</td><td>$a>b,c>0 \Rightarrow ac>bc$</td><td>方向不变</td></tr>
+            <tr><td>可乘性(负)</td><td>$a>b,c<0 \Rightarrow ac<bc$</td><td>⚠️<span class="yellow-hl">方向反转</span></td></tr>
+        </table>
+    </div>
+    <div class="knowledge-card">
+        <h3>二、作差比较法（核心）</h3>
+        <p>$a>b \iff a-b>0$，步骤：作差→化简→判断符号→得结论</p>
+    </div>
+    <div class="knowledge-card">
+        <h3>三、倒数与乘方性质</h3>
+        <table>
+            <tr><th>性质</th><th>条件</th><th>结论</th></tr>
+            <tr><td>倒数</td><td>$a>b>0$</td><td>$\frac{1}{a}<\frac{1}{b}$</td></tr>
+            <tr><td>乘方</td><td>$a>b>0$</td><td>$a^n>b^n$</td></tr>
+        </table>
+    </div>
+    <div class="memory-box">🧠 口诀：「负数乘除，方向倒流」·「同正取倒，大小颠倒」</div>
+    <div class="metaphor-box">🎣 比喻：不等式像天平⚖️——加减砝码方向不变；乘负数就像把天平倒过来。</div>
+
+    <!-- ============ 二、秒答训练区（8题） ============ -->
+    <div class="section-title s2">⚡ 秒答训练（概念速检·8题）</div>
+    <div v-for="(q, qi) in quickQuiz" :key="'qq'+qi" class="quiz-item">
+        <div class="q-text">{{ qi+1 }}. {{ q.text }}</div>
+        <div class="q-opts">
+            <span v-for="(opt, oi) in q.options" :key="oi" class="q-opt"
+                  :class="qqOptClass(qi, oi)" @click="qqAnswer(qi, oi)">{{ String.fromCharCode(65+oi) }}. {{ opt }}</span>
+        </div>
+        <div class="q-exp" :class="{ show: q.showExp }" v-html="q.expHtml"></div>
+    </div>
+
+    <!-- ============ 三、基础强化区（12题） ============ -->
+    <div class="section-title s3">💪 基础强化（肌肉记忆·12题）</div>
+    <div class="drill-controls">
+        <button @click="reshuffleDrill">🔄 重新出题</button>
+        <span class="drill-score">✅ {{ drillCorrect }} / {{ drillQuestions.length }}</span>
+    </div>
+    <div v-for="(q, qi) in drillQuestions" :key="'dr'+qi+'_'+drillKey" class="quiz-item">
+        <div class="q-text">{{ qi+1 }}. {{ q.text }}</div>
+        <div class="q-opts">
+            <span v-for="(opt, oi) in q.options" :key="oi" class="q-opt"
+                  :class="drillOptClass(qi, oi)" @click="drillAnswer(qi, oi)">{{ String.fromCharCode(65+oi) }}. {{ opt }}</span>
+        </div>
+        <div class="q-exp" :class="{ show: q.showExp }" v-html="q.expHtml"></div>
+    </div>
+
+    <!-- ============ 四、梯度自测（6题） ============ -->
+    <div class="section-title s4">🎯 梯度自测·真题练习（6题）</div>
+    <div v-for="(q, qi) in examQuestions" :key="'ex'+qi" class="quiz-item">
+        <span class="diff-badge" :class="q.level">{{ q.levelLabel }}</span>
+        <div class="q-text">{{ qi+1 }}. {{ q.text }}</div>
+        <div class="q-opts">
+            <span v-for="(opt, oi) in q.options" :key="oi" class="q-opt"
+                  :class="exOptClass(qi, oi)" @click="exSelect(qi, oi)">{{ String.fromCharCode(65+oi) }}. {{ opt }}</span>
+        </div>
+        <div class="q-exp" :class="{ show: q.showExp }" v-html="q.expHtml"></div>
+    </div>
+    <button class="submit-btn" @click="submitAllExam" :disabled="allExamSubmitted">
+        {{ allExamSubmitted ? '✅ 已完成批改' : '📝 提交全部真题练习' }}
+    </button>
+    <div class="score-display" v-if="allExamSubmitted" :style="{ background: examScore>=4 ? '#dcfce7' : '#fef2f2' }">
+        🎯 真题得分：{{ examScore }} / 6
+        <span v-if="examScore>=5">🏆 优秀！</span>
+        <span v-else-if="examScore>=3">👍 加油！</span>
+        <span v-else>📚 建议重新练习基础强化区</span>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="../index.html">🏠 首页</a>
+        <a href="09_basic_inequality_1.html">下一模块 ▶</a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+<script>
+    const { createApp, ref, reactive, computed } = Vue;
+    createApp({
+        setup() {
+            // ===== 秒答训练（8题） =====
+            const quickQuiz = reactive([
+                { text:'若$a>b$，则$a+3$___$b+3$', options:['>','<','=','无法确定'], answer:0, showExp:false, userChoice:-1, expHtml:'✅ A | <span class="yellow-hl">可加性</span>，两边加同一个数方向不变。' },
+                { text:'若$a>b$，则$-2a$___$-2b$', options:['>','<','=','无法确定'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | 乘负数$-2$，<span class="yellow-hl">方向反转</span>。' },
+                { text:'比较大小最通用的方法是？', options:['作差法','作商法','直接看','猜'], answer:0, showExp:false, userChoice:-1, expHtml:'✅ A | <span class="yellow-hl">作差法</span>是最通用的方法。' },
+                { text:'若$x>y>0$，则$\\frac{1}{x}$___$\\frac{1}{y}$', options:['>','<','=','无法确定'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | 两正数取倒数，<span class="yellow-hl">大小颠倒</span>。' },
+                { text:'若$a>b$，$c<0$，则$ac$___$bc$', options:['>','<','=','无法确定'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | 乘负数$c$，<span class="yellow-hl">方向反转</span>。' },
+                { text:'若$a>b>0$，则$a^2$___$b^2$', options:['>','<','=','无法确定'], answer:0, showExp:false, userChoice:-1, expHtml:'✅ A | <span class="yellow-hl">乘方性质</span>，正数乘方方向不变。' },
+                { text:'若$a>b$，则$a-c$___$b-c$', options:['>','<','=','无法确定'], answer:0, showExp:false, userChoice:-1, expHtml:'✅ A | <span class="yellow-hl">可加性</span>，加$-c$方向不变。' },
+                { text:'不等式性质中，乘什么数方向反转？', options:['正数','负数','零','任何数'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | 乘<span class="yellow-hl">负数</span>时不等号方向反转。' }
+            ]);
+            const qqAnswer = (qi, oi) => { if(quickQuiz[qi].showExp) return; quickQuiz[qi].userChoice=oi; quickQuiz[qi].showExp=true; };
+            const qqOptClass = (qi, oi) => {
+                const q=quickQuiz[qi];
+                if(!q.showExp) return q.userChoice===oi?'selected':'';
+                if(oi===q.answer) return 'correct';
+                if(oi===q.userChoice&&oi!==q.answer) return 'wrong';
+                return '';
+            };
+
+            // ===== 基础强化区（12题，随机出题池） =====
+            const drillPool = [
+                { text:'若$a>b$，则$a+5$___$b+5$', options:['>','<','='], answer:0, expHtml:'<span class="yellow-hl">可加性</span>，加5方向不变。' },
+                { text:'若$x<y$，则$x-3$___$y-3$', options:['<','>','='], answer:0, expHtml:'<span class="yellow-hl">可加性</span>，减3方向不变。' },
+                { text:'若$m\\geq n$，则$m+2$___$n+2$', options:['\\geq','\\leq','='], answer:0, expHtml:'<span class="yellow-hl">可加性</span>，加2方向不变。' },
+                { text:'若$a>b$，则$-a$___$-b$', options:['<','>','='], answer:0, expHtml:'乘<span class="yellow-hl">-1</span>，方向反转。' },
+                { text:'若$x<y$，则$-3x$___$-3y$', options:['>','<','='], answer:0, expHtml:'乘<span class="yellow-hl">负数-3</span>，方向反转。' },
+                { text:'若$m>n$，则$-\\frac{1}{2}m$___$-\\frac{1}{2}n$', options:['<','>','='], answer:0, expHtml:'乘<span class="yellow-hl">负数-1/2</span>，方向反转。' },
+                { text:'若$a>b>0$，则$\\frac{1}{a}$___$\\frac{1}{b}$', options:['<','>','='], answer:0, expHtml:'<span class="yellow-hl">倒数性质</span>，同正取倒大小颠倒。' },
+                { text:'若$0<x<y$，则$\\frac{1}{x}$___$\\frac{1}{y}$', options:['>','<','='], answer:0, expHtml:'<span class="yellow-hl">倒数性质</span>，同正取倒大小颠倒。' },
+                { text:'若$a>b$且$c>0$，则$ac$___$bc$', options:['>','<','='], answer:0, expHtml:'乘<span class="yellow-hl">正数$c$</span>，方向不变。' },
+                { text:'若$a>b$且$d<0$，则$ad$___$bd$', options:['<','>','='], answer:0, expHtml:'乘<span class="yellow-hl">负数$d$</span>，方向反转。' },
+                { text:'若$x<y<0$，则$-x$___$-y$', options:['>','<','='], answer:0, expHtml:'乘<span class="yellow-hl">-1</span>反转：$-x>-y$。' },
+                { text:'若$a>b$且$c<0$，则$a+c$___$b+c$', options:['>','<','='], answer:0, expHtml:'<span class="yellow-hl">可加性</span>，加$c$方向不变，与$c$正负无关。' },
+                { text:'若$a>b$且$b>c$，则$a$___$c$', options:['>','<','='], answer:0, expHtml:'<span class="yellow-hl">传递性</span>。' },
+                { text:'作差法：$a>b \\iff a-b$___$0$', options:['>','<','='], answer:0, expHtml:'<span class="yellow-hl">作差法原理</span>。' },
+                { text:'若$a>0>b$，则$a$___$b$', options:['>','<','='], answer:0, expHtml:'正数<span class="yellow-hl">大于</span>负数。' },
+            ];
+            const drillKey = ref(0);
+            const drillQuestions = ref([]);
+            const drillCorrect = computed(() => drillQuestions.value.filter(q => q.showExp && q.userChoice===q.answer).length);
+            
+            const shuffleArray = (arr) => {
+                const a = [...arr];
+                for(let i=a.length-1; i>0; i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+                return a;
+            };
+            const generateDrill = () => {
+                const shuffled = shuffleArray(drillPool);
+                drillQuestions.value = shuffled.slice(0, 12).map(q => ({
+                    ...q, showExp: false, userChoice: -1
+                }));
+            };
+            const reshuffleDrill = () => {
+                drillKey.value++;
+                generateDrill();
+            };
+            const drillAnswer = (qi, oi) => {
+                if(drillQuestions.value[qi].showExp) return;
+                drillQuestions.value[qi].userChoice = oi;
+                drillQuestions.value[qi].showExp = true;
+                // 错题收录
+                const q = drillQuestions.value[qi];
+                const stored = localStorage.getItem('math_mistakes');
+                let mistakes = stored ? JSON.parse(stored) : [];
+                const qId = '08_drill_' + qi + '_' + drillKey.value;
+                if(q.userChoice !== q.answer) {
+                    if(!mistakes.find(m => m.id===qId)) {
+                        mistakes.push({ id:qId, module:'08', moduleName:'等式与不等式的性质', text:q.text, options:q.options, answer:q.answer, expHtml:q.expHtml, level:'基础强化', timestamp:Date.now() });
+                    }
+                } else {
+                    mistakes = mistakes.filter(m => m.id !== qId);
+                }
+                localStorage.setItem('math_mistakes', JSON.stringify(mistakes));
+            };
+            const drillOptClass = (qi, oi) => {
+                const q = drillQuestions.value[qi];
+                if(!q.showExp) return q.userChoice===oi?'selected':'';
+                if(oi===q.answer) return 'correct';
+                if(oi===q.userChoice&&oi!==q.answer) return 'wrong';
+                return '';
+            };
+            // 初始化
+            generateDrill();
+
+            // ===== 梯度自测（6题） =====
+            const examQuestions = reactive([
+                { level:'basic', levelLabel:'🥉基础', text:'若$a>b$，则一定成立的是（ ）', options:['$a^2>b^2$','$\\frac{a}{c}>\\frac{b}{c}$','$a-c>b-c$','$ac>bc$'], answer:2, showExp:false, userChoice:-1, expHtml:'✅ C | <span class="yellow-hl">可加性</span>恒成立。A反例$a=1,b=-2$；B/D中$c$符号未知。' },
+                { level:'basic', levelLabel:'🥉基础', text:'$M=x^2+1,N=2x$，则$M$与$N$关系是（ ）', options:['$M>N$','$M<N$','$M\\geq N$','无法确定'], answer:2, showExp:false, userChoice:-1, expHtml:'✅ C | <span class="yellow-hl">作差法</span>：$M-N=(x-1)^2\\geq 0$。' },
+                { level:'middle', levelLabel:'🥈中档', text:'"$a>b$"是"$a|a|>b|b|$"的（ ）', options:['充分不必要','必要不充分','充要条件','既不充分也不必要'], answer:2, showExp:false, userChoice:-1, expHtml:'✅ C | $f(x)=x|x|$<span class="yellow-hl">单调递增</span>，充要条件。' },
+                { level:'middle', levelLabel:'🥈中档', text:'$a>b>0,c<d<0$，一定成立的是（ ）', options:['$a-c<b-d$','$ac>bd$','$\\frac{a}{c}>\\frac{b}{d}$','$a+d>b+c$'], answer:3, showExp:false, userChoice:-1, expHtml:'✅ D | <span class="yellow-hl">同向可加性</span>：$a>b$且$d>c$。' },
+                { level:'advanced', levelLabel:'🥇综合', text:'$a>b$，一定成立的是（ ）', options:['$\\frac{1}{a}<\\frac{1}{b}$','$a^2>b^2$','$ac^2>bc^2$','$a-c>b-c$'], answer:3, showExp:false, userChoice:-1, expHtml:'✅ D | 仅<span class="yellow-hl">可加性</span>恒成立。C中$c=0$不成立。' },
+                { level:'advanced', levelLabel:'🥇综合', text:'"$x>y$"是"$|x|>|y|$"的（ ）', options:['充分不必要','必要不充分','充要条件','既不充分也不必要'], answer:3, showExp:false, userChoice:-1, expHtml:'✅ D | 反例：$x=-1,y=-2$不充分；$x=-2,y=1$不必要。' }
+            ]);
+            const allExamSubmitted = ref(false);
+            const examScore = ref(0);
+            const exSelect = (qi, oi) => { if(!allExamSubmitted.value) examQuestions[qi].userChoice=oi; };
+            const exOptClass = (qi, oi) => {
+                const q=examQuestions[qi];
+                if(!allExamSubmitted.value) return q.userChoice===oi?'selected':'';
+                if(oi===q.answer) return 'correct';
+                if(oi===q.userChoice&&oi!==q.answer) return 'wrong';
+                return '';
+            };
+            const submitAllExam = () => {
+                if(allExamSubmitted.value) return;
+                if(!examQuestions.every(q=>q.userChoice>=0)){ alert('请先完成所有真题！'); return; }
+                allExamSubmitted.value=true;
+                let score=0;
+                examQuestions.forEach(q=>{ q.showExp=true; if(q.userChoice===q.answer) score++; });
+                examScore.value=score;
+                const stored=localStorage.getItem('math_mistakes');
+                let mistakes=stored?JSON.parse(stored):[];
+                examQuestions.forEach((q,idx)=>{
+                    const qId='08_exam_'+idx;
+                    if(q.userChoice!==q.answer){
+                        if(!mistakes.find(m=>m.id===qId)) mistakes.push({ id:qId,module:'08',moduleName:'等式与不等式的性质',text:q.text,options:q.options,answer:q.answer,expHtml:q.expHtml,level:q.levelLabel,timestamp:Date.now() });
+                    }else{ mistakes=mistakes.filter(m=>m.id!==qId); }
+                });
+                localStorage.setItem('math_mistakes',JSON.stringify(mistakes));
+                if(score>=4){ const saved=localStorage.getItem('math_toolbox_progress'); const p=saved?JSON.parse(saved):{}; p['08']=true; localStorage.setItem('math_toolbox_progress',JSON.stringify(p)); }
+            };
+
+            return { quickQuiz, qqAnswer, qqOptClass, drillQuestions, drillKey, drillCorrect, reshuffleDrill, drillAnswer, drillOptClass, examQuestions, allExamSubmitted, examScore, exSelect, exOptClass, submitAllExam };
+        }
+    }).mount('#app');
+</script>
+</body>
+</html>

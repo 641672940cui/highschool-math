@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>模块11 · 二次函数与方程</title>
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            startup: {
+                ready() {
+                    MathJax.startup.defaultReady();
+                    MathJax.startup.promise.then(() => {
+                        if (typeof window.renderMath === 'function') window.renderMath();
+                    });
+                }
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        :root {
+            --bg: #f8fafc; --card: #ffffff; --text: #0f172a; --sub: #64748b;
+            --blue: #3b82f6; --blue-light: #eff6ff; --green: #10b981; --green-light: #ecfdf5;
+            --red: #ef4444; --red-light: #fef2f2; --yellow: #fde047; --orange: #f59e0b;
+            --purple: #8b5cf6; --purple-light: #f5f3ff;
+            --border: #e2e8f0; --shadow: 0 4px 12px rgba(0,0,0,0.04); --radius: 20px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg); padding: 16px 12px 80px; display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; -webkit-tap-highlight-color: transparent;
+        }
+        .container { max-width: 500px; width: 100%; }
+        .top-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+        .back-btn {
+            width: 40px; height: 40px; border-radius: 50%; background: var(--card); border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer;
+            text-decoration: none; color: var(--text); box-shadow: var(--shadow); flex-shrink: 0;
+        }
+        .top-title { font-size: 1rem; font-weight: 700; color: var(--text); }
+        .section-title {
+            font-size: 1rem; font-weight: 700; color: var(--text); margin: 18px 0 10px;
+            padding-left: 12px; border-left: 4px solid var(--blue); display: flex; align-items: center; gap: 6px;
+        }
+        .section-title.s2 { border-left-color: var(--purple); }
+        .section-title.s3 { border-left-color: #06b6d4; }
+        .section-title.s4 { border-left-color: var(--orange); }
+        .knowledge-card {
+            background: var(--card); border-radius: var(--radius); padding: 14px 16px;
+            margin-bottom: 10px; box-shadow: var(--shadow); border: 1px solid var(--border);
+        }
+        .knowledge-card h3 { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+        .knowledge-card p { font-size: 0.85rem; color: #334155; line-height: 1.6; margin-bottom: 3px; }
+        .knowledge-card table { width: 100%; border-collapse: collapse; font-size: 0.78rem; margin: 6px 0; }
+        .knowledge-card th { background: #f1f5f9; padding: 7px 5px; text-align: left; font-weight: 600; }
+        .knowledge-card td { padding: 7px 5px; border-bottom: 1px solid var(--border); }
+        .warn-box {
+            background: #fef2f2; border-left: 4px solid var(--red); padding: 10px 14px;
+            border-radius: 0 14px 14px 0; margin: 10px 0; font-size: 0.85rem;
+        }
+        .memory-box {
+            background: #f5f3ff; border-left: 4px solid var(--purple); padding: 10px 14px;
+            border-radius: 0 14px 14px 0; margin: 10px 0; font-size: 0.85rem; font-weight: 600;
+        }
+        .metaphor-box {
+            background: #ecfdf5; border-left: 4px solid var(--green); padding: 10px 14px;
+            border-radius: 0 14px 14px 0; margin: 10px 0; font-size: 0.85rem;
+        }
+        .quiz-item {
+            background: var(--card); border-radius: 16px; padding: 12px 14px;
+            margin-bottom: 8px; box-shadow: var(--shadow); border: 1px solid var(--border);
+        }
+        .quiz-item .q-text { font-size: 0.85rem; font-weight: 500; margin-bottom: 6px; }
+        .q-opts { display: flex; flex-wrap: wrap; gap: 6px; }
+        .q-opt {
+            padding: 7px 12px; border-radius: 18px; font-size: 0.8rem; font-weight: 500;
+            background: #f1f5f9; border: 1px solid var(--border); cursor: pointer; transition: 0.15s;
+        }
+        .q-opt.selected { background: #dbeafe; border-color: var(--blue); }
+        .q-opt.correct { background: #dcfce7; border-color: var(--green); }
+        .q-opt.wrong { background: #fee2e2; border-color: var(--red); }
+        .q-exp {
+            margin-top: 6px; padding: 8px 10px; background: #fffbeb; border-radius: 10px;
+            font-size: 0.78rem; display: none; line-height: 1.5;
+        }
+        .q-exp.show { display: block; }
+        .yellow-hl { background: #fde047; font-weight: 600; padding: 0 3px; border-radius: 3px; }
+        .diff-badge {
+            display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.7rem;
+            font-weight: 700; margin-bottom: 6px;
+        }
+        .diff-badge.basic { background: #dcfce7; color: #166534; }
+        .diff-badge.middle { background: #fef3c7; color: #92400e; }
+        .diff-badge.advanced { background: #fee2e2; color: #991b1b; }
+        .submit-btn {
+            display: block; width: 100%; padding: 14px; background: #0f172a; color: white;
+            border: none; border-radius: 30px; font-size: 1rem; font-weight: 600; margin: 16px 0;
+            cursor: pointer; transition: 0.2s;
+        }
+        .submit-btn:active { transform: scale(0.97); }
+        .submit-btn:disabled { background: #94a3b8; }
+        .bottom-nav { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+        .bottom-nav a {
+            flex: 1; text-align: center; padding: 12px 8px; background: var(--card);
+            border-radius: 16px; text-decoration: none; color: var(--text); font-size: 0.82rem;
+            font-weight: 500; border: 1px solid var(--border); min-width: 60px;
+        }
+        .score-display { text-align: center; font-size: 1rem; font-weight: 700; padding: 10px; border-radius: 16px; margin: 10px 0; }
+        .drill-controls { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; }
+        .drill-controls button { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); background: var(--card); font-size: 0.82rem; cursor: pointer; font-weight: 500; }
+        .drill-score { font-size: 0.85rem; font-weight: 600; color: var(--sub); }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <div class="top-bar">
+        <a href="../index.html" class="back-btn">←</a>
+        <span class="top-title">模块11 · 二次函数与方程</span>
+    </div>
+
+    <!-- ============ 一、知识点讲解区 ============ -->
+    <div class="section-title">📖 知识点讲解</div>
+    <div class="knowledge-card">
+        <h3>🔍 一、系数识别（高频易错）</h3>
+        <p>标准形式：$ax^2+bx+c=0$，<span class="yellow-hl">先化一般式</span>再识别$a,b,c$</p>
+        <table>
+            <tr><th>原式</th><th>一般式</th><th>$a$</th><th>$b$</th><th>$c$</th></tr>
+            <tr><td>$-x^2+5$</td><td>$-x^2+0x+5$</td><td><span class="yellow-hl">-1</span></td><td>0</td><td>5</td></tr>
+            <tr><td>$x(3-x)$</td><td>$-x^2+3x+0$</td><td><span class="yellow-hl">-1</span></td><td>3</td><td>0</td></tr>
+            <tr><td>$2x-x^2=3$</td><td>$-x^2+2x-3=0$</td><td><span class="yellow-hl">-1</span></td><td>2</td><td>-3</td></tr>
+        </table>
+    </div>
+    <div class="warn-box">⚠️ 常见错误：把$-x^2$的$a$当成$1$，忽略了负号！</div>
+    <div class="knowledge-card">
+        <h3>二、二次函数图像</h3>
+        <p>$y=ax^2+bx+c$：$a>0$开口向上☕，$a<0$开口向下🌧</p>
+        <p>对称轴$x=-\frac{b}{2a}$，顶点$(-\frac{b}{2a},\frac{4ac-b^2}{4a})$</p>
+    </div>
+    <div class="knowledge-card">
+        <h3>三、判别式与韦达定理</h3>
+        <p>$\Delta=b^2-4ac$：$\Delta>0$两不等根，$\Delta=0$两等根，$\Delta<0$无实根</p>
+        <p>韦达：$x_1+x_2=-\frac{b}{a}$，$x_1x_2=\frac{c}{a}$</p>
+        <p>扩展：$x_1^2+x_2^2=(x_1+x_2)^2-2x_1x_2$，$|x_1-x_2|=\frac{\sqrt{\Delta}}{|a|}$</p>
+    </div>
+    <div class="knowledge-card">
+        <h3>四、三种形式</h3>
+        <table>
+            <tr><th>形式</th><th>表达式</th><th>用途</th></tr>
+            <tr><td>一般式</td><td>$y=ax^2+bx+c$</td><td>标准</td></tr>
+            <tr><td>顶点式</td><td>$y=a(x-h)^2+k$</td><td>顶点$(h,k)$</td></tr>
+            <tr><td>交点式</td><td>$y=a(x-x_1)(x-x_2)$</td><td>看交点</td></tr>
+        </table>
+    </div>
+    <div class="memory-box">🧠 口诀：「a定开口，Δ定交点，对称轴在中间」·「韦达不韦达，两根和积抓」</div>
+    <div class="metaphor-box">🏀 比喻：抛物线是投篮弧线——顶点是最高点，球落地瞬间就是方程的根。</div>
+
+    <!-- ============ 二、秒答训练（8题） ============ -->
+    <div class="section-title s2">⚡ 秒答训练（8题）</div>
+    <div v-for="(q,qi) in quickQuiz" :key="'qq'+qi" class="quiz-item">
+        <div class="q-text">{{ qi+1 }}. {{ q.text }}</div>
+        <div class="q-opts"><span v-for="(opt,oi) in q.options" :key="oi" class="q-opt" :class="qqOptClass(qi,oi)" @click="qqAnswer(qi,oi)">{{ String.fromCharCode(65+oi) }}. {{ opt }}</span></div>
+        <div class="q-exp" :class="{show:q.showExp}" v-html="q.expHtml"></div>
+    </div>
+
+    <!-- ============ 三、基础强化区（12题） ============ -->
+    <div class="section-title s3">💪 基础强化（肌肉记忆·12题）</div>
+    <div class="drill-controls">
+        <button @click="reshuffleDrill">🔄 重新出题</button>
+        <span class="drill-score">✅ {{ drillCorrect }} / {{ drillQuestions.length }}</span>
+    </div>
+    <div v-for="(q,qi) in drillQuestions" :key="'dr'+qi+'_'+drillKey" class="quiz-item">
+        <div class="q-text">{{ qi+1 }}. {{ q.text }}</div>
+        <div class="q-opts"><span v-for="(opt,oi) in q.options" :key="oi" class="q-opt" :class="drillOptClass(qi,oi)" @click="drillAnswer(qi,oi)">{{ String.fromCharCode(65+oi) }}. {{ opt }}</span></div>
+        <div class="q-exp" :class="{show:q.showExp}" v-html="q.expHtml"></div>
+    </div>
+
+    <!-- ============ 四、梯度自测（6题） ============ -->
+    <div class="section-title s4">🎯 梯度自测·真题练习（6题）</div>
+    <div v-for="(q,qi) in examQuestions" :key="'ex'+qi" class="quiz-item">
+        <span class="diff-badge" :class="q.level">{{ q.levelLabel }}</span>
+        <div class="q-text">{{ qi+1 }}. {{ q.text }}</div>
+        <div class="q-opts"><span v-for="(opt,oi) in q.options" :key="oi" class="q-opt" :class="exOptClass(qi,oi)" @click="exSelect(qi,oi)">{{ String.fromCharCode(65+oi) }}. {{ opt }}</span></div>
+        <div class="q-exp" :class="{show:q.showExp}" v-html="q.expHtml"></div>
+    </div>
+    <button class="submit-btn" @click="submitAllExam" :disabled="allExamSubmitted">{{ allExamSubmitted?'✅已完成批改':'📝提交全部真题' }}</button>
+    <div class="score-display" v-if="allExamSubmitted" :style="{background:examScore>=4?'#dcfce7':'#fef2f2'}">🎯 真题得分：{{ examScore }}/6</div>
+
+    <div class="bottom-nav">
+        <a href="10_basic_inequality_2.html">◀ 上一模块</a>
+        <a href="../index.html">🏠 首页</a>
+        <a href="12_quadratic_inequality.html">下一模块 ▶</a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+<script>
+    const { createApp, ref, reactive, computed } = Vue;
+    createApp({
+        setup() {
+            const quickQuiz = reactive([
+                { text:'$3x-x^2+2=0$中$a=$？', options:['3','-1','1','2'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | 化一般式：<span class="yellow-hl">$-x^2+3x+2=0$</span>，$a=-1$。' },
+                { text:'$y=-2x^2+4x+1$开口方向？', options:['向上','向下','向左','向右'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | $a=-2<0$，<span class="yellow-hl">开口向下</span>。' },
+                { text:'$x^2-6x+9=0$的$\\Delta=$？', options:['0','36','72','-36'], answer:0, showExp:false, userChoice:-1, expHtml:'✅ A | $\\Delta=36-36=0$，<span class="yellow-hl">两个相等实根</span>。' },
+                { text:'$2x^2-6x+1=0$两根之和？', options:['6','3','-3','1'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | 韦达：$x_1+x_2=-\\frac{-6}{2}=3$。' },
+                { text:'$y=x^2-4x+5$最小值？', options:['0','1','4','5'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | 配方$(x-2)^2+1$，最小<span class="yellow-hl">1</span>。' },
+                { text:'判别式$\\Delta=$？', options:['$b^2-ac$','$b^2-4ac$','$b-4ac$','$4ac-b^2$'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | <span class="yellow-hl">$\\Delta=b^2-4ac$</span>。' },
+                { text:'$y=ax^2+bx+c$对称轴？', options:['$x=\\frac{b}{2a}$','$x=-\\frac{b}{2a}$','$x=\\frac{b}{a}$','$x=-\\frac{b}{a}$'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | <span class="yellow-hl">$x=-\\frac{b}{2a}$</span>。' },
+                { text:'韦达定理中$x_1x_2=$？', options:['$-\\frac{b}{a}$','$\\frac{b}{a}$','$\\frac{c}{a}$','$-\\frac{c}{a}$'], answer:2, showExp:false, userChoice:-1, expHtml:'✅ C | <span class="yellow-hl">$x_1x_2=\\frac{c}{a}$</span>。' }
+            ]);
+            const qqAnswer = (qi,oi) => { if(quickQuiz[qi].showExp) return; quickQuiz[qi].userChoice=oi; quickQuiz[qi].showExp=true; };
+            const qqOptClass = (qi,oi) => { const q=quickQuiz[qi]; if(!q.showExp) return q.userChoice===oi?'selected':''; if(oi===q.answer) return 'correct'; if(oi===q.userChoice&&oi!==q.answer) return 'wrong'; return ''; };
+
+            const drillPool = [
+                { text:'$-x^2+4x-3=0$中$a=$？', options:['1','-1','4','-3'], answer:1, expHtml:'<span class="yellow-hl">$a=-1$</span>，注意符号。' },
+                { text:'$x(2-x)=1$化一般式后$a=$？', options:['1','-1','2','-2'], answer:1, expHtml:'$-x^2+2x-1=0$，<span class="yellow-hl">$a=-1$</span>。' },
+                { text:'$y=3x^2-6x+2$开口？', options:['向上','向下'], answer:0, expHtml:'$a=3>0$，<span class="yellow-hl">开口向上</span>。' },
+                { text:'$x^2-4x+4=0$的$\\Delta=$？', options:['0','4','8','16'], answer:0, expHtml:'$16-16=0$，<span class="yellow-hl">$\\Delta=0$</span>。' },
+                { text:'$x^2+2x+5=0$的$\\Delta$？', options:['-16','-4','0','16'], answer:0, expHtml:'$4-20=-16<0$，<span class="yellow-hl">无实根</span>。' },
+                { text:'$\\Delta>0$时几个实根？', options:['0','1','2','3'], answer:2, expHtml:'<span class="yellow-hl">两个不等实根</span>。' },
+                { text:'$x^2-5x+6=0$两根和？', options:['5','-5','6','-6'], answer:0, expHtml:'韦达：<span class="yellow-hl">$x_1+x_2=5$</span>。' },
+                { text:'$x^2-5x+6=0$两根积？', options:['5','-5','6','-6'], answer:2, expHtml:'韦达：<span class="yellow-hl">$x_1x_2=6$</span>。' },
+                { text:'$x^2-3x+2=0$两根？', options:['1,2','-1,-2','1,-2','-1,2'], answer:0, expHtml:'$(x-1)(x-2)=0$，<span class="yellow-hl">$x=1,2$</span>。' },
+                { text:'$y=(x-3)^2+2$的顶点？', options:['(3,2)','(-3,2)','(3,-2)','(-3,-2)'], answer:0, expHtml:'顶点式：<span class="yellow-hl">$(3,2)$</span>。' },
+                { text:'$y=2(x-1)(x+3)$交点？', options:['1,-3','-1,3','1,3','-1,-3'], answer:0, expHtml:'交点式：<span class="yellow-hl">$x=1,-3$</span>。' },
+                { text:'$x^2+px+q=0$两根和？', options:['$p$','$-p$','$q$','$-q$'], answer:1, expHtml:'韦达：<span class="yellow-hl">$x_1+x_2=-p$</span>。' },
+                { text:'$y=x^2+2x+3$配方？', options:['$(x+1)^2+2$','$(x-1)^2+2$','$(x+1)^2-2$','$(x-1)^2-2$'], answer:0, expHtml:'<span class="yellow-hl">$(x+1)^2+2$</span>。' },
+                { text:'$\\Delta=0$时图像与x轴？', options:['两个交点','一个交点(相切)','无交点','三个交点'], answer:1, expHtml:'<span class="yellow-hl">相切</span>，一个交点。' },
+            ];
+            const drillKey = ref(0); const drillQuestions = ref([]);
+            const drillCorrect = computed(() => drillQuestions.value.filter(q => q.showExp && q.userChoice===q.answer).length);
+            const shuffleArray = arr => { const a=[...arr]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+            const generateDrill = () => { drillQuestions.value = shuffleArray(drillPool).slice(0,12).map(q=>({...q,showExp:false,userChoice:-1})); };
+            const reshuffleDrill = () => { drillKey.value++; generateDrill(); };
+            const drillAnswer = (qi,oi) => {
+                if(drillQuestions.value[qi].showExp) return;
+                drillQuestions.value[qi].userChoice=oi; drillQuestions.value[qi].showExp=true;
+                const q=drillQuestions.value[qi]; const stored=localStorage.getItem('math_mistakes'); let mistakes=stored?JSON.parse(stored):[];
+                const qId='11_drill_'+qi+'_'+drillKey.value;
+                if(q.userChoice!==q.answer){ if(!mistakes.find(m=>m.id===qId)) mistakes.push({id:qId,module:'11',moduleName:'二次函数与方程',text:q.text,options:q.options,answer:q.answer,expHtml:q.expHtml,level:'基础强化',timestamp:Date.now()}); }
+                else{ mistakes=mistakes.filter(m=>m.id!==qId); }
+                localStorage.setItem('math_mistakes',JSON.stringify(mistakes));
+            };
+            const drillOptClass = (qi,oi) => { const q=drillQuestions.value[qi]; if(!q.showExp) return q.userChoice===oi?'selected':''; if(oi===q.answer) return 'correct'; if(oi===q.userChoice&&oi!==q.answer) return 'wrong'; return ''; };
+            generateDrill();
+
+            const examQuestions = reactive([
+                { level:'basic', levelLabel:'🥉基础', text:'$2-x^2=3x$化一般式后$a,b,c$为（ ）', options:['$2,3,-1$','$-1,-3,2$','$1,3,-2$','$-1,3,-2$'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | 移项：<span class="yellow-hl">$-x^2-3x+2=0$</span>。' },
+                { level:'basic', levelLabel:'🥉基础', text:'$x^2-4x+4=0$的根（ ）', options:['两不等','两相等','无','无法判断'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | $\\Delta=0$，<span class="yellow-hl">两相等实根</span>。' },
+                { level:'middle', levelLabel:'🥈中档', text:'$2x^2-6x+1=0$，$\\frac{1}{x_1}+\\frac{1}{x_2}=$（ ）', options:['3','6','$\\frac{1}{3}$','$-\\frac{1}{3}$'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | 韦达：$\\frac{x_1+x_2}{x_1x_2}=\\frac{3}{1/2}=6$。' },
+                { level:'middle', levelLabel:'🥈中档', text:'$y=x^2+(m-2)x+1$与$x$轴两交点，$m$范围（ ）', options:['$m<0$或$m>4$','$0<m<4$','$m>2$','$m<-2$或$m>2$'], answer:0, showExp:false, userChoice:-1, expHtml:'✅ A | $\\Delta>0$：$(m-2)^2>4$，<span class="yellow-hl">$m<0$或$m>4$</span>。' },
+                { level:'advanced', levelLabel:'🥇综合', text:'$ax^2+bx+2>0$解集$\\{-\\frac{1}{2}<x<\\frac{1}{3}\\}$，$a=$（ ）', options:['12','-12','6','-6'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | 解集在中间$a<0$，积$\\frac{2}{a}=-\\frac{1}{6}$，<span class="yellow-hl">$a=-12$</span>。' },
+                { level:'advanced', levelLabel:'🥇综合', text:'$A=\\{x|x^2-2x+a=0\\}$恰一元素，$a=$（ ）', options:['0','1','2','3'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | $\\Delta=0$：$4-4a=0$。<span class="yellow-hl">跨章综合</span>。' }
+            ]);
+            const allExamSubmitted = ref(false); const examScore = ref(0);
+            const exSelect = (qi,oi) => { if(!allExamSubmitted.value) examQuestions[qi].userChoice=oi; };
+            const exOptClass = (qi,oi) => { const q=examQuestions[qi]; if(!allExamSubmitted.value) return q.userChoice===oi?'selected':''; if(oi===q.answer) return 'correct'; if(oi===q.userChoice&&oi!==q.answer) return 'wrong'; return ''; };
+            const submitAllExam = () => {
+                if(allExamSubmitted.value) return;
+                if(!examQuestions.every(q=>q.userChoice>=0)){ alert('请先完成所有真题！'); return; }
+                allExamSubmitted.value=true; let score=0;
+                examQuestions.forEach(q=>{ q.showExp=true; if(q.userChoice===q.answer) score++; });
+                examScore.value=score;
+                const stored=localStorage.getItem('math_mistakes'); let mistakes=stored?JSON.parse(stored):[];
+                examQuestions.forEach((q,idx)=>{ const qId='11_exam_'+idx; if(q.userChoice!==q.answer){ if(!mistakes.find(m=>m.id===qId)) mistakes.push({id:qId,module:'11',moduleName:'二次函数与方程',text:q.text,options:q.options,answer:q.answer,expHtml:q.expHtml,level:q.levelLabel,timestamp:Date.now()}); }else{ mistakes=mistakes.filter(m=>m.id!==qId); } });
+                localStorage.setItem('math_mistakes',JSON.stringify(mistakes));
+                if(score>=4){ const s=localStorage.getItem('math_toolbox_progress'); const p=s?JSON.parse(s):{}; p['11']=true; localStorage.setItem('math_toolbox_progress',JSON.stringify(p)); }
+            };
+
+            return { quickQuiz, qqAnswer, qqOptClass, drillQuestions, drillKey, drillCorrect, reshuffleDrill, drillAnswer, drillOptClass, examQuestions, allExamSubmitted, examScore, exSelect, exOptClass, submitAllExam };
+        }
+    }).mount('#app');
+</script>
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>模块12 · 一元二次不等式</title>
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            startup: {
+                ready() {
+                    MathJax.startup.defaultReady();
+                    MathJax.startup.promise.then(() => {
+                        if (typeof window.renderMath === 'function') window.renderMath();
+                    });
+                }
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        :root {
+            --bg: #f8fafc; --card: #ffffff; --text: #0f172a; --sub: #64748b;
+            --blue: #3b82f6; --blue-light: #eff6ff; --green: #10b981; --green-light: #ecfdf5;
+            --red: #ef4444; --red-light: #fef2f2; --yellow: #fde047; --orange: #f59e0b;
+            --purple: #8b5cf6; --purple-light: #f5f3ff;
+            --border: #e2e8f0; --shadow: 0 4px 12px rgba(0,0,0,0.04); --radius: 20px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg); padding: 16px 12px 80px; display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; -webkit-tap-highlight-color: transparent;
+        }
+        .container { max-width: 500px; width: 100%; }
+        .top-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+        .back-btn {
+            width: 40px; height: 40px; border-radius: 50%; background: var(--card); border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer;
+            text-decoration: none; color: var(--text); box-shadow: var(--shadow); flex-shrink: 0;
+        }
+        .top-title { font-size: 1rem; font-weight: 700; color: var(--text); }
+        .section-title {
+            font-size: 1rem; font-weight: 700; color: var(--text); margin: 18px 0 10px;
+            padding-left: 12px; border-left: 4px solid var(--blue); display: flex; align-items: center; gap: 6px;
+        }
+        .section-title.s2 { border-left-color: var(--purple); }
+        .section-title.s3 { border-left-color: #06b6d4; }
+        .section-title.s4 { border-left-color: var(--orange); }
+        .knowledge-card {
+            background: var(--card); border-radius: var(--radius); padding: 14px 16px;
+            margin-bottom: 10px; box-shadow: var(--shadow); border: 1px solid var(--border);
+        }
+        .knowledge-card h3 { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+        .knowledge-card p { font-size: 0.85rem; color: #334155; line-height: 1.6; margin-bottom: 3px; }
+        .knowledge-card table { width: 100%; border-collapse: collapse; font-size: 0.78rem; margin: 6px 0; }
+        .knowledge-card th { background: #f1f5f9; padding: 7px 5px; text-align: left; font-weight: 600; }
+        .knowledge-card td { padding: 7px 5px; border-bottom: 1px solid var(--border); }
+        .warn-box {
+            background: #fef2f2; border-left: 4px solid var(--red); padding: 10px 14px;
+            border-radius: 0 14px 14px 0; margin: 10px 0; font-size: 0.85rem;
+        }
+        .memory-box {
+            background: #f5f3ff; border-left: 4px solid var(--purple); padding: 10px 14px;
+            border-radius: 0 14px 14px 0; margin: 10px 0; font-size: 0.85rem; font-weight: 600;
+        }
+        .metaphor-box {
+            background: #ecfdf5; border-left: 4px solid var(--green); padding: 10px 14px;
+            border-radius: 0 14px 14px 0; margin: 10px 0; font-size: 0.85rem;
+        }
+        .quiz-item {
+            background: var(--card); border-radius: 16px; padding: 12px 14px;
+            margin-bottom: 8px; box-shadow: var(--shadow); border: 1px solid var(--border);
+        }
+        .quiz-item .q-text { font-size: 0.85rem; font-weight: 500; margin-bottom: 6px; }
+        .q-opts { display: flex; flex-wrap: wrap; gap: 6px; }
+        .q-opt {
+            padding: 7px 12px; border-radius: 18px; font-size: 0.8rem; font-weight: 500;
+            background: #f1f5f9; border: 1px solid var(--border); cursor: pointer; transition: 0.15s;
+        }
+        .q-opt.selected { background: #dbeafe; border-color: var(--blue); }
+        .q-opt.correct { background: #dcfce7; border-color: var(--green); }
+        .q-opt.wrong { background: #fee2e2; border-color: var(--red); }
+        .q-exp {
+            margin-top: 6px; padding: 8px 10px; background: #fffbeb; border-radius: 10px;
+            font-size: 0.78rem; display: none; line-height: 1.5;
+        }
+        .q-exp.show { display: block; }
+        .yellow-hl { background: #fde047; font-weight: 600; padding: 0 3px; border-radius: 3px; }
+        .diff-badge {
+            display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.7rem;
+            font-weight: 700; margin-bottom: 6px;
+        }
+        .diff-badge.basic { background: #dcfce7; color: #166534; }
+        .diff-badge.middle { background: #fef3c7; color: #92400e; }
+        .diff-badge.advanced { background: #fee2e2; color: #991b1b; }
+        .submit-btn {
+            display: block; width: 100%; padding: 14px; background: #0f172a; color: white;
+            border: none; border-radius: 30px; font-size: 1rem; font-weight: 600; margin: 16px 0;
+            cursor: pointer; transition: 0.2s;
+        }
+        .submit-btn:active { transform: scale(0.97); }
+        .submit-btn:disabled { background: #94a3b8; }
+        .bottom-nav { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+        .bottom-nav a {
+            flex: 1; text-align: center; padding: 12px 8px; background: var(--card);
+            border-radius: 16px; text-decoration: none; color: var(--text); font-size: 0.82rem;
+            font-weight: 500; border: 1px solid var(--border); min-width: 60px;
+        }
+        .score-display { text-align: center; font-size: 1rem; font-weight: 700; padding: 10px; border-radius: 16px; margin: 10px 0; }
+        .drill-controls { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; }
+        .drill-controls button { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); background: var(--card); font-size: 0.82rem; cursor: pointer; font-weight: 500; }
+        .drill-score { font-size: 0.85rem; font-weight: 600; color: var(--sub); }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <div class="top-bar">
+        <a href="../index.html" class="back-btn">←</a>
+        <span class="top-title">模块12 · 一元二次不等式</span>
+    </div>
+
+    <!-- ============ 一、知识点讲解区 ============ -->
+    <div class="section-title">📖 知识点讲解</div>
+    <div class="knowledge-card">
+        <h3>一、标准解法流程</h3>
+        <p>①<span class="yellow-hl">标准化</span>：确保$a>0$（$a<0$则乘$-1$变号）</p>
+        <p>②<span class="yellow-hl">求根</span>：解$ax^2+bx+c=0$得$x_1,x_2$</p>
+        <p>③<span class="yellow-hl">画草图</span>：开口向上，标两根</p>
+        <p>④<span class="yellow-hl">写解集</span>：根据不等号取两边或中间</p>
+    </div>
+    <div class="knowledge-card">
+        <h3>二、口诀（$a>0$时）</h3>
+        <table>
+            <tr><th>不等号</th><th>解集</th><th>口诀</th></tr>
+            <tr><td>$>0$</td><td>$(-\infty,x_1)\cup(x_2,+\infty)$</td><td><span class="yellow-hl">大于取两边</span></td></tr>
+            <tr><td>$<0$</td><td>$(x_1,x_2)$</td><td><span class="yellow-hl">小于取中间</span></td></tr>
+        </table>
+    </div>
+    <div class="warn-box">
+        ⚠️ <strong>开口向下的陷阱</strong>：若$a<0$，<span class="yellow-hl">必须先乘$-1$变号</span>！<br>
+        例：$-x^2+4x-3>0$→$x^2-4x+3<0$→$(1,3)$<br>
+        ❌直接套"大于取两边"得$(-\infty,1)\cup(3,+\infty)$是错的！
+    </div>
+    <div class="knowledge-card">
+        <h3>三、恒成立问题</h3>
+        <table>
+            <tr><th>条件</th><th>结论</th></tr>
+            <tr><td>$ax^2+bx+c>0$恒成立</td><td>$a>0$且$\Delta<0$</td></tr>
+            <tr><td>$ax^2+bx+c<0$恒成立</td><td>$a<0$且$\Delta<0$</td></tr>
+        </table>
+        <p>⚠️ $a=0$时退化为一次，需<span class="yellow-hl">单独讨论</span>！</p>
+    </div>
+    <div class="knowledge-card">
+        <h3>四、含参分类讨论框架</h3>
+        <p>例：$ax^2-(a+1)x+1<0$</p>
+        <p>①讨论$a=0$ → ②$a\neq 0$时求根 → ③比较两根大小 → ④结合开口写解集</p>
+    </div>
+    <div class="memory-box">🧠 口诀：「大于取两边，小于取中间，开口向下先翻面」·「恒成立看两样：a的方向和Δ的模样」</div>
+    <div class="metaphor-box">🌉 比喻：抛物线是拱桥，x轴是水面。$>0$问桥上哪段在水面上方——看开口和交点。</div>
+
+    <!-- ============ 二、秒答训练（8题） ============ -->
+    <div class="section-title s2">⚡ 秒答训练（8题）</div>
+    <div v-for="(q,qi) in quickQuiz" :key="'qq'+qi" class="quiz-item">
+        <div class="q-text">{{ qi+1 }}. {{ q.text }}</div>
+        <div class="q-opts"><span v-for="(opt,oi) in q.options" :key="oi" class="q-opt" :class="qqOptClass(qi,oi)" @click="qqAnswer(qi,oi)">{{ String.fromCharCode(65+oi) }}. {{ opt }}</span></div>
+        <div class="q-exp" :class="{show:q.showExp}" v-html="q.expHtml"></div>
+    </div>
+
+    <!-- ============ 三、基础强化区（12题） ============ -->
+    <div class="section-title s3">💪 基础强化（肌肉记忆·12题）</div>
+    <div class="drill-controls">
+        <button @click="reshuffleDrill">🔄 重新出题</button>
+        <span class="drill-score">✅ {{ drillCorrect }} / {{ drillQuestions.length }}</span>
+    </div>
+    <div v-for="(q,qi) in drillQuestions" :key="'dr'+qi+'_'+drillKey" class="quiz-item">
+        <div class="q-text">{{ qi+1 }}. {{ q.text }}</div>
+        <div class="q-opts"><span v-for="(opt,oi) in q.options" :key="oi" class="q-opt" :class="drillOptClass(qi,oi)" @click="drillAnswer(qi,oi)">{{ String.fromCharCode(65+oi) }}. {{ opt }}</span></div>
+        <div class="q-exp" :class="{show:q.showExp}" v-html="q.expHtml"></div>
+    </div>
+
+    <!-- ============ 四、梯度自测（6题） ============ -->
+    <div class="section-title s4">🎯 梯度自测·真题练习（6题）</div>
+    <div v-for="(q,qi) in examQuestions" :key="'ex'+qi" class="quiz-item">
+        <span class="diff-badge" :class="q.level">{{ q.levelLabel }}</span>
+        <div class="q-text">{{ qi+1 }}. {{ q.text }}</div>
+        <div class="q-opts"><span v-for="(opt,oi) in q.options" :key="oi" class="q-opt" :class="exOptClass(qi,oi)" @click="exSelect(qi,oi)">{{ String.fromCharCode(65+oi) }}. {{ opt }}</span></div>
+        <div class="q-exp" :class="{show:q.showExp}" v-html="q.expHtml"></div>
+    </div>
+    <button class="submit-btn" @click="submitAllExam" :disabled="allExamSubmitted">{{ allExamSubmitted?'✅已完成批改':'📝提交全部真题' }}</button>
+    <div class="score-display" v-if="allExamSubmitted" :style="{background:examScore>=4?'#dcfce7':'#fef2f2'}">🎯 真题得分：{{ examScore }}/6</div>
+
+    <div class="bottom-nav">
+        <a href="11_quadratic_equation.html">◀ 上一模块</a>
+        <a href="../index.html">🏠 首页</a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+<script>
+    const { createApp, ref, reactive, computed } = Vue;
+    createApp({
+        setup() {
+            const quickQuiz = reactive([
+                { text:'$x^2-4<0$的解集是？', options:['$(-2,2)$','$(-\\infty,-2)\\cup(2,+\\infty)$','$(0,4)$','$\\varnothing$'], answer:0, showExp:false, userChoice:-1, expHtml:'✅ A | 根$\\pm2$，$a>0$，$<0$<span class="yellow-hl">取中间</span>。' },
+                { text:'$-x^2+2x+3>0$第一步？', options:['直接取两边','乘-1变号','配方','求导'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | $a=-1<0$，<span class="yellow-hl">先乘-1变号</span>。' },
+                { text:'$x^2+kx+1>0$恒成立，$k$范围？', options:['$(-2,2)$','$(-\\infty,-2)\\cup(2,+\\infty)$','全体实数','$(-1,1)$'], answer:0, showExp:false, userChoice:-1, expHtml:'✅ A | $a=1>0$，$\\Delta=k^2-4<0$，<span class="yellow-hl">$-2<k<2$</span>。' },
+                { text:'$(x-1)(x-3)>0$解集？', options:['$(1,3)$','$(-\\infty,1)\\cup(3,+\\infty)$','$(3,+\\infty)$','$\\varnothing$'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | 两根1,3，$a>0$，$>0$<span class="yellow-hl">取两边</span>。' },
+                { text:'$ax^2+bx+c>0$解集$(2,5)$，$a$符号？', options:['正','负','不确定','零'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | 解集在中间，<span class="yellow-hl">$a<0$</span>。' },
+                { text:'$x^2-3x+2<0$解集？', options:['$(1,2)$','$(-\\infty,1)\\cup(2,+\\infty)$','$(-2,-1)$','$\\varnothing$'], answer:0, showExp:false, userChoice:-1, expHtml:'✅ A | 根1,2，$<0$<span class="yellow-hl">取中间</span>。' },
+                { text:'恒成立问题需满足？', options:['$\\Delta>0$','$\\Delta<0$','$\\Delta=0$','$\\Delta\\geq0$'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | 恒成立需<span class="yellow-hl">$\\Delta<0$</span>（与x轴无交点）。' },
+                { text:'解不等式第一步？', options:['求根','标准化','画图','写解集'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | 先<span class="yellow-hl">标准化</span>使$a>0$。' }
+            ]);
+            const qqAnswer = (qi,oi) => { if(quickQuiz[qi].showExp) return; quickQuiz[qi].userChoice=oi; quickQuiz[qi].showExp=true; };
+            const qqOptClass = (qi,oi) => { const q=quickQuiz[qi]; if(!q.showExp) return q.userChoice===oi?'selected':''; if(oi===q.answer) return 'correct'; if(oi===q.userChoice&&oi!==q.answer) return 'wrong'; return ''; };
+
+            const drillPool = [
+                { text:'$x^2-1>0$解集？', options:['$(-1,1)$','$(-\\infty,-1)\\cup(1,+\\infty)$','$(1,+\\infty)$','$\\varnothing$'], answer:1, expHtml:'根$\\pm1$，$>0$<span class="yellow-hl">取两边</span>。' },
+                { text:'$x^2-9<0$解集？', options:['$(-3,3)$','$(-\\infty,-3)\\cup(3,+\\infty)$','$(0,9)$','$\\varnothing$'], answer:0, expHtml:'根$\\pm3$，$<0$<span class="yellow-hl">取中间</span>。' },
+                { text:'$x^2-5x+6<0$解集？', options:['$(2,3)$','$(-\\infty,2)\\cup(3,+\\infty)$','$(-3,-2)$','$\\varnothing$'], answer:0, expHtml:'根2,3，<span class="yellow-hl">取中间</span>。' },
+                { text:'$-x^2+4x-3>0$解集？', options:['$(1,3)$','$(-\\infty,1)\\cup(3,+\\infty)$','$(-3,-1)$','$\\varnothing$'], answer:0, expHtml:'先变号：$x^2-4x+3<0$，<span class="yellow-hl">取中间$(1,3)$</span>。' },
+                { text:'$x^2+x+1>0$解集？', options:['$\\mathbb{R}$','$\\varnothing$','$(0,+\\infty)$','$(-\\infty,0)$'], answer:0, expHtml:'$\\Delta=-3<0$，$a>0$，<span class="yellow-hl">全体实数</span>。' },
+                { text:'$x^2-2x+1\\leq 0$解集？', options:['$\\{1\\}$','$(-\\infty,1]$','$[1,+\\infty)$','$\\varnothing$'], answer:0, expHtml:'$(x-1)^2\\leq 0$，<span class="yellow-hl">仅$x=1$</span>。' },
+                { text:'$x^2-4x+3\\geq 0$解集？', options:['$[1,3]$','$(-\\infty,1]\\cup[3,+\\infty)$','$(1,3)$','$\\mathbb{R}$'], answer:1, expHtml:'根1,3，$\\geq 0$<span class="yellow-hl">取两边+闭区间</span>。' },
+                { text:'$-x^2+1<0$解集？', options:['$(-1,1)$','$(-\\infty,-1)\\cup(1,+\\infty)$','$\\mathbb{R}$','$\\varnothing$'], answer:1, expHtml:'变号：$x^2-1>0$，<span class="yellow-hl">取两边</span>。' },
+                { text:'$(x-2)(x+3)>0$解集？', options:['$(-3,2)$','$(-\\infty,-3)\\cup(2,+\\infty)$','$(2,+\\infty)$','$(-\\infty,-3)$'], answer:1, expHtml:'根-3,2，$>0$<span class="yellow-hl">取两边</span>。' },
+                { text:'$x^2+2x+2<0$解集？', options:['$\\mathbb{R}$','$\\varnothing$','$(-2,0)$','无法确定'], answer:1, expHtml:'$\\Delta=-4<0$，$a>0$，恒正，<span class="yellow-hl">无解</span>。' },
+                { text:'$x^2-6x+8\\leq 0$解集？', options:['$[2,4]$','$(-\\infty,2]\\cup[4,+\\infty)$','$(2,4)$','$\\varnothing$'], answer:0, expHtml:'根2,4，$\\leq 0$<span class="yellow-hl">取中间+闭区间</span>。' },
+                { text:'$a<0$时解不等式第一步？', options:['求根','画图','乘-1变号','写解集'], answer:2, expHtml:'<span class="yellow-hl">乘-1并反转不等号</span>。' },
+                { text:'$2x^2-3x+1>0$解集？', options:['$(\\frac{1}{2},1)$','$(-\\infty,\\frac{1}{2})\\cup(1,+\\infty)$','$(1,2)$','$\\varnothing$'], answer:1, expHtml:'根$\\frac{1}{2},1$，$>0$<span class="yellow-hl">取两边</span>。' },
+                { text:'恒成立$ax^2+bx+c<0$需？', options:['$a>0,\\Delta<0$','$a<0,\\Delta<0$','$a>0,\\Delta>0$','$a<0,\\Delta>0$'], answer:1, expHtml:'<span class="yellow-hl">$a<0$且$\\Delta<0$</span>。' },
+            ];
+            const drillKey = ref(0); const drillQuestions = ref([]);
+            const drillCorrect = computed(() => drillQuestions.value.filter(q => q.showExp && q.userChoice===q.answer).length);
+            const shuffleArray = arr => { const a=[...arr]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+            const generateDrill = () => { drillQuestions.value = shuffleArray(drillPool).slice(0,12).map(q=>({...q,showExp:false,userChoice:-1})); };
+            const reshuffleDrill = () => { drillKey.value++; generateDrill(); };
+            const drillAnswer = (qi,oi) => {
+                if(drillQuestions.value[qi].showExp) return;
+                drillQuestions.value[qi].userChoice=oi; drillQuestions.value[qi].showExp=true;
+                const q=drillQuestions.value[qi]; const stored=localStorage.getItem('math_mistakes'); let mistakes=stored?JSON.parse(stored):[];
+                const qId='12_drill_'+qi+'_'+drillKey.value;
+                if(q.userChoice!==q.answer){ if(!mistakes.find(m=>m.id===qId)) mistakes.push({id:qId,module:'12',moduleName:'一元二次不等式',text:q.text,options:q.options,answer:q.answer,expHtml:q.expHtml,level:'基础强化',timestamp:Date.now()}); }
+                else{ mistakes=mistakes.filter(m=>m.id!==qId); }
+                localStorage.setItem('math_mistakes',JSON.stringify(mistakes));
+            };
+            const drillOptClass = (qi,oi) => { const q=drillQuestions.value[qi]; if(!q.showExp) return q.userChoice===oi?'selected':''; if(oi===q.answer) return 'correct'; if(oi===q.userChoice&&oi!==q.answer) return 'wrong'; return ''; };
+            generateDrill();
+
+            const examQuestions = reactive([
+                { level:'basic', levelLabel:'🥉基础', text:'$x^2-3x+2<0$解集（ ）', options:['$(-\\infty,1)\\cup(2,+\\infty)$','$(1,2)$','$(-2,-1)$','$\\varnothing$'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | 根1,2，$a>0$，<span class="yellow-hl">小于取中间</span>。' },
+                { level:'basic', levelLabel:'🥉基础', text:'$-x^2+x+2\\geq0$解集（ ）', options:['$[-1,2]$','$(-\\infty,-1]\\cup[2,+\\infty)$','$[-2,1]$','$(-\\infty,-2]\\cup[1,+\\infty)$'], answer:0, showExp:false, userChoice:-1, expHtml:'✅ A | 变号$x^2-x-2\\leq0$，根-1,2，<span class="yellow-hl">取中间+闭区间</span>。' },
+                { level:'middle', levelLabel:'🥈中档', text:'$x^2-(m+1)x+m<0$解集非空，$m$范围（ ）', options:['$m=1$','$m\\neq1$','$m>1$','$m<1$'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | 根1和$m$，需<span class="yellow-hl">两根不同</span>即$m\\neq1$。' },
+                { level:'middle', levelLabel:'🥈中档', text:'$x^2-2ax+a^2-1<0$解集（ ）', options:['$(a-1,a+1)$','$(a+1,a-1)$','$(a,a+2)$','$(-a-1,-a+1)$'], answer:0, showExp:false, userChoice:-1, expHtml:'✅ A | $(x-a)^2<1$，$|x-a|<1$，<span class="yellow-hl">$(a-1,a+1)$</span>。' },
+                { level:'advanced', levelLabel:'🥇综合', text:'$kx^2+kx+1>0$恒成立，$k$范围（ ）', options:['$(0,4)$','$[0,4)$','$(0,4]$','$[0,4]$'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | $k=0$成立；$k>0$且$\\Delta<0$得$0<k<4$。<span class="yellow-hl">勿忘$k=0$</span>。' },
+                { level:'advanced', levelLabel:'🥇综合', text:'$A=\\{x|x^2-4x+a<0\\}$非空且$A\\subseteq(-\\infty,5)$，$a$范围（ ）', options:['$(-\\infty,4)$','$(3,4)$','$(3,4]$','$[3,4)$'], answer:2, showExp:false, userChoice:-1, expHtml:'✅ C | $\\Delta>0$得$a<4$，大根$2+\\sqrt{4-a}\\leq5$得$a\\geq-5$，综合$(3,4]$。<span class="yellow-hl">跨章综合</span>。' }
+            ]);
+            const allExamSubmitted = ref(false); const examScore = ref(0);
+            const exSelect = (qi,oi) => { if(!allExamSubmitted.value) examQuestions[qi].userChoice=oi; };
+            const exOptClass = (qi,oi) => { const q=examQuestions[qi]; if(!allExamSubmitted.value) return q.userChoice===oi?'selected':''; if(oi===q.answer) return 'correct'; if(oi===q.userChoice&&oi!==q.answer) return 'wrong'; return ''; };
+            const submitAllExam = () => {
+                if(allExamSubmitted.value) return;
+                if(!examQuestions.every(q=>q.userChoice>=0)){ alert('请先完成所有真题！'); return; }
+                allExamSubmitted.value=true; let score=0;
+                examQuestions.forEach(q=>{ q.showExp=true; if(q.userChoice===q.answer) score++; });
+                examScore.value=score;
+                const stored=localStorage.getItem('math_mistakes'); let mistakes=stored?JSON.parse(stored):[];
+                examQuestions.forEach((q,idx)=>{ const qId='12_exam_'+idx; if(q.userChoice!==q.answer){ if(!mistakes.find(m=>m.id===qId)) mistakes.push({id:qId,module:'12',moduleName:'一元二次不等式',text:q.text,options:q.options,answer:q.answer,expHtml:q.expHtml,level:q.levelLabel,timestamp:Date.now()}); }else{ mistakes=mistakes.filter(m=>m.id!==qId); } });
+                localStorage.setItem('math_mistakes',JSON.stringify(mistakes));
+                if(score>=4){ const s=localStorage.getItem('math_toolbox_progress'); const p=s?JSON.parse(s):{}; p['12']=true; localStorage.setItem('math_toolbox_progress',JSON.stringify(p)); }
+            };
+
+            return { quickQuiz, qqAnswer, qqOptClass, drillQuestions, drillKey, drillCorrect, reshuffleDrill, drillAnswer, drillOptClass, examQuestions, allExamSubmitted, examScore, exSelect, exOptClass, submitAllExam };
+        }
+    }).mount('#app');
+</script>
+</body>
+</html>

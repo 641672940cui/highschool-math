@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>模块10 · 基本不等式（下）· 配凑与拓展</title>
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            startup: {
+                ready() {
+                    MathJax.startup.defaultReady();
+                    MathJax.startup.promise.then(() => {
+                        if (typeof window.renderMath === 'function') window.renderMath();
+                    });
+                }
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        :root {
+            --bg: #f8fafc; --card: #ffffff; --text: #0f172a; --sub: #64748b;
+            --blue: #3b82f6; --blue-light: #eff6ff; --green: #10b981; --green-light: #ecfdf5;
+            --red: #ef4444; --red-light: #fef2f2; --yellow: #fde047; --orange: #f59e0b;
+            --purple: #8b5cf6; --purple-light: #f5f3ff;
+            --border: #e2e8f0; --shadow: 0 4px 12px rgba(0,0,0,0.04); --radius: 20px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg); padding: 16px 12px 80px; display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; -webkit-tap-highlight-color: transparent;
+        }
+        .container { max-width: 500px; width: 100%; }
+        .top-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+        .back-btn {
+            width: 40px; height: 40px; border-radius: 50%; background: var(--card); border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer;
+            text-decoration: none; color: var(--text); box-shadow: var(--shadow); flex-shrink: 0;
+        }
+        .top-title { font-size: 1rem; font-weight: 700; color: var(--text); }
+        .section-title {
+            font-size: 1rem; font-weight: 700; color: var(--text); margin: 18px 0 10px;
+            padding-left: 12px; border-left: 4px solid var(--blue); display: flex; align-items: center; gap: 6px;
+        }
+        .section-title.s2 { border-left-color: var(--purple); }
+        .section-title.s3 { border-left-color: #06b6d4; }
+        .section-title.s4 { border-left-color: var(--orange); }
+        .knowledge-card {
+            background: var(--card); border-radius: var(--radius); padding: 14px 16px;
+            margin-bottom: 10px; box-shadow: var(--shadow); border: 1px solid var(--border);
+        }
+        .knowledge-card h3 { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+        .knowledge-card p { font-size: 0.85rem; color: #334155; line-height: 1.6; margin-bottom: 3px; }
+        .knowledge-card table { width: 100%; border-collapse: collapse; font-size: 0.78rem; margin: 6px 0; }
+        .knowledge-card th { background: #f1f5f9; padding: 7px 5px; text-align: left; font-weight: 600; }
+        .knowledge-card td { padding: 7px 5px; border-bottom: 1px solid var(--border); }
+        .formula-box {
+            background: #f0f9ff; border: 2px solid #3b82f6; border-radius: 16px; padding: 14px;
+            text-align: center; font-size: 0.95rem; font-weight: 700; margin: 10px 0; line-height: 1.8;
+        }
+        .step-box {
+            background: #f8fafc; border: 1px dashed #94a3b8; border-radius: 14px; padding: 12px 14px;
+            margin: 10px 0; font-size: 0.83rem; line-height: 1.7;
+        }
+        .memory-box {
+            background: #f5f3ff; border-left: 4px solid var(--purple); padding: 10px 14px;
+            border-radius: 0 14px 14px 0; margin: 10px 0; font-size: 0.85rem; font-weight: 600;
+        }
+        .metaphor-box {
+            background: #ecfdf5; border-left: 4px solid var(--green); padding: 10px 14px;
+            border-radius: 0 14px 14px 0; margin: 10px 0; font-size: 0.85rem;
+        }
+        .quiz-item {
+            background: var(--card); border-radius: 16px; padding: 12px 14px;
+            margin-bottom: 8px; box-shadow: var(--shadow); border: 1px solid var(--border);
+        }
+        .quiz-item .q-text { font-size: 0.85rem; font-weight: 500; margin-bottom: 6px; }
+        .q-opts { display: flex; flex-wrap: wrap; gap: 6px; }
+        .q-opt {
+            padding: 7px 12px; border-radius: 18px; font-size: 0.8rem; font-weight: 500;
+            background: #f1f5f9; border: 1px solid var(--border); cursor: pointer; transition: 0.15s;
+        }
+        .q-opt.selected { background: #dbeafe; border-color: var(--blue); }
+        .q-opt.correct { background: #dcfce7; border-color: var(--green); }
+        .q-opt.wrong { background: #fee2e2; border-color: var(--red); }
+        .q-exp {
+            margin-top: 6px; padding: 8px 10px; background: #fffbeb; border-radius: 10px;
+            font-size: 0.78rem; display: none; line-height: 1.5;
+        }
+        .q-exp.show { display: block; }
+        .yellow-hl { background: #fde047; font-weight: 600; padding: 0 3px; border-radius: 3px; }
+        .diff-badge {
+            display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.7rem;
+            font-weight: 700; margin-bottom: 6px;
+        }
+        .diff-badge.basic { background: #dcfce7; color: #166534; }
+        .diff-badge.middle { background: #fef3c7; color: #92400e; }
+        .diff-badge.advanced { background: #fee2e2; color: #991b1b; }
+        .submit-btn {
+            display: block; width: 100%; padding: 14px; background: #0f172a; color: white;
+            border: none; border-radius: 30px; font-size: 1rem; font-weight: 600; margin: 16px 0;
+            cursor: pointer; transition: 0.2s;
+        }
+        .submit-btn:active { transform: scale(0.97); }
+        .submit-btn:disabled { background: #94a3b8; }
+        .bottom-nav { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+        .bottom-nav a {
+            flex: 1; text-align: center; padding: 12px 8px; background: var(--card);
+            border-radius: 16px; text-decoration: none; color: var(--text); font-size: 0.82rem;
+            font-weight: 500; border: 1px solid var(--border); min-width: 60px;
+        }
+        .score-display { text-align: center; font-size: 1rem; font-weight: 700; padding: 10px; border-radius: 16px; margin: 10px 0; }
+        .drill-controls { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; }
+        .drill-controls button { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); background: var(--card); font-size: 0.82rem; cursor: pointer; font-weight: 500; }
+        .drill-score { font-size: 0.85rem; font-weight: 600; color: var(--sub); }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <div class="top-bar">
+        <a href="../index.html" class="back-btn">←</a>
+        <span class="top-title">模块10 · 基本不等式（下）</span>
+    </div>
+
+    <!-- ============ 一、知识点讲解区 ============ -->
+    <div class="section-title">📖 知识点讲解</div>
+    <div class="knowledge-card">
+        <h3>一、配凑法</h3>
+        <p>当式子不满足"积为定值"时，通过<span class="yellow-hl">换元</span>构造定值。</p>
+        <div class="step-box">
+            <strong>例</strong>：$x+\frac{1}{x-1}$（$x>1$）<br>
+            令$t=x-1>0$，原式$=t+1+\frac{1}{t}\geq 2+1=3$
+        </div>
+    </div>
+    <div class="knowledge-card">
+        <h3>二、"1"的代换法</h3>
+        <p>已知$\frac{m}{a}+\frac{n}{b}=1$，则$a+b=(a+b)\times 1=(a+b)(\frac{m}{a}+\frac{n}{b})$</p>
+        <p>展开后用基本不等式。<span class="yellow-hl">乘以1不改变值</span>，但改变了形式。</p>
+    </div>
+    <div class="knowledge-card">
+        <h3>三、重要不等式链</h3>
+        <div class="formula-box">
+            $\frac{2}{\frac{1}{a}+\frac{1}{b}} \leq \sqrt{ab} \leq \frac{a+b}{2} \leq \sqrt{\frac{a^2+b^2}{2}}$
+        </div>
+        <table>
+            <tr><th>名称</th><th>表达式</th><th>排序</th></tr>
+            <tr><td>调和平均数</td><td>$\frac{2}{1/a+1/b}$</td><td>最小</td></tr>
+            <tr><td>几何平均数</td><td>$\sqrt{ab}$</td><td>第二</td></tr>
+            <tr><td>算术平均数</td><td>$\frac{a+b}{2}$</td><td>第三</td></tr>
+            <tr><td>平方平均数</td><td>$\sqrt{\frac{a^2+b^2}{2}}$</td><td>最大</td></tr>
+        </table>
+    </div>
+    <div class="knowledge-card">
+        <h3>四、实际应用建模步骤</h3>
+        <p>设变量→表示其他量→列目标函数→判断<span class="yellow-hl">正数+定值</span>→用基本不等式→验证等号</p>
+    </div>
+    <div class="memory-box">🧠 口诀：「遇到分数想代换，乘1展开配成对」·「调几算平，从小到大排成队」</div>
+    <div class="metaphor-box">🎂 比喻："1"的代换就像蛋糕的两种切法——乘到目标式里，蛋糕大小没变，但形状变成了基本不等式喜欢的样子。</div>
+
+    <!-- ============ 二、秒答训练（8题） ============ -->
+    <div class="section-title s2">⚡ 秒答训练（8题）</div>
+    <div v-for="(q,qi) in quickQuiz" :key="'qq'+qi" class="quiz-item">
+        <div class="q-text">{{ qi+1 }}. {{ q.text }}</div>
+        <div class="q-opts"><span v-for="(opt,oi) in q.options" :key="oi" class="q-opt" :class="qqOptClass(qi,oi)" @click="qqAnswer(qi,oi)">{{ String.fromCharCode(65+oi) }}. {{ opt }}</span></div>
+        <div class="q-exp" :class="{show:q.showExp}" v-html="q.expHtml"></div>
+    </div>
+
+    <!-- ============ 三、基础强化区（12题） ============ -->
+    <div class="section-title s3">💪 基础强化（肌肉记忆·12题）</div>
+    <div class="drill-controls">
+        <button @click="reshuffleDrill">🔄 重新出题</button>
+        <span class="drill-score">✅ {{ drillCorrect }} / {{ drillQuestions.length }}</span>
+    </div>
+    <div v-for="(q,qi) in drillQuestions" :key="'dr'+qi+'_'+drillKey" class="quiz-item">
+        <div class="q-text">{{ qi+1 }}. {{ q.text }}</div>
+        <div class="q-opts"><span v-for="(opt,oi) in q.options" :key="oi" class="q-opt" :class="drillOptClass(qi,oi)" @click="drillAnswer(qi,oi)">{{ String.fromCharCode(65+oi) }}. {{ opt }}</span></div>
+        <div class="q-exp" :class="{show:q.showExp}" v-html="q.expHtml"></div>
+    </div>
+
+    <!-- ============ 四、梯度自测（6题） ============ -->
+    <div class="section-title s4">🎯 梯度自测·真题练习（6题）</div>
+    <div v-for="(q,qi) in examQuestions" :key="'ex'+qi" class="quiz-item">
+        <span class="diff-badge" :class="q.level">{{ q.levelLabel }}</span>
+        <div class="q-text">{{ qi+1 }}. {{ q.text }}</div>
+        <div class="q-opts"><span v-for="(opt,oi) in q.options" :key="oi" class="q-opt" :class="exOptClass(qi,oi)" @click="exSelect(qi,oi)">{{ String.fromCharCode(65+oi) }}. {{ opt }}</span></div>
+        <div class="q-exp" :class="{show:q.showExp}" v-html="q.expHtml"></div>
+    </div>
+    <button class="submit-btn" @click="submitAllExam" :disabled="allExamSubmitted">{{ allExamSubmitted?'✅已完成批改':'📝提交全部真题' }}</button>
+    <div class="score-display" v-if="allExamSubmitted" :style="{background:examScore>=4?'#dcfce7':'#fef2f2'}">🎯 真题得分：{{ examScore }}/6</div>
+
+    <div class="bottom-nav">
+        <a href="09_basic_inequality_1.html">◀ 上一模块</a>
+        <a href="../index.html">🏠 首页</a>
+        <a href="11_quadratic_equation.html">下一模块 ▶</a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+<script>
+    const { createApp, ref, reactive, computed } = Vue;
+    createApp({
+        setup() {
+            const quickQuiz = reactive([
+                { text:'使用基本不等式必须满足几个条件？', options:['1个','2个','3个','4个'], answer:2, showExp:false, userChoice:-1, expHtml:'✅ C | <span class="yellow-hl">一正二定三相等</span>。' },
+                { text:'$x>1$时求$x+\\frac{1}{x-1}$最小，第一步？', options:['直接用公式','令$t=x-1$','通分','平方'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | <span class="yellow-hl">换元法</span>构造标准形式。' },
+                { text:'"1"的代换法本质是？', options:['乘1不变','加0不变','配方','因式分解'], answer:0, showExp:false, userChoice:-1, expHtml:'✅ A | <span class="yellow-hl">乘以1</span>不改变值。' },
+                { text:'矩形周长固定，面积最大形状是？', options:['长方形','正方形','圆','三角形'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | <span class="yellow-hl">和定积最大</span>。' },
+                { text:'$\\frac{2}{\\frac{1}{a}+\\frac{1}{b}}$叫什么平均数？', options:['算术','几何','调和','平方'], answer:2, showExp:false, userChoice:-1, expHtml:'✅ C | <span class="yellow-hl">调和平均数</span>，最小。' },
+                { text:'不等式链中最大的是？', options:['调和','几何','算术','平方'], answer:3, showExp:false, userChoice:-1, expHtml:'✅ D | <span class="yellow-hl">平方平均数</span>最大。' },
+                { text:'"调几算平"中的"平"指？', options:['平均','平方','平衡','平面'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | <span class="yellow-hl">平方平均数</span>。' },
+                { text:'配凑法的核心是？', options:['通分','换元构造定值','配方','展开'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | <span class="yellow-hl">换元</span>构造积为定值。' }
+            ]);
+            const qqAnswer = (qi,oi) => { if(quickQuiz[qi].showExp) return; quickQuiz[qi].userChoice=oi; quickQuiz[qi].showExp=true; };
+            const qqOptClass = (qi,oi) => {
+                const q=quickQuiz[qi]; if(!q.showExp) return q.userChoice===oi?'selected':''; if(oi===q.answer) return 'correct'; if(oi===q.userChoice&&oi!==q.answer) return 'wrong'; return '';
+            };
+
+            const drillPool = [
+                { text:'$x>1$，$x+\\frac{1}{x-1}$最小？', options:['2','3','4','5'], answer:1, expHtml:'令$t=x-1$，$t+1+\\frac{1}{t}\\geq 3$。<span class="yellow-hl">换元配凑</span>。' },
+                { text:'$\\frac{1}{a}+\\frac{1}{b}=1$，$a+b$最小？', options:['2','3','4','6'], answer:2, expHtml:'<span class="yellow-hl">"1"的代换</span>：$(a+b)(\\frac{1}{a}+\\frac{1}{b})\\geq 4$。' },
+                { text:'$x>0$，$x+\\frac{4}{x+2}$最小？提示：令$t=x+2$', options:['2','4','6','8'], answer:0, expHtml:'$t>2$，$t-2+\\frac{4}{t}\\geq 2\\sqrt{4}-2=2$。' },
+                { text:'不等式链：调和__几何__算术__平方', options:['$<,<,<$','$\\leq,\\leq,\\leq$','$>,\\geq,\\geq$','$=,=,=$'], answer:1, expHtml:'全部是<span class="yellow-hl">$\\leq$</span>关系。' },
+                { text:'"1"的代换中，乘1后下一步？', options:['展开','配方','通分','求导'], answer:0, expHtml:'<span class="yellow-hl">展开</span>后用基本不等式。' },
+                { text:'$a,b>0$，$a+b=1$，$\\frac{1}{a}+\\frac{1}{b}$最小？', options:['2','4','6','8'], answer:1, expHtml:'$(a+b)(\\frac{1}{a}+\\frac{1}{b})\\geq 4$。<span class="yellow-hl">"1"的代换</span>。' },
+                { text:'实际应用建模第一步？', options:['列方程','设变量','求导','画图'], answer:1, expHtml:'<span class="yellow-hl">设变量</span>。' },
+                { text:'调和平均数公式？', options:['$\\frac{a+b}{2}$','$\\sqrt{ab}$','$\\frac{2}{1/a+1/b}$','$\\frac{a^2+b^2}{2}$'], answer:2, expHtml:'✅ C | <span class="yellow-hl">$\\frac{2}{1/a+1/b}$</span>。' },
+                { text:'$x>2$，$x+\\frac{1}{x-2}$最小？', options:['3','4','5','6'], answer:1, expHtml:'令$t=x-2>0$，$t+2+\\frac{1}{t}\\geq 4$。' },
+                { text:'$\\frac{2}{a}+\\frac{3}{b}=1$，$a+b$代换后系数？', options:['2和3','3和2','5','6'], answer:0, expHtml:'$(a+b)(\\frac{2}{a}+\\frac{3}{b})$展开得$2+3+...$。' },
+                { text:'平方平均数公式？', options:['$\\frac{a+b}{2}$','$\\sqrt{ab}$','$\\sqrt{\\frac{a^2+b^2}{2}}$','$\\frac{a^2+b^2}{2}$'], answer:2, expHtml:'✅ C | <span class="yellow-hl">$\\sqrt{\\frac{a^2+b^2}{2}}$</span>。' },
+                { text:'$x+\\frac{1}{2x-1}(x>\\frac{1}{2})$最小？提示换元', options:['$\\sqrt{2}$','$\\sqrt{2}+\\frac{1}{2}$','2','3'], answer:1, expHtml:'令$t=2x-1>0$，$\\frac{t+1}{2}+\\frac{1}{t}\\geq \\sqrt{2}+\\frac{1}{2}$。' },
+            ];
+            const drillKey = ref(0); const drillQuestions = ref([]);
+            const drillCorrect = computed(() => drillQuestions.value.filter(q => q.showExp && q.userChoice===q.answer).length);
+            const shuffleArray = arr => { const a=[...arr]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+            const generateDrill = () => { drillQuestions.value = shuffleArray(drillPool).slice(0,12).map(q=>({...q,showExp:false,userChoice:-1})); };
+            const reshuffleDrill = () => { drillKey.value++; generateDrill(); };
+            const drillAnswer = (qi,oi) => {
+                if(drillQuestions.value[qi].showExp) return;
+                drillQuestions.value[qi].userChoice=oi; drillQuestions.value[qi].showExp=true;
+                const q=drillQuestions.value[qi]; const stored=localStorage.getItem('math_mistakes'); let mistakes=stored?JSON.parse(stored):[];
+                const qId='10_drill_'+qi+'_'+drillKey.value;
+                if(q.userChoice!==q.answer){ if(!mistakes.find(m=>m.id===qId)) mistakes.push({id:qId,module:'10',moduleName:'基本不等式(下)',text:q.text,options:q.options,answer:q.answer,expHtml:q.expHtml,level:'基础强化',timestamp:Date.now()}); }
+                else{ mistakes=mistakes.filter(m=>m.id!==qId); }
+                localStorage.setItem('math_mistakes',JSON.stringify(mistakes));
+            };
+            const drillOptClass = (qi,oi) => {
+                const q=drillQuestions.value[qi]; if(!q.showExp) return q.userChoice===oi?'selected':''; if(oi===q.answer) return 'correct'; if(oi===q.userChoice&&oi!==q.answer) return 'wrong'; return '';
+            };
+            generateDrill();
+
+            const examQuestions = reactive([
+                { level:'basic', levelLabel:'🥉基础', text:'适合用基本不等式求最小值的是（ ）', options:['$x^2+2x+1$','$x+\\frac{2}{x},x>0$','$x^2+\\frac{1}{x}$','$x+\\frac{1}{x^2}$'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | 乘积为<span class="yellow-hl">定值2</span>。' },
+                { level:'basic', levelLabel:'🥉基础', text:'$x>0,x+\\frac{9}{x}\\geq 6$等号时$x=$（ ）', options:['1','3','6','9'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | $x=\\frac{9}{x}$，$x=3$。<span class="yellow-hl">三相等</span>。' },
+                { level:'middle', levelLabel:'🥈中档', text:'$\\frac{2}{a}+\\frac{1}{b}=1$，$a+b$最小（ ）', options:['$3+2\\sqrt{2}$','$2+2\\sqrt{2}$','$3+\\sqrt{2}$','4'], answer:0, showExp:false, userChoice:-1, expHtml:'✅ A | <span class="yellow-hl">"1"的代换</span>：$3+\\frac{a}{b}+\\frac{2b}{a}\\geq 3+2\\sqrt{2}$。' },
+                { level:'middle', levelLabel:'🥈中档', text:'$x>\\frac{1}{2}$，$2x+\\frac{1}{2x-1}$最小（ ）', options:['2','3','4','5'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | 令$t=2x-1$，$t+1+\\frac{1}{t}\\geq 3$。<span class="yellow-hl">整体换元</span>。' },
+                { level:'advanced', levelLabel:'🥇综合', text:'水池容积8m³深2m，底120元/m²壁80元/m²，最低造价（ ）', options:['1280','1440','1760','1920'], answer:2, showExp:false, userChoice:-1, expHtml:'✅ C | $y=480+320(x+\\frac{4}{x})\\geq 1760$。<span class="yellow-hl">实际建模</span>。' },
+                { level:'advanced', levelLabel:'🥇综合', text:'$a,b,c>0,a+b+c=1$，$\\frac{1}{a}+\\frac{1}{b}+\\frac{1}{c}$最小（ ）', options:['6','9','12','15'], answer:1, showExp:false, userChoice:-1, expHtml:'✅ B | <span class="yellow-hl">三元推广</span>：$(a+b+c)(\\frac{1}{a}+\\frac{1}{b}+\\frac{1}{c})\\geq 9$。' }
+            ]);
+            const allExamSubmitted = ref(false); const examScore = ref(0);
+            const exSelect = (qi,oi) => { if(!allExamSubmitted.value) examQuestions[qi].userChoice=oi; };
+            const exOptClass = (qi,oi) => {
+                const q=examQuestions[qi]; if(!allExamSubmitted.value) return q.userChoice===oi?'selected':''; if(oi===q.answer) return 'correct'; if(oi===q.userChoice&&oi!==q.answer) return 'wrong'; return '';
+            };
+            const submitAllExam = () => {
+                if(allExamSubmitted.value) return;
+                if(!examQuestions.every(q=>q.userChoice>=0)){ alert('请先完成所有真题！'); return; }
+                allExamSubmitted.value=true; let score=0;
+                examQuestions.forEach(q=>{ q.showExp=true; if(q.userChoice===q.answer) score++; });
+                examScore.value=score;
+                const stored=localStorage.getItem('math_mistakes'); let mistakes=stored?JSON.parse(stored):[];
+                examQuestions.forEach((q,idx)=>{ const qId='10_exam_'+idx; if(q.userChoice!==q.answer){ if(!mistakes.find(m=>m.id===qId)) mistakes.push({id:qId,module:'10',moduleName:'基本不等式(下)',text:q.text,options:q.options,answer:q.answer,expHtml:q.expHtml,level:q.levelLabel,timestamp:Date.now()}); }else{ mistakes=mistakes.filter(m=>m.id!==qId); } });
+                localStorage.setItem('math_mistakes',JSON.stringify(mistakes));
+                if(score>=4){ const s=localStorage.getItem('math_toolbox_progress'); const p=s?JSON.parse(s):{}; p['10']=true; localStorage.setItem('math_toolbox_progress',JSON.stringify(p)); }
+            };
+
+            return { quickQuiz, qqAnswer, qqOptClass, drillQuestions, drillKey, drillCorrect, reshuffleDrill, drillAnswer, drillOptClass, examQuestions, allExamSubmitted, examScore, exSelect, exOptClass, submitAllExam };
+        }
+    }).mount('#app');
+</script>
+</body>
+</html>

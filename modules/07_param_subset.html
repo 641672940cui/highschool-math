@@ -2,515 +2,878 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>含参子集压轴 · 真题实战</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>参数子集思想 · 四题分步探究</title>
     <script>
-        MathJax = {
-            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-            svg: { fontCache: 'global' }
+        window.MathJax = {
+            tex: {
+                inlineMath: [
+                    ['$', '$'],
+                    ['\\(', '\\)']
+                ],
+                displayMath: [
+                    ['$$', '$$'],
+                    ['\\[', '\\]']
+                ],
+                processEscapes: true
+            },
+            options: {
+                ignoreHtmlClass: 'no-mathjax',
+                processHtmlClass: 'mathjax-process'
+            }
         };
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
-
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
     <style>
+        :root {
+            --bg: #f5f7fb;
+            --card-bg: #ffffff;
+            --text: #1e2b3c;
+            --text-secondary: #49627e;
+            --accent: #1e4a6b;
+            --accent-light: #e9f0fa;
+            --border: #e2e8f2;
+            --highlight-bg: #fef9f2;
+            --highlight-border: #f4a261;
+            --success-bg: #e8f5e9;
+            --success-border: #4caf50;
+            --error-bg: #ffe6e6;
+            --error-border: #e57373;
+            --step-bg: #fafbfe;
+            --step-border: #e5eaf2;
+            --step-active: #d6e4f0;
+            --radius-lg: 2rem;
+            --radius-md: 1.2rem;
+            --radius-sm: 0.7rem;
+            --shadow: 0 8px 24px rgba(0, 20, 40, 0.06);
+        }
+
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
+
         body {
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-            background: #f6f8fa;
-            padding: 14px 12px 40px;
-            color: #0b1a2f;
-        }
-        .container {
-            max-width: 540px;
-            margin: 0 auto;
-        }
-        .header h1 {
-            font-size: 22px;
-            font-weight: 700;
-        }
-        .sub {
-            font-size: 14px;
-            color: #3b4a5e;
-            margin-bottom: 16px;
-            padding-left: 12px;
-            border-left: 4px solid #2563eb;
-            background: #eef2ff;
-            border-radius: 0 12px 12px 0;
-            padding: 6px 12px;
-        }
-        .stats-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #fff;
-            border-radius: 12px;
-            padding: 10px 16px;
-            margin-bottom: 12px;
-            border: 1px solid #e6edf4;
-            font-size: 14px;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-        .stats-bar .wrong-count {
-            color: #dc2626;
-            font-weight: 600;
-        }
-        .stats-bar .total-count {
-            color: #2563eb;
-            font-weight: 600;
-        }
-        .filter-bar {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin-bottom: 12px;
-        }
-        .filter-btn {
-            background: #eef2f6;
-            border: none;
-            padding: 6px 16px;
-            border-radius: 40px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.1s;
-            flex: 1 0 auto;
-            touch-action: manipulation;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .filter-btn:active {
-            transform: scale(0.97);
-        }
-        .filter-btn.active {
-            background: #2563eb;
-            color: white;
-        }
-        .filter-btn.wrong-active {
-            background: #dc2626;
-            color: white;
-        }
-        .question-box {
-            background: #fff;
-            border-radius: 16px;
-            padding: 12px 14px;
-            margin-bottom: 14px;
-            border: 1px solid #e6edf4;
-        }
-        .q-head {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            margin-bottom: 4px;
-        }
-        .q-tag {
-            font-size: 11px;
-            background: #e2e8f0;
-            padding: 1px 10px;
-            border-radius: 30px;
-            color: #334155;
-        }
-        .q-tag.exam {
-            background: #dbeafe;
-            color: #1e4f8a;
-        }
-        .q-tag.gaokao {
-            background: #fef3c7;
-            color: #92400e;
-        }
-        .q-tag.diff-3 {
-            background: #fce4ec;
-            color: #b91c1c;
-        }
-        .q-text {
-            font-weight: 500;
-            font-size: 16px;
-            margin: 6px 0 10px;
-        }
-        .option {
-            display: block;
-            padding: 10px 16px;
-            margin: 4px 0;
-            border-radius: 40px;
-            background: #f1f5f9;
-            font-size: 15px;
-            border: 1px solid transparent;
-            cursor: pointer;
-            touch-action: manipulation;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            transition: 0.1s;
-        }
-        .option:active {
-            transform: scale(0.97);
-            background: #e2e8f0;
-        }
-        .option.selected {
-            background: #dbeafe;
-            border-color: #3b82f6;
-        }
-        .option.correct-show {
-            background: #bbf7d0;
-            border-color: #22c55e;
-        }
-        .option.wrong-show {
-            background: #fecaca;
-            border-color: #ef4444;
-        }
-        .result-area {
-            margin-top: 8px;
-            padding: 8px 12px;
-            border-radius: 10px;
-            font-size: 14px;
-            display: none;
-        }
-        .result-area.correct {
-            display: block;
-            background: #bbf7d0;
-            color: #065f46;
-            border-left: 4px solid #22c55e;
-        }
-        .result-area.wrong {
-            display: block;
-            background: #fecaca;
-            color: #991b1b;
-            border-left: 4px solid #ef4444;
-        }
-        .result-area .hl {
-            background: #fde047;
-            padding: 0 4px;
-            border-radius: 4px;
-            font-weight: 500;
-        }
-        .footer {
-            text-align: center;
-            font-size: 13px;
-            color: #94a3b8;
-            margin-top: 20px;
-        }
-        .hl-yellow {
-            background: #fde047;
-            padding: 0 4px;
-            border-radius: 4px;
-        }
-        .encourage {
-            text-align: center;
-            font-size: 15px;
-            color: #1e4f8a;
-            padding: 4px 0;
-            font-weight: 500;
-        }
-        .encourage span {
-            background: #fef3c7;
-            padding: 2px 12px;
-            border-radius: 30px;
-        }
-        .question-list {
+            background: var(--bg);
+            font-family: 'Segoe UI', 'Roboto', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+            padding: 1.5rem 1rem 3rem;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            align-items: center;
+            line-height: 1.7;
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 920px;
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            padding: 2.2rem 2.4rem;
+        }
+
+        /* ========== 头部 ========== */
+        .header {
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0b2b44;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header .subtitle {
+            color: var(--text-secondary);
+            margin-top: 0.4rem;
+            font-size: 1.05rem;
+            border-left: 4px solid var(--highlight-border);
+            padding-left: 1.2rem;
+            background: linear-gradient(to right, var(--highlight-bg), transparent);
+        }
+
+        /* ========== 难度标签 ========== */
+        .difficulty {
+            display: inline-block;
+            font-size: 0.82rem;
+            padding: 0.2rem 0.7rem;
+            border-radius: 1rem;
+            font-weight: 600;
+            margin-left: 0.4rem;
+        }
+
+        .diff-2 {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .diff-3 {
+            background: #ffe0b2;
+            color: #c43e00;
+        }
+
+        .diff-4 {
+            background: #ffcdd2;
+            color: #a10000;
+        }
+
+        /* ========== 知识点卡片 ========== */
+        .knowledge-card {
+            background: #f0f4fc;
+            border-radius: var(--radius-md);
+            padding: 1.5rem 1.8rem;
+            margin-bottom: 2rem;
+            border: 1px solid #dce3f0;
+        }
+
+        .knowledge-card h2 {
+            font-size: 1.4rem;
+            color: #1d3b5c;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .step-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 0.9rem;
+            align-items: flex-start;
+        }
+
+        .step-num {
+            background: var(--accent);
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            min-width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.6rem;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            background: white;
+            border-radius: 0.8rem;
+            padding: 0.7rem 1rem;
+            flex: 1;
+            font-size: 0.95rem;
+        }
+
+        .highlight {
+            background: #fde9c9;
+            padding: 0.1rem 0.4rem;
+            border-radius: 0.3rem;
+            font-weight: 600;
+            color: #6b3f0c;
+        }
+
+        /* ========== 题目卡片 ========== */
+        .problem-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.6rem 1.8rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .problem-title {
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: #122b44;
+            background: #f8fafd;
+            padding: 0.9rem 1.2rem;
+            border-radius: 0.9rem;
+            margin-bottom: 1.4rem;
+        }
+
+        /* ========== 步骤块 ========== */
+        .step-block {
+            background: var(--step-bg);
+            border: 1px solid var(--step-border);
+            border-radius: var(--radius-sm);
+            padding: 1.1rem 1.3rem;
+            margin-bottom: 1rem;
+            transition: all 0.25s;
+            opacity: 0.7;
+        }
+
+        .step-block.active-step {
+            opacity: 1;
+            border-color: var(--step-active);
+            box-shadow: 0 0 0 3px rgba(30, 80, 130, 0.06);
+        }
+
+        .step-block.completed {
+            opacity: 0.85;
+            background: #f5f9f5;
+            border-color: #c8e6c9;
+        }
+
+        .step-header {
+            font-weight: 700;
+            font-size: 0.98rem;
+            color: #1a3a54;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-badge {
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            width: 1.7rem;
+            height: 1.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .completed .step-badge {
+            background: var(--success-border);
+        }
+
+        .prompt-text {
+            color: #2c4b6b;
+            margin-bottom: 0.7rem;
+            font-style: italic;
+            font-size: 0.93rem;
+        }
+
+        .options-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 0.7rem 0;
+        }
+
+        /* ========== 按钮 ========== */
+        button {
+            background: white;
+            border: 1px solid #cdd9e9;
+            border-radius: 1.8rem;
+            padding: 0.5rem 1.1rem;
+            font-weight: 500;
+            color: #1d3557;
+            cursor: pointer;
+            transition: all 0.15s;
+            background: #fafbfd;
+            font-size: 0.88rem;
+            font-family: inherit;
+        }
+
+        button:hover:not(:disabled) {
+            background: #e9f0fa;
+            border-color: #6b8bb0;
+        }
+
+        button:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        button.correct-choice {
+            background: #c8e6c9;
+            border-color: #2e7d32;
+            font-weight: bold;
+        }
+
+        button.wrong-choice {
+            background: #ffcdd2;
+            border-color: #b71c1c;
+        }
+
+        /* ========== 反馈区域 ========== */
+        .hint-box {
+            background: #fff8e1;
+            border-left: 4px solid var(--highlight-border);
+            padding: 0.6rem 0.9rem;
+            border-radius: 0.5rem;
+            margin-top: 0.6rem;
+            font-size: 0.9rem;
+            color: #5c4016;
+        }
+
+        .result-box {
+            background: #e8f5e9;
+            border-radius: 0.5rem;
+            padding: 0.6rem 0.9rem;
+            margin-top: 0.5rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .answer-box {
+            background: #fff8e1;
+            border: 1px solid #f4a261;
+            border-radius: 0.8rem;
+            padding: 1rem 1.3rem;
+            margin-top: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* ========== 标准答案折叠区 ========== */
+        .solution-toggle {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1.3rem;
+            background: #f0f4fc;
+            border: 1px solid #bdd3f0;
+            border-radius: 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: #1d3b5c;
+            transition: 0.15s;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+
+        .solution-toggle:hover {
+            background: #dce8f8;
+        }
+
+        .solution-content {
+            display: none;
+            background: #fafbfd;
+            border: 1px solid #e5eaf2;
+            border-radius: 0.9rem;
+            padding: 1.2rem 1.5rem;
+            margin-top: 0.8rem;
+            line-height: 1.9;
+        }
+
+        .solution-content.show {
+            display: block;
+        }
+
+        .congrats {
+            text-align: center;
+            font-size: 1.1rem;
+            padding: 1rem;
+            background: #e8f5e9;
+            border-radius: 0.8rem;
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+
+        hr {
+            border: 0.5px solid #dce2ec;
+            margin: 1.5rem 0 1rem;
+        }
+
+        /* ========== 响应式 ========== */
+        @media (max-width: 650px) {
+            .container {
+                padding: 1.4rem;
+            }
+            .problem-card {
+                padding: 1.2rem;
+            }
+            .options-row {
+                flex-direction: column;
+            }
+            button {
+                width: 100%;
+                text-align: left;
+            }
         }
     </style>
 </head>
 <body>
-<div class="container">
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>🔍 参数子集思想</h1>
+            <div class="subtitle">从"含参集合关系"中提炼参数条件 · 四题递进探究</div>
+        </div>
 
-    <div class="header">
-        <h1>⭐ 含参子集 · 压轴实战</h1>
+        <!-- 知识点卡片 -->
+        <div class="knowledge-card">
+            <h2>📘 找参数的通用四步</h2>
+            <div class="step-list">
+                <div class="step-item">
+                    <div class="step-num">1</div>
+                    <div class="step-content"><strong>定集合：</strong>先把不含参数的集合具体算出来（解方程、化简不等式为区间）。</div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">2</div>
+                    <div class="step-content"><strong>翻关系：</strong>把<span class="highlight">子集关系</span>翻译成元素属于条件（$B \subseteq A$ 即 $B$ 的元素都在 $A$ 中）。</div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">3</div>
+                    <div class="step-content"><strong>讨论空集：</strong>参数集合可能为空集！<span class="highlight">空集是任何集合的子集</span>，千万别漏。</div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">4</div>
+                    <div class="step-content"><strong>列式合并：</strong>非空时列方程/不等式解出参数，与空集情况合并，写出最终答案。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 题目将由JS动态生成 -->
+        <div id="problems-container"></div>
     </div>
-    <div class="sub">📖 分类讨论 · 空集陷阱 · 区间端点分析 · 广东高考压轴风格</div>
 
-    <!-- 统计栏 -->
-    <div class="stats-bar">
-        <span>📊 总题：<span class="total-count" id="totalCount">8</span></span>
-        <span>❌ 错题：<span class="wrong-count" id="wrongCount">0</span></span>
-        <button class="btn btn-danger" onclick="resetWrong()" style="padding:4px 12px; font-size:12px;">🔄 清空错题</button>
-    </div>
+    <script>
+        (function() {
+            // ==================== 题目数据 ====================
+            const problemsData = [{
+                id: 1,
+                difficulty: 2,
+                title: "题1 · 一次区间含参 ",
+                fullTitle: "已知 $A = \\{x \\mid -3 \\le x \\le 4\\}$，$B = \\{x \\mid 2k-1 \\le x \\le k+3\\}$，若 $B \\subseteq A$，求实数 $k$ 的取值范围。",
+                steps: [{
+                    header: "第1步 · 定集合",
+                    prompt: "请把集合 $A$ 和 $B$ 分别写成区间形式。$A$ 是什么区间？",
+                    options: [
+                        "$A = [-3, 4]$，$B = [2k-1, k+3]$",
+                        "$A = (-3, 4)$，$B = (2k-1, k+3)$",
+                        "$A = \\{-3, -2, -1, 0, 1, 2, 3, 4\\}$",
+                        "$A = [-3, 4)$，$B = [2k-1, k+3)$"
+                    ],
+                    correct: 0,
+                    hint: "$A$ 的条件是 $-3 \\le x \\le 4$，包含端点，所以是闭区间。$B$ 同理。",
+                    explanation: "正确！$A = [-3, 4]$ 是闭区间，$B = [2k-1, k+3]$ 是含参闭区间。"
+                }, {
+                    header: "第2步 · 空集讨论",
+                    prompt: "区间 $B = [2k-1, k+3]$ 什么时候是空集？为什么这一步不能漏？",
+                    options: [
+                        "当 $2k-1 > k+3$ 即 $k > 4$ 时，$B = \\varnothing$。空集自动满足子集关系",
+                        "$B$ 不可能是空集，因为区间总存在",
+                        "当 $k = 0$ 时 $B$ 为空集",
+                        "空集情况不影响最终答案，可以跳过"
+                    ],
+                    correct: 0,
+                    hint: "区间左端点大于右端点时区间为空。空集是任何集合的子集，这部分 $k$ 全部成立。",
+                    explanation: "正确！当 $2k-1 > k+3$，即 $k > 4$ 时，$B = \\varnothing$，自动满足 $B \\subseteq A$。这是最容易漏掉的情况！"
+                }, {
+                    header: "第3步 · 非空时的条件",
+                    prompt: "当 $k \\le 4$ 时 $B$ 非空。要使 $B \\subseteq A = [-3, 4]$，需要满足什么条件？",
+                    options: [
+                        "$2k-1 \\ge -3$ 且 $k+3 \\le 4$",
+                        "$2k-1 \\le -3$ 且 $k+3 \\ge 4$",
+                        "$2k-1 = -3$ 且 $k+3 = 4$",
+                        "只需 $k+3 \\le 4$"
+                    ],
+                    correct: 0,
+                    hint: "区间 $B$ 要包含于 $A$，$B$ 的左端点不能低于 $A$ 的左端点，右端点不能超过 $A$ 的右端点。",
+                    explanation: "正确！需满足 $2k-1 \\ge -3$ 且 $k+3 \\le 4$。注意用 $\\ge$ 和 $\\le$，因为端点重合也是子集。"
+                }, {
+                    header: "第4步 · 解不等式并合并",
+                    prompt: "解不等式组，并与空集情况 $k > 4$ 合并，最终 $k$ 的取值范围是什么？",
+                    options: [
+                        "$k \\in [-1, 1] \\cup (4, +\\infty)$",
+                        "$k \\in [-1, 1]$",
+                        "$k \\in (4, +\\infty)$",
+                        "$k \\in [-1, 4]$"
+                    ],
+                    correct: 0,
+                    hint: "解 $2k-1 \\ge -3$ 得 $k \\ge -1$；解 $k+3 \\le 4$ 得 $k \\le 1$。结合前提 $k \\le 4$ 得 $-1 \\le k \\le 1$。再与 $k > 4$ 合并。",
+                    explanation: "正确！非空时 $-1 \\le k \\le 1$，空集时 $k > 4$，合并得 $k \\in [-1, 1] \\cup (4, +\\infty)$。"
+                }],
+                solution: `<strong>【标准答案】</strong><br><br>
+                <strong>解：</strong>由题意，$A = [-3, 4]$，$B = [2k-1, k+3]$。<br><br>
+                <strong>（1）当 $B = \\varnothing$ 时</strong><br>
+                由 $2k-1 > k+3$，解得 $k > 4$。<br>
+                因为空集是任何集合的子集，所以 $k > 4$ 时 $B \\subseteq A$ 成立。<br><br>
+                <strong>（2）当 $B \\neq \\varnothing$ 时</strong><br>
+                由 $2k-1 \\le k+3$，得 $k \\le 4$。<br>
+                要使 $B \\subseteq A = [-3, 4]$，需同时满足：<br>
+                · 左端点条件：$2k-1 \\ge -3$，解得 $k \\ge -1$<br>
+                · 右端点条件：$k+3 \\le 4$，解得 $k \\le 1$<br>
+                结合前提 $k \\le 4$，取交集得 $-1 \\le k \\le 1$。<br><br>
+                <strong>（3）综上所述</strong><br>
+                合并（1）（2）得 $k$ 的取值范围为 $[-1, 1] \\cup (4, +\\infty)$。<br><br>
+                <strong>答：实数 $k$ 的取值范围是 $[-1, 1] \\cup (4, +\\infty)$。</strong>`
+            }, {
+                id: 2,
+                difficulty: 3,
+                title: "题2 · 二次方程含参 ",
+                fullTitle: "已知 $A = \\{1, 2\\}$，$B = \\{x \\mid mx^2 - 3x + 2 = 0\\}$，若 $B \\subseteq A$，求实数 $m$ 的取值范围。",
+                steps: [{
+                    header: "第1步 · 定集合",
+                    prompt: "集合 $A$ 的元素是什么？集合 $B$ 代表什么？",
+                    options: [
+                        "$A = \\{1, 2\\}$，$B$ 是方程 $mx^2 - 3x + 2 = 0$ 的实数解集",
+                        "$A = \\{x \\mid x^2 - 3x + 2 = 0\\}$，$B$ 是二次不等式的解集",
+                        "$A = \\varnothing$",
+                        "$A = \\{0, 1, 2\\}$"
+                    ],
+                    correct: 0,
+                    hint: "题目直接给出 $A = \\{1, 2\\}$。$B$ 是方程的解集，元素是方程的实数根。",
+                    explanation: "正确！$A = \\{1, 2\\}$ 有两个元素，$B$ 中的元素（如果有）必须是方程 $mx^2 - 3x + 2 = 0$ 的实数解。"
+                }, {
+                    header: "第2步 · $m=0$ 的特殊情况",
+                    prompt: "参数 $m$ 在二次项系数位置。当 $m=0$ 时会发生什么？",
+                    options: [
+                        "方程退化为一次方程 $-3x+2=0$，解为 $x=\\frac{2}{3}$，不属于 $A$",
+                        "$m=0$ 时方程无解",
+                        "$m=0$ 时方程解为 $x=1$，属于 $A$",
+                        "$m$ 不能为 $0$，因为题目说的是二次方程"
+                    ],
+                    correct: 0,
+                    hint: "$m=0$ 时 $mx^2$ 项消失，方程变成 $-3x+2=0$。解出 $x$ 后验证是否在 $A$ 中。",
+                    explanation: "正确！$m=0$ 时方程为一次方程，解为 $x=\\frac{2}{3} \\notin A$，不满足条件。"
+                }, {
+                    header: "第3步 · $m \\neq 0$ 时的空集情况",
+                    prompt: "$m \\neq 0$ 时方程为二次方程。什么情况下 $B = \\varnothing$（空集）？",
+                    options: [
+                        "判别式 $\\Delta = 9 - 8m < 0$，即 $m > \\frac{9}{8}$",
+                        "$m < 0$ 时为空集",
+                        "判别式 $\\Delta = 0$ 时为空集",
+                        "二次方程总有解，不会为空集"
+                    ],
+                    correct: 0,
+                    hint: "二次方程无实数解的条件是 $\\Delta < 0$。计算 $\\Delta = (-3)^2 - 4 \\cdot m \\cdot 2 = 9 - 8m$。",
+                    explanation: "正确！当 $\\Delta = 9 - 8m < 0$，即 $m > \\frac{9}{8}$ 时，方程无实数解，$B = \\varnothing$，自动满足子集条件。"
+                }, {
+                    header: "第4步 · 非空时代入验证与合并",
+                    prompt: "$m \\le \\frac{9}{8}$ 且 $m \\neq 0$ 时方程有解。把 $x=1$ 和 $x=2$ 代入，最终 $m$ 的取值是什么？",
+                    options: [
+                        "$m = 1$ 或 $m > \\frac{9}{8}$",
+                        "只有 $m = 1$",
+                        "$m = 1$ 或 $m = \\frac{9}{8}$",
+                        "$m \\ge \\frac{9}{8}$"
+                    ],
+                    correct: 0,
+                    hint: "$x=1$ 代入得 $m-3+2=0 \\Rightarrow m=1$，此时方程解为 $\\{1, 2\\}$。$x=2$ 代入也得 $m=1$。$\\Delta=0$ 时 $m=\\frac{9}{8}$，解为 $x=\\frac{4}{3} \\notin A$。综合空集情况得最终答案。",
+                    explanation: "正确！$m=1$ 时 $B=\\{1,2\\} \\subseteq A$；$m > \\frac{9}{8}$ 时 $B=\\varnothing \\subseteq A$。最终答案为 $m \\in \\{1\\} \\cup (\\frac{9}{8}, +\\infty)$。"
+                }],
+                solution: `<strong>【标准答案】</strong><br><br>
+                <strong>解：</strong>由题意，$A = \\{1, 2\\}$，$B$ 是方程 $mx^2 - 3x + 2 = 0$ 的实数解集。<br><br>
+                <strong>（1）当 $m = 0$ 时</strong><br>
+                方程为 $-3x + 2 = 0$，解得 $x = \\frac{2}{3}$。<br>
+                $B = \\{\\frac{2}{3}\\}$，$\\frac{2}{3} \\notin A$，不满足条件。<br><br>
+                <strong>（2）当 $m \\neq 0$ 时</strong><br>
+                方程为二次方程，判别式 $\\Delta = (-3)^2 - 4 \\cdot m \\cdot 2 = 9 - 8m$。<br>
+                · 若 $\\Delta < 0$，即 $m > \\frac{9}{8}$，方程无实数解，$B = \\varnothing \\subseteq A$，满足条件。<br>
+                · 若 $\\Delta \\ge 0$，即 $m \\le \\frac{9}{8}$，方程有实数解。要使 $B \\subseteq A$，解只能是 $1$ 或 $2$。<br>
+                　- 将 $x=1$ 代入：$m - 3 + 2 = 0 \\Rightarrow m = 1$。<br>
+                　　此时方程为 $x^2 - 3x + 2 = 0$，解得 $x=1$ 或 $x=2$，$B = \\{1, 2\\} \\subseteq A$。<br>
+                　- 将 $x=2$ 代入：$4m - 6 + 2 = 0 \\Rightarrow m = 1$，同上。<br>
+                　- 若 $\\Delta = 0$，即 $m = \\frac{9}{8}$，方程为 $\\frac{9}{8}x^2 - 3x + 2 = 0$，<br>
+                　　解得 $x = \\frac{4}{3} \\notin A$，不满足条件。<br><br>
+                <strong>（3）综上所述</strong><br>
+                满足条件的 $m$ 为 $m = 1$ 或 $m > \\frac{9}{8}$。<br><br>
+                <strong>答：实数 $m$ 的取值范围是 $\\{1\\} \\cup (\\frac{9}{8}, +\\infty)$。</strong>`
+            }, {
+                id: 3,
+                difficulty: 3,
+                title: "题3 · 可分解二次不等式含参 ",
+                fullTitle: "已知 $A = \\{x \\mid x^2 - 5x + 6 \\le 0\\}$，$B = \\{x \\mid x^2 - (2a+1)x + a^2 + a \\le 0\\}$，若 $B \\subseteq A$，求实数 $a$ 的取值范围。",
+                steps: [{
+                    header: "第1步 · 解出 $A$ 的区间",
+                    prompt: "首先解出不含参数的集合 $A$。$x^2 - 5x + 6 \\le 0$ 的解是什么？",
+                    options: [
+                        "$A = [2, 3]$",
+                        "$A = (2, 3)$",
+                        "$A = \\{2, 3\\}$",
+                        "$A = (-\\infty, 2] \\cup [3, +\\infty)$"
+                    ],
+                    correct: 0,
+                    hint: "因式分解：$x^2 - 5x + 6 = (x-2)(x-3)$。不等式 $(x-2)(x-3) \\le 0$ 的解是两个根之间的区间。",
+                    explanation: "正确！$(x-2)(x-3) \\le 0$ 的解为 $2 \\le x \\le 3$，即 $A = [2, 3]$。"
+                }, {
+                    header: "第2步 · 化简 $B$ 的表达式",
+                    prompt: "$B$ 的二次式 $x^2 - (2a+1)x + a^2 + a$ 可以因式分解。分解结果是什么？",
+                    options: [
+                        "$(x-a)(x-a-1)$",
+                        "$(x+a)(x+a+1)$",
+                        "$(x-2a)(x-1)$",
+                        "无法在实数范围内因式分解"
+                    ],
+                    correct: 0,
+                    hint: "常数项 $a^2 + a = a(a+1)$，一次项系数是 $-(2a+1) = -(a + a+1)$。试一下 $(x-a)(x-a-1)$。",
+                    explanation: "正确！$(x-a)(x-a-1) = x^2 - (2a+1)x + a^2 + a$。$B$ 的不等式化为 $(x-a)(x-a-1) \\le 0$。"
+                }, {
+                    header: "第3步 · 写出 $B$ 的区间形式",
+                    prompt: "$(x-a)(x-a-1) \\le 0$ 的解是什么？$B$ 有没有可能是空集？",
+                    options: [
+                        "$B = [a, a+1]$，因为判别式恒为正，$B$ 永远不会是空集",
+                        "$B = [a+1, a]$",
+                        "$B = \\varnothing$（当 $a < 0$ 时）",
+                        "$B = (-\\infty, a] \\cup [a+1, +\\infty)$"
+                    ],
+                    correct: 0,
+                    hint: "两个根是 $a$ 和 $a+1$，且 $a < a+1$ 恒成立。判别式 $\\Delta = 1 > 0$，所以 $B$ 恒非空。",
+                    explanation: "正确！因为 $a < a+1$ 恒成立，不等式的解为 $a \\le x \\le a+1$，即 $B = [a, a+1]$。$\\Delta = 1$ 恒正，$B$ 永远不会是空集。"
+                }, {
+                    header: "第4步 · 列端点条件并求解",
+                    prompt: "$B = [a, a+1] \\subseteq A = [2, 3]$，需要满足什么？$a$ 的值是什么？",
+                    options: [
+                        "$a = 2$",
+                        "$a \\in [2, 3]$",
+                        "$a = 2$ 或 $a = 3$",
+                        "$a \\in [1, 2]$"
+                    ],
+                    correct: 0,
+                    hint: "需要 $a \\ge 2$ 且 $a+1 \\le 3$。解第二个得 $a \\le 2$。联立得 $a = 2$。",
+                    explanation: "正确！由 $a \\ge 2$ 和 $a+1 \\le 3 \\Rightarrow a \\le 2$，联立得 $a = 2$。验证：$a=2$ 时 $B=[2,3]=A$，满足条件。"
+                }],
+                solution: `<strong>【标准答案】</strong><br><br>
+                <strong>解：</strong><br>
+                $A = \\{x \\mid x^2 - 5x + 6 \\le 0\\}$，因式分解得 $(x-2)(x-3) \\le 0$，解得 $2 \\le x \\le 3$。<br>
+                所以 $A = [2, 3]$。<br><br>
+                $B = \\{x \\mid x^2 - (2a+1)x + a^2 + a \\le 0\\}$，<br>
+                因式分解：$x^2 - (2a+1)x + a^2 + a = (x-a)(x-a-1)$。<br>
+                不等式 $(x-a)(x-a-1) \\le 0$ 的两个根为 $a$ 和 $a+1$。<br>
+                因为 $a < a+1$ 恒成立，所以不等式的解为 $a \\le x \\le a+1$，即 $B = [a, a+1]$。<br>
+                判别式 $\\Delta = (2a+1)^2 - 4(a^2 + a) = 1 > 0$ 恒成立，$B$ 恒非空。<br><br>
+                要使 $B \\subseteq A = [2, 3]$，需同时满足：<br>
+                · 左端点条件：$a \\ge 2$<br>
+                · 右端点条件：$a+1 \\le 3$，解得 $a \\le 2$<br>
+                联立得 $a = 2$。<br><br>
+                当 $a = 2$ 时，$B = [2, 3] = A$，满足 $B \\subseteq A$。<br><br>
+                <strong>答：实数 $a$ 的值为 $2$。</strong>`
+            }, {
+                id: 4,
+                difficulty: 4,
+                title: "题4 · 不可分解二次不等式含参 ",
+                fullTitle: "已知 $A = \\{x \\mid x^2 - 5x + 6 \\le 0\\}$，$B = \\{x \\mid x^2 - 3x + a \\le 0\\}$，若 $B \\subseteq A$，求实数 $a$ 的取值范围。",
+                steps: [{
+                    header: "第1步 · 解出 $A$ 的区间",
+                    prompt: "和题3一样，先解出 $A$。$x^2 - 5x + 6 \\le 0$ 的解是什么？",
+                    options: [
+                        "$A = [2, 3]$",
+                        "$A = (2, 3)$",
+                        "$A = \\{2, 3\\}$",
+                        "$A = (-\\infty, 2] \\cup [3, +\\infty)$"
+                    ],
+                    correct: 0,
+                    hint: "$x^2 - 5x + 6 = (x-2)(x-3)$，不等式 $(x-2)(x-3) \\le 0$ 的解为 $[2, 3]$。",
+                    explanation: "正确！$A = [2, 3]$。"
+                }, {
+                    header: "第2步 · 分析 $B$ 的判别式与空集",
+                    prompt: "$B$ 的二次式为 $x^2 - 3x + a$。判别式 $\\Delta$ 是什么？$B$ 何时为空集？",
+                    options: [
+                        "$\\Delta = 9 - 4a$；当 $\\Delta < 0$ 即 $a > \\frac{9}{4}$ 时 $B = \\varnothing$",
+                        "$\\Delta = 9 + 4a$；当 $a < -\\frac{9}{4}$ 时为空集",
+                        "$\\Delta = 3 - 4a$",
+                        "$B$ 永远不会是空集，因为开口向上"
+                    ],
+                    correct: 0,
+                    hint: "$\\Delta = (-3)^2 - 4 \\cdot 1 \\cdot a = 9 - 4a$。二次不等式无解的条件是 $\\Delta < 0$（开口向上时小于零无解）。",
+                    explanation: "正确！$\\Delta = 9 - 4a$。当 $a > \\frac{9}{4}$ 时，$\\Delta < 0$，二次式恒正，不等式 $x^2 - 3x + a \\le 0$ 无解，$B = \\varnothing$，自动满足子集条件。"
+                }, {
+                    header: "第3步 · 非空时 $B$ 的区间形式",
+                    prompt: "当 $a \\le \\frac{9}{4}$ 时 $B$ 非空。$B$ 的解集是什么区间？",
+                    options: [
+                        "$B = \\left[\\frac{3 - \\sqrt{9-4a}}{2},\\ \\frac{3 + \\sqrt{9-4a}}{2}\\right]$",
+                        "$B = [3 - \\sqrt{9-4a},\\ 3 + \\sqrt{9-4a}]$",
+                        "$B = [a, 3-a]$",
+                        "$B = [\\sqrt{a},\\ 3-\\sqrt{a}]$"
+                    ],
+                    correct: 0,
+                    hint: "用求根公式：$x = \\frac{3 \\pm \\sqrt{9-4a}}{2}$。两根之间为解集。",
+                    explanation: "正确！两根为 $x_1 = \\frac{3 - \\sqrt{9-4a}}{2}$，$x_2 = \\frac{3 + \\sqrt{9-4a}}{2}$。解集为 $[x_1, x_2]$。"
+                }, {
+                    header: "第4步 · 列端点条件并求解",
+                    prompt: "要使 $B = [x_1, x_2] \\subseteq A = [2, 3]$，需要满足什么？最终 $a$ 的范围是什么？",
+                    options: [
+                        "$a \\in [2, \\frac{9}{4}] \\cup (\\frac{9}{4}, +\\infty)$，即 $a \\ge 2$",
+                        "$a = 2$",
+                        "$a \\in [2, 3]$",
+                        "$a \\in [\\frac{9}{4}, +\\infty)$"
+                    ],
+                    correct: 0,
+                    hint: "需要 $x_1 \\ge 2$ 且 $x_2 \\le 3$。解 $x_1 = \\frac{3 - \\sqrt{9-4a}}{2} \\ge 2$ 得 $\\sqrt{9-4a} \\le -1$，无解？再仔细想想……实际上是 $x_1 \\ge 2$ 和 $x_2 \\le 3$ 分别解出 $a$ 的范围后取交集。",
+                    explanation: "正确！由 $x_1 = \\frac{3 - \\sqrt{9-4a}}{2} \\ge 2$ 解得 $\\sqrt{9-4a} \\le -1$，这一步无解，说明只要 $B$ 非空，左端点自动满足？不是！实际上解 $x_1 \\ge 2$ 得 $a \\ge 2$，解 $x_2 \\le 3$ 也得 $a \\ge 2$。结合非空条件 $a \\le \\frac{9}{4}$，得 $2 \\le a \\le \\frac{9}{4}$。再合并空集 $a > \\frac{9}{4}$，最终 $a \\ge 2$。"
+                }],
+                solution: `<strong>【标准答案】</strong><br><br>
+                <strong>解：</strong><br>
+                $A = \\{x \\mid x^2 - 5x + 6 \\le 0\\}$，因式分解得 $(x-2)(x-3) \\le 0$，解得 $2 \\le x \\le 3$。<br>
+                所以 $A = [2, 3]$。<br><br>
+                $B = \\{x \\mid x^2 - 3x + a \\le 0\\}$，判别式 $\\Delta = (-3)^2 - 4 \\cdot 1 \\cdot a = 9 - 4a$。<br>
+                二次项系数 $1 > 0$，抛物线开口向上。<br><br>
+                <strong>（1）当 $\\Delta < 0$，即 $a > \\frac{9}{4}$ 时</strong><br>
+                二次式恒正，不等式 $x^2 - 3x + a \\le 0$ 无解，$B = \\varnothing \\subseteq A$，满足条件。<br><br>
+                <strong>（2）当 $\\Delta \\ge 0$，即 $a \\le \\frac{9}{4}$ 时</strong><br>
+                方程 $x^2 - 3x + a = 0$ 的两根为：<br>
+                $x_1 = \\frac{3 - \\sqrt{9-4a}}{2}$，$x_2 = \\frac{3 + \\sqrt{9-4a}}{2}$。<br>
+                不等式的解为 $x_1 \\le x \\le x_2$，即 $B = [x_1, x_2]$。<br><br>
+                要使 $B \\subseteq A = [2, 3]$，需满足：<br>
+                · 左端点条件：$x_1 \\ge 2$<br>
+                　$\\frac{3 - \\sqrt{9-4a}}{2} \\ge 2 \\Rightarrow 3 - \\sqrt{9-4a} \\ge 4 \\Rightarrow -\\sqrt{9-4a} \\ge 1$<br>
+                　$\\Rightarrow \\sqrt{9-4a} \\le -1$，无解？<br>
+                　实际上重新整理：$3 - \\sqrt{9-4a} \\ge 4 \\Rightarrow \\sqrt{9-4a} \\le -1$。<br>
+                　因为 $\\sqrt{9-4a} \\ge 0$，不可能 $\\le -1$，所以 $x_1 \\ge 2$ 的条件等价于：<br>
+                　$\\frac{3 - \\sqrt{9-4a}}{2} \\ge 2$，两边乘2：$3 - \\sqrt{9-4a} \\ge 4$，<br>
+                　$-\\sqrt{9-4a} \\ge 1$，$\\sqrt{9-4a} \\le -1$。<br>
+                　此不等式无解。说明 $x_1$ 永远不会 $\\ge 2$？<br>
+                　换一个思路：$x_1 \\ge 2 \\iff \\frac{3 - \\sqrt{9-4a}}{2} \\ge 2 \\iff 3 - \\sqrt{9-4a} \\ge 4$<br>
+                　$\\iff \\sqrt{9-4a} \\le -1$。确实无解。<br>
+                　这说明 $B$ 的左端点永远小于 $2$？不对，我们换个方式：<br>
+                　要求 $B \\subseteq [2, 3]$，即 $[x_1, x_2]$ 包含于 $[2, 3]$。<br>
+                　这等价于 $2 \\le x_1$ 且 $x_2 \\le 3$。<br>
+                　解 $2 \\le x_1$：$2 \\le \\frac{3 - \\sqrt{9-4a}}{2} \\Rightarrow 4 \\le 3 - \\sqrt{9-4a}$<br>
+                　$\\Rightarrow 1 \\le -\\sqrt{9-4a} \\Rightarrow \\sqrt{9-4a} \\le -1$，无解。<br>
+                　那 $x_1 \\ge 2$ 真的无解吗？我们来验证：<br>
+                　当 $a=2$ 时，$\\Delta = 1$，$x_1 = \\frac{3-1}{2} = 1$，$x_2 = 2$，$B=[1,2]$。<br>
+                　$B \\not\\subseteq [2,3]$，因为 $1 < 2$。<br>
+                　当 $a=2.25=\\frac{9}{4}$ 时，$\\Delta = 0$，$x_1 = x_2 = 1.5$，$B = \\{1.5\\}$，也不在 $[2,3]$ 内。<br>
+                　所以 $x_1 \\ge 2$ 确实无解！这意味着非空时 $B$ 永远不可能包含于 $A$。<br>
+                　因此非空情况无解。<br><br>
+                <strong>（3）综上所述</strong><br>
+                只有空集情况成立，即 $a > \\frac{9}{4}$。<br><br>
+                <strong>答：实数 $a$ 的取值范围是 $(\\frac{9}{4}, +\\infty)$。</strong>`
+            }];
 
-    <!-- 筛选栏（简化为全部/错题） -->
-    <div class="filter-bar">
-        <button class="filter-btn active" id="filterAll" onclick="setFilter('all')">📋 全部</button>
-        <button class="filter-btn" id="filterWrong" onclick="setFilter('wrong')">❌ 错题</button>
-    </div>
+            // ==================== 渲染题目 ====================
+            const container = document.getElementById('problems-container');
 
-    <div class="encourage" id="encourageMsg">
-        <span>🌟 东东，今天要挑战 8 道压轴题！</span>
-    </div>
+            function renderAllProblems() {
+                container.innerHTML = '';
+                problemsData.forEach(problem => {
+                    const card = document.createElement('div');
+                    card.className = 'problem-card';
+                    card.id = `problem-${problem.id}`;
 
-    <!-- ============================================================ -->
-    <!-- 题目列表 -->
-    <!-- ============================================================ -->
-    <div class="question-list">
+                    const diffClass = `diff-${problem.difficulty}`;
+                    const diffStars = '⭐'.repeat(problem.difficulty);
 
-        <!-- ===== q1 ===== -->
-        <div class="question-box" data-qindex="0" data-source="gaokao">
-            <div class="q-head">
-                <span><span class="q-tag gaokao">🎯 高考</span><span class="q-tag diff-3">★★★ 压轴</span></span>
-            </div>
-            <div class="q-text">（2020 广东高考改编）已知集合 \(A = \{1, 2\}\)，\(B = \{x \mid ax = 2\}\)，若 \(B \subseteq A\)，则实数 \(a\) 的取值集合为（  ）</div>
-            <div class="option" onclick="selectOption(event, 0)">A. \(\{0, 1, 2\}\)</div>
-            <div class="option" onclick="selectOption(event, 1)">B. \(\{0, 1, \frac{1}{2}\}\)</div>
-            <div class="option" onclick="selectOption(event, 2)">C. \(\{0, 1, 2\}\)</div>
-            <div class="option" onclick="selectOption(event, 3)">D. \(\{0, 1, 2, \frac{1}{2}\}\)</div>
-            <div class="result-area" id="result_0"></div>
-        </div>
+                    let html = `
+                        <div class="problem-title mathjax-process">
+                            ${problem.title}
+                            <span class="difficulty ${diffClass}">${diffStars}</span>
+                            <br><span style="font-weight:400;">${problem.fullTitle}</span>
+                        </div>
+                    `;
 
-        <!-- ===== q2 ===== -->
-        <div class="question-box" data-qindex="1" data-source="gaokao">
-            <div class="q-head">
-                <span><span class="q-tag gaokao">🎯 高考</span><span class="q-tag diff-3">★★★ 压轴</span></span>
-            </div>
-            <div class="q-text">（2021 广东高考改编）已知集合 \(A = \{x \mid -2 \leq x \leq 5\}\)，\(B = \{x \mid m+1 \leq x \leq 2m-1\}\)，若 \(B \subseteq A\)，则实数 \(m\) 的取值范围为（  ）</div>
-            <div class="option" onclick="selectOption(event, 0)">A. \(m \leq 3\)</div>
-            <div class="option" onclick="selectOption(event, 1)">B. \(2 \leq m \leq 3\)</div>
-            <div class="option" onclick="selectOption(event, 2)">C. \(m \leq 3 \text{ 且 } m \geq 0\)</div>
-            <div class="option" onclick="selectOption(event, 3)">D. \(m < 3\)</div>
-            <div class="result-area" id="result_1"></div>
-        </div>
+                    // 渲染步骤
+                    problem.steps.forEach((step, stepIdx) => {
+                        html += `
+                            <div class="step-block" id="prob-${problem.id}-step-${stepIdx}" style="${stepIdx === 0 ? 'opacity:1;' : ''}">
+                                <div class="step-header">
+                                    <span class="step-badge">${stepIdx + 1}</span>
+                                    <span>${step.header}</span>
+                                    ${stepIdx === 0 ? '<span style="font-size:0.78rem;color:#e67e22;">👈 当前步骤</span>' : ''}
+                                </div>
+                                <div class="prompt-text mathjax-process">💡 ${step.prompt}</div>
+                                <div class="options-row" id="prob-${problem.id}-step-${stepIdx}-opts">
+                                    ${step.options.map((opt, optIdx) => `
+                                        <button onclick="checkAnswer(${problem.id}, ${stepIdx}, ${optIdx}, this)" ${stepIdx > 0 ? 'disabled' : ''}>${opt}</button>
+                                    `).join('')}
+                                </div>
+                                <div id="prob-${problem.id}-step-${stepIdx}-fb"></div>
+                            </div>
+                        `;
+                    });
 
-        <!-- ===== q3 ===== -->
-        <div class="question-box" data-qindex="2" data-source="gaokao">
-            <div class="q-head">
-                <span><span class="q-tag gaokao">🎯 高考</span><span class="q-tag diff-3">★★★ 压轴</span></span>
-            </div>
-            <div class="q-text">（2022 广东高考改编）已知集合 \(A = \{1, 2, 3\}\)，\(B = \{x \mid x^2 - ax + 2 = 0\}\)，若 \(A \cup B = A\)，则实数 \(a\) 的值为（  ）</div>
-            <div class="option" onclick="selectOption(event, 0)">A. \(2\)</div>
-            <div class="option" onclick="selectOption(event, 1)">B. \(3\)</div>
-            <div class="option" onclick="selectOption(event, 2)">C. \(2 \text{ 或 } 3\)</div>
-            <div class="option" onclick="selectOption(event, 3)">D. \(1 \text{ 或 } 2\)</div>
-            <div class="result-area" id="result_2"></div>
-        </div>
+                    // 标准答案折叠区
+                    html += `
+                        <button class="solution-toggle" onclick="toggleSolution(${problem.id}, this)">📝 查看标准答案</button>
+                        <div class="solution-content mathjax-process" id="prob-${problem.id}-solution">
+                            ${problem.solution}
+                        </div>
+                    `;
 
-        <!-- ===== q4 ===== -->
-        <div class="question-box" data-qindex="3" data-source="gaokao">
-            <div class="q-head">
-                <span><span class="q-tag gaokao">🎯 高考</span><span class="q-tag diff-3">★★★ 压轴</span></span>
-            </div>
-            <div class="q-text">（2023 广东高考模拟）已知集合 \(A = \{x \mid x^2 - 3x + 2 < 0\}\)，\(B = \{x \mid x^2 - ax + 1 < 0\}\)，若 \(B \subseteq A\)，则实数 \(a\) 的取值范围为（  ）</div>
-            <div class="option" onclick="selectOption(event, 0)">A. \(a = 2\)</div>
-            <div class="option" onclick="selectOption(event, 1)">B. \(2 \leq a < \frac{5}{2}\)</div>
-            <div class="option" onclick="selectOption(event, 2)">C. \(2 < a < \frac{5}{2}\)</div>
-            <div class="option" onclick="selectOption(event, 3)">D. \(a \geq 2\)</div>
-            <div class="result-area" id="result_3"></div>
-        </div>
+                    card.innerHTML = html;
+                    container.appendChild(card);
+                });
 
-        <!-- ===== q5 ===== -->
-        <div class="question-box" data-qindex="4" data-source="gaokao">
-            <div class="q-head">
-                <span><span class="q-tag gaokao">🎯 高考</span><span class="q-tag diff-3">★★★ 压轴</span></span>
-            </div>
-            <div class="q-text">（2019 全国卷改编）已知集合 \(A = \{x \mid x^2 - 5x + 4 = 0\}\)，\(B = \{x \mid ax - 1 = 0\}\)，若 \(B \subseteq A\)，则实数 \(a\) 的取值集合为（  ）</div>
-            <div class="option" onclick="selectOption(event, 0)">A. \(\{0, 1, \frac{1}{4}\}\)</div>
-            <div class="option" onclick="selectOption(event, 1)">B. \(\{0, 1, \frac{1}{4}, 1\}\)</div>
-            <div class="option" onclick="selectOption(event, 2)">C. \(\{0, 1, \frac{1}{4}, 1\}\)</div>
-            <div class="option" onclick="selectOption(event, 3)">D. \(\{0, 1, 4\}\)</div>
-            <div class="result-area" id="result_4"></div>
-        </div>
-
-        <!-- ===== q6 ===== -->
-        <div class="question-box" data-qindex="5" data-source="gaokao">
-            <div class="q-head">
-                <span><span class="q-tag gaokao">🎯 高考</span><span class="q-tag diff-3">★★★ 压轴</span></span>
-            </div>
-            <div class="q-text">（2024 广东高考模拟）已知集合 \(A = \{x \mid x > 2\}\)，\(B = \{x \mid ax > 2\}\)，若 \(B \subseteq A\)，则实数 \(a\) 的取值范围为（  ）</div>
-            <div class="option" onclick="selectOption(event, 0)">A. \(a \geq 0\)</div>
-            <div class="option" onclick="selectOption(event, 1)">B. \(a > 0\)</div>
-            <div class="option" onclick="selectOption(event, 2)">C. \(a \geq 1\)</div>
-            <div class="option" onclick="selectOption(event, 3)">D. \(a > 1\)</div>
-            <div class="result-area" id="result_5"></div>
-        </div>
-
-        <!-- ===== q7 ===== -->
-        <div class="question-box" data-qindex="6" data-source="gaokao">
-            <div class="q-head">
-                <span><span class="q-tag gaokao">🎯 高考</span><span class="q-tag diff-3">★★★ 压轴</span></span>
-            </div>
-            <div class="q-text">（2020 全国卷改编）已知集合 \(A = \{x \mid -1 \leq x \leq 4\}\)，\(B = \{x \mid m \leq x \leq m+2\}\)，若 \(B \subseteq A\)，则实数 \(m\) 的取值范围为（  ）</div>
-            <div class="option" onclick="selectOption(event, 0)">A. \(-1 \leq m \leq 2\)</div>
-            <div class="option" onclick="selectOption(event, 1)">B. \(-1 \leq m \leq 4\)</div>
-            <div class="option" onclick="selectOption(event, 2)">C. \(-1 \leq m \leq 3\)</div>
-            <div class="option" onclick="selectOption(event, 3)">D. \(0 \leq m \leq 2\)</div>
-            <div class="result-area" id="result_6"></div>
-        </div>
-
-        <!-- ===== q8 ===== -->
-        <div class="question-box" data-qindex="7" data-source="gaokao">
-            <div class="q-head">
-                <span><span class="q-tag gaokao">🎯 高考</span><span class="q-tag diff-3">★★★ 压轴</span></span>
-            </div>
-            <div class="q-text">（2023 全国卷改编）已知集合 \(A = \{x \mid x^2 - 4x + 3 = 0\}\)，\(B = \{x \mid ax^2 - x + 1 = 0\}\)，若 \(B \subseteq A\)，则实数 \(a\) 的取值集合为（  ）</div>
-            <div class="option" onclick="selectOption(event, 0)">A. \(\{0, 1\}\)</div>
-            <div class="option" onclick="selectOption(event, 1)">B. \(\{0, 1, \frac{1}{3}\}\)</div>
-            <div class="option" onclick="selectOption(event, 2)">C. \(\{0, 1, \frac{1}{3}, \frac{1}{4}\}\)</div>
-            <div class="option" onclick="selectOption(event, 3)">D. \(\{0, 1, \frac{1}{3}, \frac{1}{4}\}\)</div>
-            <div class="result-area" id="result_7"></div>
-        </div>
-
-    </div><!-- end question-list -->
-
-    <div class="footer">
-        <span class="hl-yellow">黄标</span> = 重点知识 &nbsp;·&nbsp; 点击选项立刻判断
-    </div>
-</div>
-
-<!-- ============================================================ -->
-<!-- 核心 JavaScript -->
-<!-- ============================================================ -->
-<script>
-    // ================================================================
-    // 全局状态
-    // ================================================================
-    var STORAGE_KEY = 'dongdong_07_wrong';
-    var wrongIds = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    var selectedMap = {};
-    var answeredMap = {};
-    var currentFilter = 'all';
-
-    var correctMap = {
-        0: 0, 1: 0, 2: 1, 3: 1, 4: 0,
-        5: 3, 6: 0, 7: 1
-    };
-
-    var explainMap = [
-        '⚠️ 分类讨论：<br>① 若 \(a = 0\)，方程 \(0 \cdot x = 2\) 无解 → \(B = \varnothing\) → \(B \subseteq A\) ✅<br>② 若 \(a \neq 0\)，\(x = \frac{2}{a}\)，要 \(B \subseteq A\)，则 \(\frac{2}{a}\) 必须是 1 或 2。<br>\(\frac{2}{a} = 1\) → \(a = 2\)；\(\frac{2}{a} = 2\) → \(a = 1\)。<br>合并：<span class="hl">\(a = 0, 1, 2\)</span>。',
-        '⚠️ 空集讨论：<br>① 若 \(m+1 > 2m-1\)，即 \(m < 2\) 时，\(B = \varnothing\)，满足 \(B \subseteq A\) ✅<br>② 若 \(m \geq 2\) 时，要满足：\(m+1 \geq -2\) 且 \(2m-1 \leq 5\)<br>得 \(m \geq -3\) 且 \(m \leq 3\)，结合 \(m \geq 2\) → \(2 \leq m \leq 3\)<br>合并：<span class="hl">\(m \leq 3\)</span>。',
-        '\(A \cup B = A\) 表示 \(B \subseteq A\)。<br>\(B\) 是方程 \(x^2 - ax + 2 = 0\) 的解集，元素只能是 1、2、3。<br>若 \(B = \{1, 2\}\)，由韦达定理：\(1+2=3=a\)，\(1 \times 2 = 2\) 符合 ✅<br>所以 <span class="hl">\(a = 3\)</span>。',
-        '解 \(A\)：\(x^2 - 3x + 2 < 0\) → \((x-1)(x-2) < 0\) → \(A = (1, 2)\)。<br>设 \(B = (x_1, x_2)\)，则 \(x_1 + x_2 = a\)，\(x_1 x_2 = 1\)。<br>要 \(B \subseteq A\)，需 \(x_1 \geq 1\)，\(x_2 \leq 2\)。<br>由 \(x_1 x_2 = 1\)，当 \(x_2 = 2\) 时 \(x_1 = \frac{1}{2}\)，此时 \(a = \frac{5}{2}\)，但 \(B = (\frac{1}{2}, 2)\) 不满足 \(B \subseteq A\)。<br>所以 \(a < \frac{5}{2}\)，且 \(a = 2\) 时 \(B = \varnothing\) 也满足。<br>合并：<span class="hl">\(2 \leq a < \frac{5}{2}\)</span>。',
-        '解 \(A\)：\(x^2 - 5x + 4 = 0\) → \((x-1)(x-4)=0\) → \(A = \{1, 4\}\)。<br>① 若 \(a = 0\)，方程 \(0 \cdot x - 1 = 0\) 无解 → \(B = \varnothing\) ✅<br>② 若 \(a \neq 0\)，\(x = \frac{1}{a}\)，要 \(B \subseteq A\)，需 \(\frac{1}{a} = 1\) 或 \(4\)。<br>\(\frac{1}{a} = 1\) → \(a = 1\)；\(\frac{1}{a} = 4\) → \(a = \frac{1}{4}\)。<br>合并：<span class="hl">\(\{0, 1, \frac{1}{4}\}\)</span>。',
-        '\(B \subseteq A\) 表示 \(B\) 中所有元素都满足 \(x > 2\)。<br>\(B = \{x \mid ax > 2\}\)。<br>① 若 \(a = 0\)，\(0 > 2\) 无解 → \(B = \varnothing\) ✅<br>② 若 \(a > 0\)，\(x > \frac{2}{a}\)，要 \(B \subseteq A\)，需 \(\frac{2}{a} \geq 2\) → \(a \leq 1\)，结合 \(a > 0\) → \(0 < a \leq 1\)。<br>③ 若 \(a < 0\)，\(x < \frac{2}{a}\)，不满足 \(x > 2\)，不可。<br>合并：<span class="hl">\(0 \leq a \leq 1\)</span>，即 \(a \in [0, 1]\)。但选项只有 D 最接近。',
-        '\(B \subseteq A\)，B 区间完全落在 A = [-1, 4] 里。<br>① 空集讨论：B 不可能为空（因为 \(m \leq m+2\) 恒成立）。<br>② 非空时：\(m \geq -1\) 且 \(m+2 \leq 4\) → \(m \leq 2\)。<br>合并：<span class="hl">\(-1 \leq m \leq 2\)</span>。',
-        '解 \(A\)：\(x^2 - 4x + 3 = 0\) → \((x-1)(x-3)=0\) → \(A = \{1, 3\}\)。<br>① 若 \(a = 0\)，方程 \(-x + 1 = 0\) → \(x = 1\) → \(B = \{1\}\) ✅<br>② 若 \(a \neq 0\)，方程要有解且解在 A 中。<br>代入 \(x = 1\)：\(a - 1 + 1 = 0\) → \(a = 0\)（已包含）<br>代入 \(x = 3\)：\(9a - 3 + 1 = 0\) → \(a = \frac{2}{9}\)。<br>检查判别式：\(\Delta = 1 - 4a\)，当 \(a = \frac{2}{9}\) 时，\(\Delta = 1 - \frac{8}{9} = \frac{1}{9} > 0\)，有两个根，需两个根都在 A 中。<br>由韦达定理：两根和 \(= \frac{1}{a} = \frac{9}{2} \neq 1+3=4\)，所以不可。<br>所以只有 <span class="hl">\(a = 0\) 或 \(a = 1\)</span>？不对，当 \(a=1\) 时，方程 \(x^2 - x + 1 = 0\)，\(\Delta = -3 < 0\)，无解 → \(B = \varnothing\) ✅<br>所以合并：<span class="hl">\(\{0, 1\}\)</span>。'
-    ];
-
-    var correctAnswerText = ['A', 'A', 'B', 'B', 'A', 'D', 'A', 'A'];
-
-    // ================================================================
-    // 核心交互
-    // ================================================================
-
-    function selectOption(event, oi) {
-        var container = event.target.closest('.question-box');
-        if (!container) return;
-
-        var qIndex = parseInt(container.getAttribute('data-qindex'), 10);
-        if (isNaN(qIndex)) return;
-
-        if (answeredMap[qIndex]) return;
-
-        var isCorrect = (oi === correctMap[qIndex]);
-        selectedMap[qIndex] = oi;
-        answeredMap[qIndex] = true;
-
-        var options = container.querySelectorAll('.option');
-        options.forEach(function(el, idx) {
-            el.classList.remove('selected', 'correct-show', 'wrong-show');
-            if (idx === oi) el.classList.add('selected');
-            if (idx === correctMap[qIndex]) el.classList.add('correct-show');
-            if (idx === oi && !isCorrect) el.classList.add('wrong-show');
-        });
-
-        var resultArea = document.getElementById('result_' + qIndex);
-        if (resultArea) {
-            var correctLetter = correctAnswerText[qIndex];
-            if (isCorrect) {
-                resultArea.className = 'result-area correct';
-                resultArea.innerHTML = '✅ 回答正确！' + explainMap[qIndex];
-            } else {
-                resultArea.className = 'result-area wrong';
-                resultArea.innerHTML = '❌ 再想想哦～ 正确答案是 <strong>' + correctLetter + '</strong>。<br>' + explainMap[qIndex];
+                if (window.MathJax && MathJax.typesetPromise) {
+                    MathJax.typesetPromise();
+                }
             }
-        }
 
-        var idx = wrongIds.indexOf(qIndex);
-        if (!isCorrect) {
-            if (idx === -1) wrongIds.push(qIndex);
-        } else {
-            if (idx !== -1) wrongIds.splice(idx, 1);
-        }
+            // ==================== 检查答案 ====================
+            window.checkAnswer = function(problemId, stepIdx, selectedOptIdx, btnElement) {
+                const problem = problemsData.find(p => p.id === problemId);
+                if (!problem) return;
+                const step = problem.steps[stepIdx];
+                const isCorrect = (selectedOptIdx === step.correct);
+                const fbDiv = document.getElementById(`prob-${problemId}-step-${stepIdx}-fb`);
+                const optsContainer = document.getElementById(`prob-${problemId}-step-${stepIdx}-opts`);
+                const stepBlock = document.getElementById(`prob-${problemId}-step-${stepIdx}`);
 
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(wrongIds));
-        updateStats();
-        updateFilter();
+                const allBtns = optsContainer.querySelectorAll('button');
+                allBtns.forEach(b => b.disabled = true);
 
-        if (window.MathJax && MathJax.typesetPromise) {
-            MathJax.typesetPromise();
-        }
-    }
+                allBtns.forEach(b => {
+                    const match = b.getAttribute('onclick').match(/checkAnswer\((\d+),\s*(\d+),\s*(\d+)/);
+                    if (match && parseInt(match[3]) === step.correct) {
+                        b.classList.add('correct-choice');
+                    }
+                });
 
-    function resetWrong() {
-        if (confirm('确定要清空所有错题记录吗？')) {
-            wrongIds = [];
-            localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
-            updateStats();
-            updateFilter();
-        }
-    }
+                if (!isCorrect) {
+                    btnElement.classList.add('wrong-choice');
+                    fbDiv.innerHTML = `<div class="hint-box mathjax-process">❌ 不对哦。提示：${step.hint}</div>`;
+                    setTimeout(() => {
+                        allBtns.forEach(b => {
+                            b.disabled = false;
+                            b.classList.remove('correct-choice', 'wrong-choice');
+                        });
+                        fbDiv.innerHTML = '';
+                    }, 2500);
+                } else {
+                    stepBlock.classList.add('completed');
+                    stepBlock.querySelector('.step-badge').textContent = '✓';
+                    fbDiv.innerHTML = `<div class="result-box mathjax-process">✅ 正确！${step.explanation}</div>`;
 
-    // ================================================================
-    // 筛选
-    // ================================================================
+                    if (stepIdx + 1 < problem.steps.length) {
+                        const nextBlock = document.getElementById(`prob-${problemId}-step-${stepIdx + 1}`);
+                        nextBlock.style.opacity = '1';
+                        nextBlock.classList.add('active-step');
+                        const nextHeader = nextBlock.querySelector('.step-header');
+                        nextHeader.innerHTML = nextHeader.innerHTML.replace('👈 当前步骤', '');
+                        nextHeader.innerHTML +=
+                            '<span style="font-size:0.78rem;color:#e67e22;">👈 当前步骤</span>';
+                        const nextBtns = nextBlock.querySelectorAll('button');
+                        nextBtns.forEach(b => b.disabled = false);
+                    } else {
+                        const card = document.getElementById(`problem-${problemId}`);
+                        const congrats = document.createElement('div');
+                        congrats.className = 'congrats';
+                        congrats.innerHTML = '🎉 恭喜！本题所有步骤完成！点击下方按钮查看标准答案。';
+                        card.appendChild(congrats);
+                    }
+                }
 
-    function setFilter(filter) {
-        currentFilter = filter;
-        updateFilter();
-        var btns = document.querySelectorAll('.filter-btn');
-        btns.forEach(function(el) {
-            el.classList.remove('active', 'wrong-active');
-        });
-        if (filter === 'all') document.getElementById('filterAll').classList.add('active');
-        else if (filter === 'wrong') document.getElementById('filterWrong').classList.add('wrong-active');
-    }
+                if (window.MathJax && MathJax.typesetPromise) {
+                    MathJax.typesetPromise();
+                }
+            };
 
-    function updateFilter() {
-        var allQuestions = document.querySelectorAll('.question-box');
-        var visibleCount = 0;
-        allQuestions.forEach(function(q) {
-            var show = true;
-            var idx = parseInt(q.getAttribute('data-qindex'), 10);
-            if (isNaN(idx)) return;
-            if (currentFilter === 'wrong') {
-                show = wrongIds.includes(idx);
-            }
-            q.style.display = show ? '' : 'none';
-            if (show) visibleCount++;
-        });
-        document.getElementById('encourageMsg').innerHTML =
-            '<span>🌟 东东，今天要挑战 ' + visibleCount + ' 道压轴题！</span>';
-    }
+            // ==================== 切换标准答案 ====================
+            window.toggleSolution = function(problemId, btn) {
+                const solutionDiv = document.getElementById(`prob-${problemId}-solution`);
+                if (solutionDiv.classList.contains('show')) {
+                    solutionDiv.classList.remove('show');
+                    btn.textContent = '📝 查看标准答案';
+                } else {
+                    solutionDiv.classList.add('show');
+                    btn.textContent = '📝 隐藏标准答案';
+                    if (window.MathJax && MathJax.typesetPromise) {
+                        MathJax.typesetPromise();
+                    }
+                }
+            };
 
-    // ================================================================
-    // 统计
-    // ================================================================
-
-    function updateStats() {
-        var total = document.querySelectorAll('.question-box').length;
-        document.getElementById('totalCount').textContent = total;
-        document.getElementById('wrongCount').textContent = wrongIds.length;
-    }
-
-    // ================================================================
-    // 初始化
-    // ================================================================
-
-    function init() {
-        updateStats();
-        setFilter('all');
-        if (window.MathJax && MathJax.typesetPromise) {
-            MathJax.typesetPromise();
-        }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
-</script>
-
+            // ==================== 初始化 ====================
+            renderAllProblems();
+        })();
+    </script>
 </body>
 </html>

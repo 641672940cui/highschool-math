@@ -16,11 +16,7 @@
             --blue: #5a8ec0;
             --purple: #8e7cc3;
         }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', 'Noto Sans SC', 'PingFang SC', system-ui, sans-serif;
             background: #f7f4ed;
@@ -28,306 +24,117 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            padding: 10px;
+            padding: 8px;
             color: var(--text);
         }
         .container {
             width: 100%;
-            max-width: 640px;
-            background: rgba(255, 254, 250, 0.95);
+            max-width: 700px;
+            background: rgba(255,254,250,0.96);
             border-radius: 1.6rem;
-            box-shadow: 0 20px 50px rgba(80, 50, 20, 0.1);
-            padding: 18px 14px 22px;
-            border: 1px solid rgba(190, 160, 120, 0.3);
-            margin: 6px 0;
+            box-shadow: 0 20px 50px rgba(80,50,20,0.1);
+            padding: 16px 12px 20px;
+            border: 1px solid rgba(190,160,120,0.3);
+            margin: 4px 0 20px 0;
+            min-height: auto;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        .header .emoji {
-            font-size: 1.6rem;
-            display: block;
-        }
-        .header h1 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #4a3020;
-        }
-        .header .subtitle {
-            font-size: 0.74rem;
-            color: #9a8878;
-        }
-        .header .msg {
-            font-size: 0.74rem;
-            color: #c08040;
-            font-weight: 600;
-            background: #fef8ef;
-            display: inline-block;
-            padding: 3px 12px;
-            border-radius: 14px;
-            margin-top: 3px;
-        }
+        .header { text-align: center; margin-bottom: 8px; }
+        .header .emoji { font-size: 1.5rem; display: block; }
+        .header h1 { font-size: 1.25rem; font-weight: 700; color: #4a3020; }
+        .header .subtitle { font-size: 0.72rem; color: #9a8878; }
+        .header .msg { font-size: 0.7rem; color: #c08040; font-weight: 600; background: #fef8ef;
+            display: inline-block; padding: 2px 10px; border-radius: 12px; margin-top: 2px; }
 
-        .tab-row {
-            display: flex;
-            gap: 4px;
-            margin-bottom: 8px;
-            background: #fdf9f1;
-            padding: 3px;
-            border-radius: 28px;
-            flex-wrap: wrap;
-        }
-        .tab-btn {
-            flex: 1 1 auto;
-            min-width: 44px;
-            background: transparent;
-            border: none;
-            color: #8a7860;
-            font-weight: 600;
-            padding: 8px 3px;
-            border-radius: 24px;
-            cursor: pointer;
-            font-size: 0.66rem;
-            transition: 0.2s;
-            white-space: nowrap;
-            -webkit-tap-highlight-color: transparent;
-            letter-spacing: 0px;
-        }
-        .tab-btn.active {
-            background: #d4923a;
-            color: #fff;
-            box-shadow: 0 4px 12px rgba(200, 130, 40, 0.3);
-        }
-        .tab-btn.purple.active {
-            background: #8e7cc3;
-            box-shadow: 0 4px 12px rgba(120, 100, 180, 0.35);
-        }
+        .tab-row { display: flex; gap: 3px; margin-bottom: 6px; background: #fdf9f1; padding: 2px;
+            border-radius: 24px; flex-wrap: wrap; }
+        .tab-btn { flex: 1 1 auto; min-width: 40px; background: transparent; border: none; color: #8a7860;
+            font-weight: 600; padding: 7px 2px; border-radius: 20px; cursor: pointer; font-size: 0.6rem;
+            transition: 0.2s; white-space: nowrap; -webkit-tap-highlight-color: transparent; line-height: 1.2; }
+        .tab-btn.active { background: #d4923a; color: #fff; box-shadow: 0 4px 10px rgba(200,130,40,0.3); }
+        .tab-btn.purple.active { background: #8e7cc3; box-shadow: 0 4px 10px rgba(120,100,180,0.35); }
 
-        .score {
-            text-align: center;
-            font-weight: 700;
-            font-size: 0.8rem;
-            margin: 4px 0;
-            color: #5c3d2e;
-        }
+        .info-row { display: flex; justify-content: space-between; align-items: center; margin: 3px 0 5px;
+            font-size: 0.7rem; color: #8a7860; flex-wrap: wrap; gap: 3px; }
+        .score { font-weight: 700; color: #5c3d2e; }
+        .count { font-weight: 500; }
 
-        .card-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin: 4px 0 10px;
-            max-height: 440px;
-            overflow-y: auto;
-            padding-right: 2px;
-            -webkit-overflow-scrolling: touch;
-        }
-        .card-grid::-webkit-scrollbar {
-            width: 3px;
-        }
-        .card-grid::-webkit-scrollbar-thumb {
-            background: #d8c8b0;
-            border-radius: 4px;
-        }
+        .card-grid { display: flex; flex-direction: column; gap: 10px; margin: 6px 0 8px;
+            max-height: 50vh; overflow-y: auto; padding-right: 2px; -webkit-overflow-scrolling: touch; }
+        .card-grid::-webkit-scrollbar { width: 3px; }
+        .card-grid::-webkit-scrollbar-thumb { background: #d8c8b0; border-radius: 4px; }
 
-        .quiz-card {
-            background: #fff;
-            border-radius: 13px;
-            padding: 12px 13px;
-            border: 1px solid #e8e0d3;
-            box-shadow: 0 4px 12px rgba(80, 50, 20, 0.03);
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
-            position: relative;
-            transition: 0.2s;
-        }
-        .quiz-card.correct {
-            border-color: #8cc89a;
-            background: #f8fdf9;
-        }
-        .quiz-card.wrong {
-            border-color: #e89898;
-            background: #fdf8f7;
-        }
+        .quiz-card { background: #fff; border-radius: 14px; padding: 14px 14px 12px;
+            border: 1px solid #e8e0d3; box-shadow: 0 4px 10px rgba(80,50,20,0.03);
+            -webkit-tap-highlight-color: transparent; user-select: none; position: relative; transition: 0.2s; }
+        .quiz-card.correct { border-color: #8cc89a; background: #f8fdf9; }
+        .quiz-card.wrong { border-color: #e89898; background: #fdf8f7; }
 
-        .card-tag {
-            display: inline-block;
-            font-size: 0.6rem;
-            font-weight: 700;
-            padding: 2px 7px;
-            border-radius: 10px;
-            margin-bottom: 4px;
-            letter-spacing: 0.2px;
-        }
-        .card-tag.formula {
-            background: #eef6fd;
-            color: #4a7eb0;
-        }
-        .card-tag.factor {
-            background: #fef7ec;
-            color: #c08030;
-        }
-        .card-tag.ineq {
-            background: #fdf0f0;
-            color: #c05050;
-        }
-        .card-tag.quad {
-            background: #f0f0fa;
-            color: #6e5ea0;
-        }
-        .card-tag.couzhi {
-            background: #fff8e8;
-            color: #b87820;
-        }
+        .card-tag { display: inline-block; font-size: 0.6rem; font-weight: 700; padding: 2px 7px;
+            border-radius: 10px; margin-bottom: 5px; letter-spacing: 0.2px; }
+        .card-tag.formula { background: #eef6fd; color: #4a7eb0; }
+        .card-tag.factor { background: #fef7ec; color: #c08030; }
+        .card-tag.ineq { background: #fdf0f0; color: #c05050; }
+        .card-tag.quad { background: #f0f0fa; color: #6e5ea0; }
+        .card-tag.couzhi { background: #fff8e8; color: #b87820; }
 
-        .card-q {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: #4a3f35;
-            line-height: 1.5;
-            margin-bottom: 2px;
-        }
+        .card-q { font-weight: 600; font-size: 0.88rem; color: #4a3f35; line-height: 1.6; margin-bottom: 4px;
+            word-break: break-word; }
 
-        .options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            margin-top: 5px;
-        }
-        .opt-btn {
-            background: #faf7f0;
-            border: 1.5px solid #e0d5c0;
-            color: #5c4a36;
-            padding: 6px 10px;
-            border-radius: 14px;
-            font-weight: 600;
-            font-size: 0.76rem;
-            cursor: pointer;
-            transition: 0.15s;
-            -webkit-tap-highlight-color: transparent;
-            line-height: 1.3;
-        }
-        .opt-btn.correct-answer {
-            background: #7cc090;
-            border-color: #5a9e6b;
-            color: #fff;
-        }
-        .opt-btn.wrong-answer {
-            background: #e89090;
-            border-color: #d46868;
-            color: #fff;
-        }
+        /* 选项区改为每行一个 */
+        .options { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; width: 100%; }
+        .opt-btn { display: block; width: 100%; background: #faf7f0; border: 1.5px solid #e0d5c0; color: #5c4a36;
+            padding: 9px 12px; border-radius: 12px; font-weight: 600; font-size: 0.78rem; cursor: pointer;
+            transition: 0.15s; -webkit-tap-highlight-color: transparent; line-height: 1.5;
+            text-align: left; word-break: break-word; }
+        .opt-btn.correct-answer { background: #7cc090; border-color: #5a9e6b; color: #fff; }
+        .opt-btn.wrong-answer { background: #e89090; border-color: #d46868; color: #fff; }
 
-        .tf-btns {
-            display: flex;
-            gap: 6px;
-            margin-top: 5px;
-        }
-        .tf-btn {
-            flex: 1;
-            background: #faf7f0;
-            border: 1.5px solid #e0d5c0;
-            color: #5c4a36;
-            padding: 7px;
-            border-radius: 14px;
-            font-weight: 700;
-            font-size: 0.8rem;
-            cursor: pointer;
-            text-align: center;
-            transition: 0.15s;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .tf-btn.selected-true {
-            background: #7cc090;
-            border-color: #5a9e6b;
-            color: #fff;
-        }
-        .tf-btn.selected-false {
-            background: #e89090;
-            border-color: #d46868;
-            color: #fff;
-        }
+        .tf-btns { display: flex; gap: 8px; margin-top: 6px; }
+        .tf-btn { flex: 1; background: #faf7f0; border: 1.5px solid #e0d5c0; color: #5c4a36;
+            padding: 10px; border-radius: 14px; font-weight: 700; font-size: 0.82rem; cursor: pointer;
+            text-align: center; transition: 0.15s; -webkit-tap-highlight-color: transparent; }
+        .tf-btn.selected-true { background: #7cc090; border-color: #5a9e6b; color: #fff; }
+        .tf-btn.selected-false { background: #e89090; border-color: #d46868; color: #fff; }
 
-        .fb {
-            display: none;
-            margin-top: 6px;
-            padding: 4px 8px;
-            border-radius: 7px;
-            font-weight: 600;
-            font-size: 0.74rem;
-        }
-        .quiz-card.answered .fb {
-            display: block;
-        }
-        .fb.ok {
-            background: #eaf8ee;
-            color: #3a7a50;
-        }
-        .fb.no {
-            background: #fdf0f0;
-            color: #b04040;
-        }
-        .fb .tip {
-            font-weight: 400;
-            font-size: 0.68rem;
-            color: #888;
-            margin-top: 2px;
-            display: block;
-        }
+        .fb { display: none; margin-top: 8px; padding: 6px 10px; border-radius: 8px;
+            font-weight: 600; font-size: 0.74rem; line-height: 1.5; }
+        .quiz-card.answered .fb { display: block; }
+        .fb.ok { background: #eaf8ee; color: #3a7a50; }
+        .fb.no { background: #fdf0f0; color: #b04040; }
+        .fb .tip { font-weight: 400; font-size: 0.7rem; color: #777; margin-top: 3px; display: block; }
 
-        .nav-row {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        button {
-            background: #fff;
-            border: 1px solid #d8c8b0;
-            color: #5c3d2e;
-            font-weight: 600;
-            padding: 8px 15px;
-            border-radius: 22px;
-            cursor: pointer;
-            font-size: 0.76rem;
-            transition: 0.2s;
-            -webkit-tap-highlight-color: transparent;
-        }
-        button.primary {
-            background: #d4923a;
-            border-color: #c8822a;
-            color: #fff;
-        }
-        button:active {
-            transform: scale(0.96);
-        }
-        button:disabled {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-        .loading {
-            text-align: center;
-            padding: 30px;
-            color: #999;
-            font-size: 0.9rem;
-        }
+        /* 错题集弹窗 */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 100; justify-content: center; align-items: center; }
+        .modal-overlay.show { display: flex; }
+        .modal { background: #fff; border-radius: 1.2rem; padding: 18px 14px; width: 90%; max-width: 500px;
+            max-height: 70vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .modal h2 { font-size: 1.1rem; color: #4a3020; margin-bottom: 10px; text-align: center; }
+        .modal .wrong-item { background: #fdf8f7; border: 1px solid #f0d0d0; border-radius: 10px;
+            padding: 10px 12px; margin-bottom: 8px; font-size: 0.78rem; line-height: 1.5; }
+        .modal .wrong-item .wq { font-weight: 600; color: #4a3f35; }
+        .modal .wrong-item .wa { color: #4a9e6b; margin-top: 3px; }
+        .modal .wrong-item .wt { color: #888; font-size: 0.7rem; margin-top: 2px; }
+        .modal .empty { text-align: center; color: #999; padding: 20px; font-size: 0.85rem; }
+        .modal .close-btn { display: block; margin: 10px auto 0; background: #d4923a; color: #fff;
+            border: none; padding: 10px 28px; border-radius: 20px; font-weight: 700; font-size: 0.85rem;
+            cursor: pointer; }
+
+        .nav-row { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+        button { background: #fff; border: 1px solid #d8c8b0; color: #5c3d2e; font-weight: 600;
+            padding: 9px 16px; border-radius: 22px; cursor: pointer; font-size: 0.76rem;
+            transition: 0.2s; -webkit-tap-highlight-color: transparent; }
+        button.primary { background: #d4923a; border-color: #c8822a; color: #fff; }
+        button.wrongbook { background: #fdf0f0; border-color: #e0b8b8; color: #b04040; }
+        button:active { transform: scale(0.96); }
+
         @media (max-width: 500px) {
-            .container {
-                padding: 14px 8px;
-                border-radius: 1.4rem;
-            }
-            .tab-btn {
-                font-size: 0.6rem;
-                padding: 7px 2px;
-                min-width: 36px;
-            }
-            .card-q {
-                font-size: 0.82rem;
-            }
-            .opt-btn {
-                font-size: 0.72rem;
-                padding: 5px 8px;
-            }
+            .container { padding: 12px 8px 16px; border-radius: 1.3rem; }
+            .tab-btn { font-size: 0.55rem; padding: 6px 1px; min-width: 32px; }
+            .card-q { font-size: 0.82rem; }
+            .opt-btn { font-size: 0.74rem; padding: 8px 10px; }
+            .card-grid { max-height: 55vh; }
+            .modal { width: 95%; padding: 14px 10px; }
         }
     </style>
 </head>
@@ -336,264 +143,320 @@
         <div class="header">
             <span class="emoji">🎯</span>
             <h1>初高衔接 五维急救包</h1>
-            <div class="subtitle">五大核心技能 每板块12题以上 高中开学前练熟</div>
-            <div class="msg">每天6题，轻量坚持，效果惊人</div>
+            <div class="subtitle">五大核心技能 · 凑值法与二次函数重点加强</div>
+            <div class="msg">每次8题 · 点击选项即判对错 · 错题自动收集</div>
         </div>
 
         <div class="tab-row" id="tabRow">
-            <button class="tab-btn active" data-module="formula">乘法公式</button>
-            <button class="tab-btn" data-module="factor">因式分解</button>
-            <button class="tab-btn" data-module="inequality">不等式</button>
-            <button class="tab-btn" data-module="quadratic">二次函数</button>
-            <button class="tab-btn purple" data-module="couzhi">凑值法</button>
+            <button class="tab-btn active" data-module="formula">乘法公式<br><small>15题</small></button>
+            <button class="tab-btn" data-module="factor">因式分解<br><small>15题</small></button>
+            <button class="tab-btn" data-module="inequality">不等式<br><small>15题</small></button>
+            <button class="tab-btn" data-module="quadratic">二次函数<br><small>22题</small></button>
+            <button class="tab-btn purple" data-module="couzhi">凑值法<br><small>22题</small></button>
         </div>
 
-        <div class="score" id="scoreBoard">得分：0 / 0</div>
-        <div id="cardGrid" class="card-grid">
-            <div class="loading">加载中...</div>
+        <div class="info-row">
+            <span class="count" id="countInfo"></span>
+            <span class="score" id="scoreBoard">得分：0 / 0</span>
         </div>
+        <div id="cardGrid" class="card-grid"></div>
 
         <div class="nav-row">
             <button id="refreshBtn">换一批</button>
             <button id="resetBtn" class="primary">重新开始</button>
+            <button id="wrongBookBtn" class="wrongbook">📋 错题集</button>
+        </div>
+    </div>
+
+    <!-- 错题集弹窗 -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <h2>📋 错题集</h2>
+            <div id="wrongList"></div>
+            <button class="close-btn" id="closeModal">关闭</button>
         </div>
     </div>
 
     <script>
         (function() {
-            // 等待 MathJax 加载完成后再初始化
             function init() {
                 // ==================== 题库 ====================
                 var bank = {
                     formula: [
-                        { type: 'choice', tag: '完全平方展开', q: '\\((x+3)^2\\) 展开是？',
-                            opts: ['\\(x^2+9\\)', '\\(x^2+6x+9\\)', '\\(x^2+3x+9\\)', '\\(x^2+6\\)'], ans: 1,
-                            tip: '首平方加尾平方加2倍首尾：x²+2·x·3+3²' },
-                        { type: 'choice', tag: '完全平方展开', q: '\\((2x-1)^2\\) 展开是？',
-                            opts: ['\\(4x^2-1\\)', '\\(4x^2-4x+1\\)', '\\(2x^2-4x+1\\)', '\\(4x^2+4x-1\\)'],
-                            ans: 1, tip: '(2x)²=4x²，中间2·2x·(-1)=-4x，(-1)²=1' },
-                        { type: 'choice', tag: '完全平方展开', q: '\\((-x+4)^2\\) 展开是？',
-                            opts: ['\\(x^2+16\\)', '\\(-x^2+8x+16\\)', '\\(x^2-8x+16\\)', '\\(x^2+8x+16\\)'],
-                            ans: 2, tip: '=(-(x-4))²=(x-4)²=x²-8x+16' },
-                        { type: 'choice', tag: '平方差公式', q: '\\((x+5)(x-5)\\) 等于？',
-                            opts: ['\\(x^2-25\\)', '\\(x^2+25\\)', '\\(x^2-10\\)', '\\(x^2-5\\)'], ans: 0,
-                            tip: '(a+b)(a-b)=a²-b²，a=x,b=5' },
-                        { type: 'choice', tag: '平方差公式', q: '\\((3a+2b)(3a-2b)\\) 等于？',
-                            opts: ['\\(9a^2-4b^2\\)', '\\(9a^2+4b^2\\)', '\\(3a^2-2b^2\\)', '\\(9a^2-2b^2\\)'],
-                            ans: 0, tip: '(3a)²-(2b)²=9a²-4b²' },
-                        { type: 'choice', tag: '配方补项', q: '\\(x^2+8x+\\underline{\\quad}\\) 成为完全平方，填？',
-                            opts: ['8', '16', '4', '64'], ans: 1, tip: '一次项系数8÷2=4，4²=16' },
-                        { type: 'choice', tag: '配方补项', q: '\\(x^2-6x+\\underline{\\quad}\\) 成为完全平方，填？',
-                            opts: ['6', '36', '9', '3'], ans: 2, tip: '6÷2=3，3²=9' },
-                        { type: 'choice', tag: '配方补项',
-                            q: '\\(4x^2+\\underline{\\quad}+25\\) 成为完全平方，中间填？',
-                            opts: ['\\(10x\\)', '\\(20x\\)', '\\(40x\\)', '\\(100x\\)'], ans: 1,
-                            tip: '(2x)²=4x², 5²=25, 中间=2·2x·5=20x' },
-                        { type: 'choice', tag: '三项完全平方', q: '\\((a+b+c)^2\\) 展开后有几项？',
-                            opts: ['3项', '6项', '9项', '4项'], ans: 1,
-                            tip: 'a²+b²+c²+2ab+2bc+2ca，共6项' },
-                        { type: 'tf', tag: '易错辨析', q: '\\((a+b)^2=a^2+b^2\\) 对吗？', ans: false,
-                            tip: '漏了中间项2ab！正确是a²+2ab+b²' },
-                        { type: 'tf', tag: '易错辨析', q: '\\((-x)^2=x^2\\) 对吗？', ans: true,
-                        tip: '负数平方变正数，正确' },
-                        { type: 'tf', tag: '易错辨析', q: '\\((x-3)^2=x^2-9\\) 对吗？', ans: false,
-                            tip: '中间有-6x，尾是+9。混淆了完全平方和平方差' },
-                        { type: 'tf', tag: '易错辨析', q: '\\((a-b)^2=(b-a)^2\\) 对吗？', ans: true,
-                            tip: '两者展开都是a²-2ab+b²，结果相同' },
+                        { id:'f1', type:'choice', tag:'完全平方展开', q:'\\((x+3)^2\\) 展开是？',
+                            opts:['\\(x^2+9\\)','\\(x^2+6x+9\\)','\\(x^2+3x+9\\)','\\(x^2+6\\)'], ans:1,
+                            tip:'首平方加尾平方加2倍首尾：x²+2·x·3+3²' },
+                        { id:'f2', type:'choice', tag:'完全平方展开', q:'\\((2x-1)^2\\) 展开是？',
+                            opts:['\\(4x^2-1\\)','\\(4x^2-4x+1\\)','\\(2x^2-4x+1\\)','\\(4x^2+4x-1\\)'], ans:1,
+                            tip:'(2x)²=4x²，中间2·2x·(-1)=-4x，(-1)²=1' },
+                        { id:'f3', type:'choice', tag:'完全平方展开', q:'\\((-x+4)^2\\) 展开是？',
+                            opts:['\\(x^2+16\\)','\\(-x^2+8x+16\\)','\\(x^2-8x+16\\)','\\(x^2+8x+16\\)'], ans:2,
+                            tip:'=(-(x-4))²=(x-4)²=x²-8x+16' },
+                        { id:'f4', type:'choice', tag:'完全平方展开', q:'\\((3x+2)^2\\) 展开是？',
+                            opts:['\\(9x^2+4\\)','\\(9x^2+12x+4\\)','\\(3x^2+12x+4\\)','\\(9x^2+6x+4\\)'], ans:1,
+                            tip:'(3x)²=9x²，中间2·3x·2=12x，2²=4' },
+                        { id:'f5', type:'choice', tag:'平方差公式', q:'\\((x+5)(x-5)\\) 等于？',
+                            opts:['\\(x^2-25\\)','\\(x^2+25\\)','\\(x^2-10\\)','\\(x^2-5\\)'], ans:0,
+                            tip:'(a+b)(a-b)=a²-b²，a=x,b=5' },
+                        { id:'f6', type:'choice', tag:'平方差公式', q:'\\((3a+2b)(3a-2b)\\) 等于？',
+                            opts:['\\(9a^2-4b^2\\)','\\(9a^2+4b^2\\)','\\(3a^2-2b^2\\)','\\(9a^2-2b^2\\)'], ans:0,
+                            tip:'(3a)²-(2b)²=9a²-4b²' },
+                        { id:'f7', type:'choice', tag:'平方差公式', q:'\\((2x+1)(2x-1)\\) 等于？',
+                            opts:['\\(4x^2-1\\)','\\(4x^2+1\\)','\\(2x^2-1\\)','\\(4x^2-2\\)'], ans:0,
+                            tip:'(2x)²-1²=4x²-1' },
+                        { id:'f8', type:'choice', tag:'配方补项', q:'\\(x^2+8x+\\underline{\\quad}\\) 成为完全平方，填？',
+                            opts:['8','16','4','64'], ans:1, tip:'一次项系数8÷2=4，4²=16' },
+                        { id:'f9', type:'choice', tag:'配方补项', q:'\\(x^2-6x+\\underline{\\quad}\\) 成为完全平方，填？',
+                            opts:['6','36','9','3'], ans:2, tip:'6÷2=3，3²=9' },
+                        { id:'f10', type:'choice', tag:'配方补项', q:'\\(4x^2+\\underline{\\quad}+25\\) 成为完全平方，中间填？',
+                            opts:['\\(10x\\)','\\(20x\\)','\\(40x\\)','\\(100x\\)'], ans:1,
+                            tip:'(2x)²=4x²,5²=25,中间=2·2x·5=20x' },
+                        { id:'f11', type:'choice', tag:'配方补项', q:'\\(9x^2-\\underline{\\quad}+16\\) 成为完全平方，中间填？',
+                            opts:['\\(12x\\)','\\(24x\\)','\\(72x\\)','\\(144x\\)'], ans:1,
+                            tip:'(3x)²=9x²,4²=16,中间=2·3x·4=24x' },
+                        { id:'f12', type:'choice', tag:'三项完全平方', q:'\\((a+b+c)^2\\) 展开后有几项？',
+                            opts:['3项','6项','9项','4项'], ans:1, tip:'a²+b²+c²+2ab+2bc+2ca，共6项' },
+                        { id:'f13', type:'tf', tag:'易错辨析', q:'\\((a+b)^2=a^2+b^2\\) 对吗？', ans:false,
+                            tip:'漏了中间项2ab！正确是a²+2ab+b²' },
+                        { id:'f14', type:'tf', tag:'易错辨析', q:'\\((x-3)^2=x^2-9\\) 对吗？', ans:false,
+                            tip:'中间有-6x，尾是+9。混淆了完全平方和平方差' },
+                        { id:'f15', type:'tf', tag:'易错辨析', q:'\\((a-b)^2=(b-a)^2\\) 对吗？', ans:true,
+                            tip:'两者展开都是a²-2ab+b²，结果相同' },
                     ],
-
                     factor: [
-                        { type: 'choice', tag: '提公因式', q: '\\(3x+6\\) 提公因式后是？',
-                            opts: ['\\(3(x+6)\\)', '\\(3(x+2)\\)', '\\(x(3+6)\\)', '\\(3x(1+2)\\)'], ans: 1,
-                            tip: '最大公因数是3，3x÷3=x，6÷3=2' },
-                        { type: 'choice', tag: '提公因式', q: '\\(2x^2y-6xy^2\\) 提公因式后是？',
-                            opts: ['\\(2xy(x-3y)\\)', '\\(2x(xy-3y^2)\\)', '\\(xy(2x-6y)\\)', '\\(2y(x^2-3xy)\\)'],
-                            ans: 0, tip: '最大公因数是2xy，每项除以2xy' },
-                        { type: 'choice', tag: '平方差分解', q: '\\(x^2-16\\) 分解为？',
-                            opts: ['\\((x-4)^2\\)', '\\((x+4)(x-4)\\)', '\\((x-16)(x+1)\\)', '\\((x+8)(x-2)\\)'],
-                            ans: 1, tip: '16=4²，用平方差公式' },
-                        { type: 'choice', tag: '平方差分解', q: '\\(9a^2-25b^2\\) 分解为？',
-                            opts: ['\\((3a+5b)(3a-5b)\\)', '\\((9a+25b)(9a-25b)\\)', '\\((3a-5b)^2\\)',
-                                '\\(3(a+5b)(a-5b)\\)'
-                            ], ans: 0, tip: '9a²=(3a)²，25b²=(5b)²' },
-                        { type: 'choice', tag: '完全平方分解', q: '\\(x^2+10x+25\\) 分解为？',
-                            opts: ['\\((x+5)^2\\)', '\\((x+25)(x+1)\\)', '\\((x-5)^2\\)', '\\((x+5)(x-5)\\)'],
-                            ans: 0, tip: '10÷2=5，5²=25，完美完全平方' },
-                        { type: 'choice', tag: '完全平方分解', q: '\\(x^2-12x+36\\) 分解为？',
-                            opts: ['\\((x-12)^2\\)', '\\((x+6)^2\\)', '\\((x-6)^2\\)', '\\((x-6)(x+6)\\)'],
-                            ans: 2, tip: '12÷2=6，6²=36，符号跟中间项' },
-                        { type: 'choice', tag: '十字相乘', q: '\\(x^2+7x+12\\) 分解为？',
-                            opts: ['\\((x+6)(x+2)\\)', '\\((x+3)(x+4)\\)', '\\((x+12)(x+1)\\)', '\\((x-3)(x-4)\\)'],
-                            ans: 1, tip: '找两个数：乘得12，加得7→3和4' },
-                        { type: 'choice', tag: '十字相乘', q: '\\(x^2-5x+6\\) 分解为？',
-                            opts: ['\\((x-3)(x-2)\\)', '\\((x+3)(x+2)\\)', '\\((x-6)(x+1)\\)', '\\((x-1)(x-6)\\)'],
-                            ans: 0, tip: '常数正+中间负→两因子都负' },
-                        { type: 'choice', tag: '十字相乘', q: '\\(x^2-4x-5\\) 分解为？',
-                            opts: ['\\((x-5)(x+1)\\)', '\\((x+5)(x-1)\\)', '\\((x-5)(x-1)\\)', '\\((x+5)(x+1)\\)'],
-                            ans: 0, tip: '常数负→一正一负：(-5)×1=-5' },
-                        { type: 'choice', tag: '先提后分', q: '\\(3x^2-27\\) 完全分解？',
-                            opts: ['\\(3(x^2-9)\\)', '\\(3(x-3)^2\\)', '\\(3(x+3)(x-3)\\)', '\\((3x+9)(x-3)\\)'],
-                            ans: 2, tip: '先提3，再用平方差分解x²-9' },
-                        { type: 'tf', tag: '易错辨析', q: '\\(x^2+4\\) 可分解为 \\((x+2)(x-2)\\) 吗？',
-                            ans: false, tip: '平方和≠平方差！x²+4在实数范围不能分解' },
-                        { type: 'tf', tag: '易错辨析', q: '\\(2x+6=2(x+6)\\) 对吗？', ans: false,
-                            tip: '6÷2=3，正确是2(x+3)' },
-                        { type: 'tf', tag: '易错辨析', q: '\\(x^2-6x+9=(x-3)(x+3)\\) 对吗？', ans: false,
-                            tip: '这是完全平方(x-3)²，中间有-6x' },
+                        { id:'fa1', type:'choice', tag:'提公因式', q:'\\(3x+6\\) 提公因式后是？',
+                            opts:['\\(3(x+6)\\)','\\(3(x+2)\\)','\\(x(3+6)\\)','\\(3x(1+2)\\)'], ans:1,
+                            tip:'最大公因数是3，3x÷3=x，6÷3=2' },
+                        { id:'fa2', type:'choice', tag:'提公因式', q:'\\(2x^2y-6xy^2\\) 提公因式后是？',
+                            opts:['\\(2xy(x-3y)\\)','\\(2x(xy-3y^2)\\)','\\(xy(2x-6y)\\)','\\(2y(x^2-3xy)\\)'], ans:0,
+                            tip:'最大公因数是2xy' },
+                        { id:'fa3', type:'choice', tag:'提公因式', q:'\\(5a^2b+10ab^2\\) 提公因式后是？',
+                            opts:['\\(5ab(a+2b)\\)','\\(5a(ab+2b^2)\\)','\\(ab(5a+10b)\\)','\\(5b(a^2+2ab)\\)'], ans:0,
+                            tip:'最大公因数是5ab' },
+                        { id:'fa4', type:'choice', tag:'平方差分解', q:'\\(x^2-16\\) 分解为？',
+                            opts:['\\((x-4)^2\\)','\\((x+4)(x-4)\\)','\\((x-16)(x+1)\\)','\\((x+8)(x-2)\\)'], ans:1,
+                            tip:'16=4²，用平方差公式' },
+                        { id:'fa5', type:'choice', tag:'平方差分解', q:'\\(9a^2-25b^2\\) 分解为？',
+                            opts:['\\((3a+5b)(3a-5b)\\)','\\((9a+25b)(9a-25b)\\)','\\((3a-5b)^2\\)','\\(3(a+5b)(a-5b)\\)'], ans:0,
+                            tip:'9a²=(3a)²，25b²=(5b)²' },
+                        { id:'fa6', type:'choice', tag:'完全平方分解', q:'\\(x^2+10x+25\\) 分解为？',
+                            opts:['\\((x+5)^2\\)','\\((x+25)(x+1)\\)','\\((x-5)^2\\)','\\((x+5)(x-5)\\)'], ans:0,
+                            tip:'10÷2=5，5²=25' },
+                        { id:'fa7', type:'choice', tag:'完全平方分解', q:'\\(x^2-12x+36\\) 分解为？',
+                            opts:['\\((x-12)^2\\)','\\((x+6)^2\\)','\\((x-6)^2\\)','\\((x-6)(x+6)\\)'], ans:2,
+                            tip:'12÷2=6，6²=36' },
+                        { id:'fa8', type:'choice', tag:'完全平方分解', q:'\\(4x^2+12x+9\\) 分解为？',
+                            opts:['\\((2x+3)^2\\)','\\((4x+9)(x+1)\\)','\\((2x-3)^2\\)','\\((2x+9)(2x+1)\\)'], ans:0,
+                            tip:'(2x)²=4x²,3²=9,中间2·2x·3=12x' },
+                        { id:'fa9', type:'choice', tag:'十字相乘', q:'\\(x^2+7x+12\\) 分解为？',
+                            opts:['\\((x+6)(x+2)\\)','\\((x+3)(x+4)\\)','\\((x+12)(x+1)\\)','\\((x-3)(x-4)\\)'], ans:1,
+                            tip:'3×4=12，3+4=7' },
+                        { id:'fa10', type:'choice', tag:'十字相乘', q:'\\(x^2-5x+6\\) 分解为？',
+                            opts:['\\((x-3)(x-2)\\)','\\((x+3)(x+2)\\)','\\((x-6)(x+1)\\)','\\((x-1)(x-6)\\)'], ans:0,
+                            tip:'常数正+中间负→两因子都负' },
+                        { id:'fa11', type:'choice', tag:'十字相乘', q:'\\(x^2-4x-5\\) 分解为？',
+                            opts:['\\((x-5)(x+1)\\)','\\((x+5)(x-1)\\)','\\((x-5)(x-1)\\)','\\((x+5)(x+1)\\)'], ans:0,
+                            tip:'常数负→一正一负：(-5)×1=-5，(-5)+1=-4' },
+                        { id:'fa12', type:'choice', tag:'先提后分', q:'\\(3x^2-27\\) 完全分解？',
+                            opts:['\\(3(x^2-9)\\)','\\(3(x-3)^2\\)','\\(3(x+3)(x-3)\\)','\\((3x+9)(x-3)\\)'], ans:2,
+                            tip:'先提3，再用平方差' },
+                        { id:'fa13', type:'tf', tag:'易错辨析', q:'\\(x^2+4\\) 可分解为 \\((x+2)(x-2)\\) 吗？', ans:false,
+                            tip:'平方和≠平方差！x²+4在实数范围不能分解' },
+                        { id:'fa14', type:'tf', tag:'易错辨析', q:'\\(2x+6=2(x+6)\\) 对吗？', ans:false, tip:'6÷2=3，正确是2(x+3)' },
+                        { id:'fa15', type:'tf', tag:'易错辨析', q:'\\(x^2-6x+9=(x-3)(x+3)\\) 对吗？', ans:false,
+                            tip:'这是完全平方(x-3)²，中间有-6x' },
                     ],
-
                     inequality: [
-                        { type: 'choice', tag: '变号规则', q: '\\(-3x>9\\) 的解是？',
-                            opts: ['\\(x>-3\\)', '\\(x<-3\\)', '\\(x>3\\)', '\\(x<3\\)'], ans: 1,
-                            tip: '两边除以-3，必须变号' },
-                        { type: 'choice', tag: '变号规则', q: '\\(-x<4\\) 的解是？',
-                            opts: ['\\(x<-4\\)', '\\(x>-4\\)', '\\(x<4\\)', '\\(x>4\\)'], ans: 1,
-                            tip: '两边乘-1变号：x>-4' },
-                        { type: 'choice', tag: '一次不等式', q: '\\(2x-5<3\\) 的解是？',
-                            opts: ['\\(x<4\\)', '\\(x>4\\)', '\\(x<-1\\)', '\\(x>-1\\)'], ans: 0,
-                        tip: '2x<8，x<4' },
-                        { type: 'choice', tag: '一次不等式', q: '\\(3x+2\\ge 5x-4\\) 的解是？',
-                            opts: ['\\(x\\le 3\\)', '\\(x\\ge 3\\)', '\\(x\\le -3\\)', '\\(x\\ge -3\\)'],
-                            ans: 0, tip: '移项：6≥2x，x≤3' },
-                        { type: 'choice', tag: '二次不等式', q: '\\(x^2-9>0\\) 的解是？',
-                            opts: ['\\(x>3\\)', '\\(x<-3\\)', '\\(x>3\\) 或 \\(x<-3\\)', '\\(-3<x<3\\)'],
-                            ans: 2, tip: '开口向上，大于0取两边' },
-                        { type: 'choice', tag: '二次不等式', q: '\\(x^2-4x+3<0\\) 的解是？',
-                            opts: ['\\(x<1\\) 或 \\(x>3\\)', '\\(1<x<3\\)', '\\(x<3\\)', '\\(x>1\\)'],
-                            ans: 1, tip: '分解(x-1)(x-3)<0，取中间' },
-                        { type: 'choice', tag: '二次不等式', q: '\\(x^2+2x+3>0\\) 恒成立吗？',
-                            opts: ['恒成立', '不恒成立', '仅x>0成立', '仅x<0成立'], ans: 0,
-                            tip: '配方(x+1)²+2>0恒成立' },
-                        { type: 'choice', tag: '含分母', q: '\\(\\frac{x}{-2}\\le 1\\) 的解是？',
-                            opts: ['\\(x\\ge -2\\)', '\\(x\\le -2\\)', '\\(x\\ge 2\\)', '\\(x\\le 2\\)'],
-                            ans: 0, tip: '乘-2变号：x≥-2' },
-                        { type: 'choice', tag: '绝对值', q: '\\(|x-3|<2\\) 的解是？',
-                            opts: ['\\(x<5\\)', '\\(x>1\\)', '\\(1<x<5\\)', '\\(x<1\\) 或 \\(x>5\\)'],
-                            ans: 2, tip: '|x-a|<b ⇔ a-b<x<a+b' },
-                        { type: 'tf', tag: '易错辨析', q: '\\(a>b\\)，则 \\(-a>-b\\) 对吗？', ans: false,
-                            tip: '乘负数变号：-a<-b' },
-                        { type: 'tf', tag: '易错辨析', q: '\\(x>3\\) 和 \\(x\\ge 3\\) 意思相同吗？',
-                            ans: false, tip: 'x>3不包括3，x≥3包括3' },
-                        { type: 'tf', tag: '易错辨析', q: '若 \\(x<2\\)，则 \\(x^2<4\\) 对吗？', ans: false,
-                            tip: '反例：x=-3时，x<2但x²=9>4' },
+                        { id:'i1', type:'choice', tag:'变号规则', q:'\\(-3x>9\\) 的解是？',
+                            opts:['\\(x>-3\\)','\\(x<-3\\)','\\(x>3\\)','\\(x<3\\)'], ans:1, tip:'除以-3必须变号' },
+                        { id:'i2', type:'choice', tag:'变号规则', q:'\\(-x<4\\) 的解是？',
+                            opts:['\\(x<-4\\)','\\(x>-4\\)','\\(x<4\\)','\\(x>4\\)'], ans:1, tip:'乘-1变号：x>-4' },
+                        { id:'i3', type:'choice', tag:'变号规则', q:'\\(-2x\\le 10\\) 的解是？',
+                            opts:['\\(x\\le -5\\)','\\(x\\ge -5\\)','\\(x\\le 5\\)','\\(x\\ge 5\\)'], ans:1,
+                            tip:'除以-2变号：x≥-5' },
+                        { id:'i4', type:'choice', tag:'一次不等式', q:'\\(2x-5<3\\) 的解是？',
+                            opts:['\\(x<4\\)','\\(x>4\\)','\\(x<-1\\)','\\(x>-1\\)'], ans:0, tip:'2x<8，x<4' },
+                        { id:'i5', type:'choice', tag:'一次不等式', q:'\\(3x+2\\ge 5x-4\\) 的解是？',
+                            opts:['\\(x\\le 3\\)','\\(x\\ge 3\\)','\\(x\\le -3\\)','\\(x\\ge -3\\)'], ans:0,
+                            tip:'移项：6≥2x，x≤3' },
+                        { id:'i6', type:'choice', tag:'一次不等式', q:'\\(4-3x>7\\) 的解是？',
+                            opts:['\\(x>-1\\)','\\(x<-1\\)','\\(x>1\\)','\\(x<1\\)'], ans:1,
+                            tip:'-3x>3，x<-1' },
+                        { id:'i7', type:'choice', tag:'二次不等式', q:'\\(x^2-9>0\\) 的解是？',
+                            opts:['\\(x>3\\)','\\(x<-3\\)','\\(x>3\\) 或 \\(x<-3\\)','\\(-3<x<3\\)'], ans:2,
+                            tip:'开口向上，大于0取两边' },
+                        { id:'i8', type:'choice', tag:'二次不等式', q:'\\(x^2-4x+3<0\\) 的解是？',
+                            opts:['\\(x<1\\) 或 \\(x>3\\)','\\(1<x<3\\)','\\(x<3\\)','\\(x>1\\)'], ans:1,
+                            tip:'分解(x-1)(x-3)<0，取中间' },
+                        { id:'i9', type:'choice', tag:'二次不等式', q:'\\(x^2-4\\le 0\\) 的解是？',
+                            opts:['\\(x\\le 2\\)','\\(x\\ge -2\\)','\\(-2\\le x\\le 2\\)','\\(x\\le -2\\) 或 \\(x\\ge 2\\)'], ans:2,
+                            tip:'开口向上，≤0取中间' },
+                        { id:'i10', type:'choice', tag:'二次不等式', q:'\\(x^2+2x+3>0\\) 恒成立吗？',
+                            opts:['恒成立','不恒成立','仅x>0成立','仅x<0成立'], ans:0,
+                            tip:'配方(x+1)²+2>0恒成立' },
+                        { id:'i11', type:'choice', tag:'含分母', q:'\\(\\frac{x}{-2}\\le 1\\) 的解是？',
+                            opts:['\\(x\\ge -2\\)','\\(x\\le -2\\)','\\(x\\ge 2\\)','\\(x\\le 2\\)'], ans:0,
+                            tip:'乘-2变号：x≥-2' },
+                        { id:'i12', type:'choice', tag:'绝对值', q:'\\(|x-3|<2\\) 的解是？',
+                            opts:['\\(x<5\\)','\\(x>1\\)','\\(1<x<5\\)','\\(x<1\\) 或 \\(x>5\\)'], ans:2,
+                            tip:'|x-a|<b ⇔ a-b<x<a+b' },
+                        { id:'i13', type:'tf', tag:'易错辨析', q:'\\(a>b\\)，则 \\(-a>-b\\) 对吗？', ans:false,
+                            tip:'乘负数变号：-a<-b' },
+                        { id:'i14', type:'tf', tag:'易错辨析', q:'\\(x>3\\) 和 \\(x\\ge 3\\) 意思相同吗？', ans:false,
+                            tip:'x>3不包括3，x≥3包括3' },
+                        { id:'i15', type:'tf', tag:'易错辨析', q:'若 \\(x<2\\)，则 \\(x^2<4\\) 对吗？', ans:false,
+                            tip:'反例：x=-3时，x<2但x²=9>4' },
                     ],
-
                     quadratic: [
-                        { type: 'choice', tag: '顶点式读顶点', q: '\\(y=(x-2)^2+3\\) 的顶点是？',
-                            opts: ['\\((2,3)\\)', '\\((-2,3)\\)', '\\((2,-3)\\)', '\\((-2,-3)\\)'], ans: 0,
-                            tip: '顶点式y=a(x-h)²+k，顶点(h,k)' },
-                        { type: 'choice', tag: '顶点式读顶点', q: '\\(y=-(x+1)^2-4\\) 的顶点是？',
-                            opts: ['\\((1,-4)\\)', '\\((-1,-4)\\)', '\\((1,4)\\)', '\\((-1,4)\\)'], ans: 1,
-                            tip: 'y=-(x-(-1))²+(-4)，顶点(-1,-4)' },
-                        { type: 'choice', tag: '配方求顶点', q: '\\(y=x^2-6x+10\\) 配方后顶点是？',
-                            opts: ['\\((3,1)\\)', '\\((-3,1)\\)', '\\((3,19)\\)', '\\((6,10)\\)'], ans: 0,
-                            tip: 'y=(x-3)²+1，顶点(3,1)' },
-                        { type: 'choice', tag: '配方求顶点', q: '\\(y=2x^2-8x+5\\) 配方后顶点是？',
-                            opts: ['\\((2,-3)\\)', '\\((2,3)\\)', '\\((-2,-3)\\)', '\\((4,5)\\)'], ans: 0,
-                            tip: 'y=2(x-2)²-3，顶点(2,-3)' },
-                        { type: 'choice', tag: '开口方向', q: '\\(y=-2x^2+8x-5\\) 开口向哪？',
-                            opts: ['向上，有最小值', '向下，有最大值', '向上，有最大值', '向下，有最小值'], ans: 1,
-                            tip: 'a=-2<0，开口向下，顶点是最高点' },
-                        { type: 'choice', tag: '对称轴', q: '\\(y=x^2-4x+5\\) 的对称轴是？',
-                            opts: ['\\(x=4\\)', '\\(x=-4\\)', '\\(x=2\\)', '\\(x=-2\\)'], ans: 2,
-                            tip: 'x=-b/(2a)=4/2=2' },
-                        { type: 'choice', tag: '判别式与交点', q: '\\(y=x^2-4x+3\\) 与x轴有几个交点？',
-                            opts: ['0个', '1个', '2个', '3个'], ans: 2, tip: 'Δ=16-12=4>0，两个交点' },
-                        { type: 'choice', tag: '判别式与交点', q: '\\(y=x^2-4x+4\\) 与x轴有几个交点？',
-                            opts: ['0个', '1个（相切）', '2个', '无法判断'], ans: 1,
-                        tip: 'Δ=16-16=0，一个交点（相切）' },
-                        { type: 'choice', tag: '判别式与交点', q: '\\(y=x^2+2x+3\\) 与x轴有几个交点？',
-                            opts: ['0个', '1个', '2个', '无数个'], ans: 0, tip: 'Δ=4-12=-8<0，无交点' },
-                        { type: 'choice', tag: '与y轴交点', q: '\\(y=x^2-3x+2\\) 与y轴的交点坐标是？',
-                            opts: ['\\((2,0)\\)', '\\((0,2)\\)', '\\((0,-3)\\)', '\\((1,0)\\)'], ans: 1,
-                            tip: '令x=0得y=2，交点是(0,2)' },
-                        { type: 'choice', tag: '求x轴交点', q: '\\(y=x^2-5x+6\\) 与x轴的交点坐标是？',
-                            opts: ['\\((2,0)\\) 和 \\((3,0)\\)', '\\((-2,0)\\) 和 \\((-3,0)\\)',
-                                '\\((0,2)\\) 和 \\((0,3)\\)', '\\((1,0)\\) 和 \\((6,0)\\)'
-                            ], ans: 0, tip: '令y=0，(x-2)(x-3)=0' },
-                        { type: 'choice', tag: '区间最值', q: '\\(y=(x-2)^2+1\\) 在 \\(x\\in[0,3]\\) 上最小值？',
-                            opts: ['1', '2', '3', '5'], ans: 0, tip: '顶点x=2在区间内' },
-                        { type: 'tf', tag: '易错辨析', q: '\\(y=-(x-1)^2+4\\) 的最小值是4，对吗？',
-                            ans: false, tip: '开口向下，4是最大值' },
-                        { type: 'tf', tag: '易错辨析', q: '\\(y=x^2+2x+3\\) 配方得 \\((x+1)^2+2\\)，对吗？',
-                            ans: true, tip: 'x²+2x+1+2=(x+1)²+2，正确' },
+                        { id:'q1', type:'choice', tag:'顶点式读顶点', q:'\\(y=(x-2)^2+3\\) 的顶点是？',
+                            opts:['\\((2,3)\\)','\\((-2,3)\\)','\\((2,-3)\\)','\\((-2,-3)\\)'], ans:0,
+                            tip:'顶点式y=a(x-h)²+k，顶点(h,k)' },
+                        { id:'q2', type:'choice', tag:'顶点式读顶点', q:'\\(y=-(x+1)^2-4\\) 的顶点是？',
+                            opts:['\\((1,-4)\\)','\\((-1,-4)\\)','\\((1,4)\\)','\\((-1,4)\\)'], ans:1,
+                            tip:'y=-(x-(-1))²+(-4)，顶点(-1,-4)' },
+                        { id:'q3', type:'choice', tag:'顶点式读顶点', q:'\\(y=2(x-3)^2+5\\) 的顶点是？',
+                            opts:['\\((-3,5)\\)','\\((3,5)\\)','\\((-3,-5)\\)','\\((3,-5)\\)'], ans:1,
+                            tip:'h=3,k=5，顶点(3,5)' },
+                        { id:'q4', type:'choice', tag:'配方求顶点', q:'\\(y=x^2-6x+10\\) 配方后顶点是？',
+                            opts:['\\((3,1)\\)','\\((-3,1)\\)','\\((3,19)\\)','\\((6,10)\\)'], ans:0,
+                            tip:'y=(x-3)²+1，顶点(3,1)' },
+                        { id:'q5', type:'choice', tag:'配方求顶点', q:'\\(y=2x^2-8x+5\\) 配方后顶点是？',
+                            opts:['\\((2,-3)\\)','\\((2,3)\\)','\\((-2,-3)\\)','\\((4,5)\\)'], ans:0,
+                            tip:'y=2(x-2)²-3，顶点(2,-3)' },
+                        { id:'q6', type:'choice', tag:'配方求顶点', q:'\\(y=-x^2+6x-5\\) 配方后顶点是？',
+                            opts:['\\((3,4)\\)','\\((-3,4)\\)','\\((3,-4)\\)','\\((-3,-4)\\)'], ans:0,
+                            tip:'y=-(x-3)²+4，顶点(3,4)' },
+                        { id:'q7', type:'choice', tag:'配方求顶点', q:'\\(y=3x^2+6x+2\\) 配方后顶点是？',
+                            opts:['\\((1,-1)\\)','\\((-1,-1)\\)','\\((1,1)\\)','\\((-1,1)\\)'], ans:1,
+                            tip:'y=3(x+1)²-1，顶点(-1,-1)' },
+                        { id:'q8', type:'choice', tag:'开口方向', q:'\\(y=-2x^2+8x-5\\) 开口向哪？',
+                            opts:['向上，有最小值','向下，有最大值','向上，有最大值','向下，有最小值'], ans:1,
+                            tip:'a=-2<0，开口向下，顶点是最高点' },
+                        { id:'q9', type:'choice', tag:'开口方向', q:'\\(y=3x^2-6x+1\\) 开口向哪？',
+                            opts:['向上，有最小值','向下，有最大值','向上，有最大值','向下，有最小值'], ans:0,
+                            tip:'a=3>0，开口向上，顶点是最低点' },
+                        { id:'q10', type:'choice', tag:'对称轴', q:'\\(y=x^2-4x+5\\) 的对称轴是？',
+                            opts:['\\(x=4\\)','\\(x=-4\\)','\\(x=2\\)','\\(x=-2\\)'], ans:2,
+                            tip:'x=-b/(2a)=4/2=2' },
+                        { id:'q11', type:'choice', tag:'对称轴', q:'\\(y=-2x^2+12x-7\\) 的对称轴是？',
+                            opts:['\\(x=3\\)','\\(x=-3\\)','\\(x=6\\)','\\(x=-6\\)'], ans:0,
+                            tip:'x=-12/(-4)=3' },
+                        { id:'q12', type:'choice', tag:'判别式与交点', q:'\\(y=x^2-4x+3\\) 与x轴有几个交点？',
+                            opts:['0个','1个','2个','3个'], ans:2, tip:'Δ=16-12=4>0，两个交点' },
+                        { id:'q13', type:'choice', tag:'判别式与交点', q:'\\(y=x^2-4x+4\\) 与x轴有几个交点？',
+                            opts:['0个','1个（相切）','2个','无法判断'], ans:1, tip:'Δ=16-16=0，一个交点（相切）' },
+                        { id:'q14', type:'choice', tag:'判别式与交点', q:'\\(y=x^2+2x+3\\) 与x轴有几个交点？',
+                            opts:['0个','1个','2个','无数个'], ans:0, tip:'Δ=4-12=-8<0，无交点' },
+                        { id:'q15', type:'choice', tag:'判别式与交点', q:'\\(y=x^2-2x+1\\) 与x轴有几个交点？',
+                            opts:['0个','1个（相切）','2个','无法判断'], ans:1,
+                            tip:'Δ=4-4=0，一个交点（相切），即顶点在x轴上' },
+                        { id:'q16', type:'choice', tag:'与y轴交点', q:'\\(y=x^2-3x+2\\) 与y轴的交点坐标是？',
+                            opts:['\\((2,0)\\)','\\((0,2)\\)','\\((0,-3)\\)','\\((1,0)\\)'], ans:1,
+                            tip:'令x=0得y=2，交点是(0,2)。y轴交点就是常数项' },
+                        { id:'q17', type:'choice', tag:'与y轴交点', q:'\\(y=-x^2+5x-6\\) 与y轴的交点坐标是？',
+                            opts:['\\((0,6)\\)','\\((0,-6)\\)','\\((0,5)\\)','\\((6,0)\\)'], ans:1,
+                            tip:'令x=0得y=-6，交点是(0,-6)' },
+                        { id:'q18', type:'choice', tag:'求x轴交点', q:'\\(y=x^2-5x+6\\) 与x轴的交点坐标是？',
+                            opts:['\\((2,0)\\) 和 \\((3,0)\\)','\\((-2,0)\\) 和 \\((-3,0)\\)','\\((0,2)\\) 和 \\((0,3)\\)','\\((1,0)\\) 和 \\((6,0)\\)'], ans:0,
+                            tip:'令y=0，(x-2)(x-3)=0' },
+                        { id:'q19', type:'choice', tag:'求x轴交点', q:'\\(y=x^2+2x-8\\) 与x轴的交点坐标是？',
+                            opts:['\\((2,0)\\) 和 \\((-4,0)\\)','\\((-2,0)\\) 和 \\((4,0)\\)','\\((0,2)\\) 和 \\((0,-4)\\)','\\((1,0)\\) 和 \\((-8,0)\\)'], ans:0,
+                            tip:'(x+4)(x-2)=0，交点(-4,0)和(2,0)' },
+                        { id:'q20', type:'choice', tag:'区间最值', q:'\\(y=(x-2)^2+1\\) 在 \\(x\\in[0,3]\\) 上最小值？',
+                            opts:['1','2','3','5'], ans:0, tip:'顶点x=2在区间内，最小值=1' },
+                        { id:'q21', type:'tf', tag:'易错辨析', q:'\\(y=-(x-1)^2+4\\) 的最小值是4，对吗？', ans:false,
+                            tip:'开口向下，4是最大值' },
+                        { id:'q22', type:'tf', tag:'易错辨析', q:'\\(y=x^2+2x+3\\) 配方得 \\((x+1)^2+2\\)，对吗？', ans:true,
+                            tip:'x²+2x+1+2=(x+1)²+2，正确' },
                     ],
-
                     couzhi: [
-                        { type: 'choice', tag: '凑倒数对',
-                            q: '\\(x+\\frac{4}{x-2}\\)（\\(x>2\\)），要凑倒数对，\\(x\\) 应变成？',
-                            opts: ['\\(x\\) 不变', '\\((x-2)+2\\)', '\\((x+2)-2\\)', '\\(2(x-2)\\)'], ans: 1,
-                            tip: '把x拆成(x-2)+2，原式=(x-2)+4/(x-2)+2' },
-                        { type: 'choice', tag: '凑倒数对',
-                            q: '\\(2x+\\frac{8}{x-1}\\)，\\(2x\\) 应变成？',
-                            opts: ['\\(2(x-1)\\)', '\\(2(x-1)+2\\)', '\\(2(x-1)-2\\)', '\\(2x\\) 不变'],
-                            ans: 1, tip: '2x=2(x-1)+2' },
-                        { type: 'choice', tag: '补偿修正',
-                            q: '\\(x+\\frac{9}{x+1}\\) 凑成 \\((x+1)+\\frac{9}{x+1}+\\underline{\\quad}\\)，填？',
-                            opts: ['\\(+1\\)', '\\(-1\\)', '\\(+9\\)', '\\(-9\\)'], ans: 1,
-                            tip: 'x=(x+1)-1，补偿-1' },
-                        { type: 'choice', tag: '补偿修正',
-                            q: '\\(3x+\\frac{6}{x-2}\\) 凑成 \\(3(x-2)+\\frac{6}{x-2}+\\underline{\\quad}\\)，填？',
-                            opts: ['\\(+6\\)', '\\(-6\\)', '\\(+3\\)', '\\(+2\\)'], ans: 0,
-                            tip: '3x=3(x-2)+6，补偿+6' },
-                        { type: 'choice', tag: '配平方凑结构', q: '\\(x^2+6x+11\\) 配方后的形式是？',
-                            opts: ['\\((x+3)^2+2\\)', '\\((x+3)^2+11\\)', '\\((x+6)^2-25\\)', '\\((x-3)^2+2\\)'],
-                            ans: 0, tip: 'x²+6x+9+2=(x+3)²+2' },
-                        { type: 'choice', tag: '配平方凑结构',
-                            q: '\\(x^2-4x+7\\) 配方得 \\((x-2)^2+\\underline{\\quad}\\)，填？',
-                            opts: ['\\(+3\\)', '\\(+7\\)', '\\(+11\\)', '\\(-3\\)'], ans: 0,
-                            tip: '(x-2)²=x²-4x+4，原式=(x-2)²+3' },
-                        { type: 'choice', tag: '凑完全平方',
-                            q: '\\(x^2+\\frac{1}{x^2}\\) 用 \\((x+\\frac{1}{x})^2\\) 表示为？',
-                            opts: ['\\((x+\\frac{1}{x})^2\\)', '\\((x+\\frac{1}{x})^2-2\\)',
-                                '\\((x+\\frac{1}{x})^2+2\\)', '\\((x-\\frac{1}{x})^2\\)'
-                            ], ans: 1,
-                            tip: '(x+1/x)²=x²+2+1/x²，所以减去2' },
-                        { type: 'choice', tag: '凑完全平方',
-                            q: '\\(x^2+\\frac{1}{x^2}\\) 用 \\((x-\\frac{1}{x})^2\\) 表示为？',
-                            opts: ['\\((x-\\frac{1}{x})^2\\)', '\\((x-\\frac{1}{x})^2+2\\)',
-                                '\\((x-\\frac{1}{x})^2-2\\)', '不能表示'
-                            ], ans: 1,
-                            tip: '(x-1/x)²=x²-2+1/x²，所以加2补回' },
-                        { type: 'choice', tag: '凑值思维', q: '凑值法最核心的步骤顺序是？',
-                            opts: ['先计算答案再凑过程', '先写目标结构再补偿差值', '先补偿差值再写目标结构',
-                            '随便凑就行'], ans: 1, tip: '四步心法：目标导航→强制执行→补偿修正' },
-                        { type: 'tf', tag: '凑值思维',
-                            q: '凑值法的核心是"先斩后奏"：先写出想要的项，再补回差值。对吗？', ans: true,
-                            tip: '对！这是凑值法的灵魂' },
-                        { type: 'tf', tag: '补偿检查',
-                            q: '\\(x+\\frac{4}{x-1}=(x-1)+\\frac{4}{x-1}-1\\) 对吗？', ans: false,
-                            tip: 'x=(x-1)+1，补偿应该是+1' },
-                        { type: 'tf', tag: '凑值目标',
-                            q: '凑值的目的是为了让两项相乘后变量消失变成常数。对吗？', ans: true,
-                            tip: '对！比如(x-1)和4/(x-1)相乘得4' },
+                        { id:'c1', type:'choice', tag:'凑倒数对', q:'\\(x+\\frac{4}{x-2}\\)（\\(x>2\\)），要凑倒数对，\\(x\\) 应变成？',
+                            opts:['\\(x\\) 不变','\\((x-2)+2\\)','\\((x+2)-2\\)','\\(2(x-2)\\)'], ans:1,
+                            tip:'把x拆成(x-2)+2，原式=(x-2)+4/(x-2)+2' },
+                        { id:'c2', type:'choice', tag:'凑倒数对', q:'\\(2x+\\frac{8}{x-1}\\)，\\(2x\\) 应变成？',
+                            opts:['\\(2(x-1)\\)','\\(2(x-1)+2\\)','\\(2(x-1)-2\\)','\\(2x\\) 不变'], ans:1,
+                            tip:'2x=2(x-1)+2' },
+                        { id:'c3', type:'choice', tag:'凑倒数对', q:'\\(3x+\\frac{12}{x-2}\\)，\\(3x\\) 应变成？',
+                            opts:['\\(3(x-2)\\)','\\(3(x-2)+6\\)','\\(3(x-2)-6\\)','\\(3(x+2)\\)'], ans:1,
+                            tip:'3x=3(x-2)+6' },
+                        { id:'c4', type:'choice', tag:'凑倒数对', q:'\\(x+\\frac{1}{2x-1}\\)，\\(x\\) 应变成？',
+                            opts:['\\(\\frac{1}{2}(2x-1)+\\frac{1}{2}\\)','\\(2x-1+1\\)','\\(\\frac{1}{2}(2x-1)-\\frac{1}{2}\\)','\\(x\\) 不变'], ans:0,
+                            tip:'x=(2x)/2=(2x-1+1)/2=(2x-1)/2+1/2' },
+                        { id:'c5', type:'choice', tag:'补偿修正', q:'\\(x+\\frac{9}{x+1}\\) 凑成 \\((x+1)+\\frac{9}{x+1}+\\underline{\\quad}\\)，填？',
+                            opts:['\\(+1\\)','\\(-1\\)','\\(+9\\)','\\(-9\\)'], ans:1, tip:'x=(x+1)-1，补偿-1' },
+                        { id:'c6', type:'choice', tag:'补偿修正', q:'\\(3x+\\frac{6}{x-2}\\) 凑成 \\(3(x-2)+\\frac{6}{x-2}+\\underline{\\quad}\\)，填？',
+                            opts:['\\(+6\\)','\\(-6\\)','\\(+3\\)','\\(+2\\)'], ans:0, tip:'3x=3(x-2)+6，补偿+6' },
+                        { id:'c7', type:'choice', tag:'补偿修正', q:'\\(2x+\\frac{10}{x+3}\\) 凑倒数对，补偿项是？',
+                            opts:['\\(+6\\)','\\(-6\\)','\\(+3\\)','\\(-3\\)'], ans:1,
+                            tip:'2x=2(x+3)-6，补偿-6' },
+                        { id:'c8', type:'choice', tag:'补偿修正', q:'\\(4x+\\frac{8}{2x-1}\\) 凑倒数对，补偿项是？',
+                            opts:['\\(+2\\)','\\(-2\\)','\\(+4\\)','\\(-4\\)'], ans:0,
+                            tip:'4x=2(2x-1)+2，补偿+2' },
+                        { id:'c9', type:'choice', tag:'配平方凑结构', q:'\\(x^2+6x+11\\) 配方后的形式是？',
+                            opts:['\\((x+3)^2+2\\)','\\((x+3)^2+11\\)','\\((x+6)^2-25\\)','\\((x-3)^2+2\\)'], ans:0,
+                            tip:'x²+6x+9+2=(x+3)²+2' },
+                        { id:'c10', type:'choice', tag:'配平方凑结构', q:'\\(x^2-4x+7\\) 配方得 \\((x-2)^2+\\underline{\\quad}\\)，填？',
+                            opts:['\\(+3\\)','\\(+7\\)','\\(+11\\)','\\(-3\\)'], ans:0,
+                            tip:'(x-2)²=x²-4x+4，原式=(x-2)²+3' },
+                        { id:'c11', type:'choice', tag:'配平方凑结构', q:'\\(x^2+10x+28\\) 配方后的形式是？',
+                            opts:['\\((x+5)^2+3\\)','\\((x+5)^2+28\\)','\\((x+10)^2-72\\)','\\((x-5)^2+3\\)'], ans:0,
+                            tip:'x²+10x+25+3=(x+5)²+3' },
+                        { id:'c12', type:'choice', tag:'配平方凑结构', q:'\\(x^2-8x+20\\) 配方后的形式是？',
+                            opts:['\\((x-4)^2+4\\)','\\((x-4)^2+20\\)','\\((x-8)^2-44\\)','\\((x+4)^2+4\\)'], ans:0,
+                            tip:'x²-8x+16+4=(x-4)²+4' },
+                        { id:'c13', type:'choice', tag:'配平方凑结构', q:'\\(2x^2+8x+5\\) 配方后的形式是？',
+                            opts:['\\(2(x+2)^2-3\\)','\\(2(x+2)^2+5\\)','\\(2(x+4)^2-27\\)','\\((2x+2)^2+1\\)'], ans:0,
+                            tip:'先提2：2(x²+4x)+5=2(x+2)²-8+5=2(x+2)²-3' },
+                        { id:'c14', type:'choice', tag:'凑完全平方', q:'\\(x^2+\\frac{1}{x^2}\\) 用 \\((x+\\frac{1}{x})^2\\) 表示为？',
+                            opts:['\\((x+\\frac{1}{x})^2\\)','\\((x+\\frac{1}{x})^2-2\\)','\\((x+\\frac{1}{x})^2+2\\)','\\((x-\\frac{1}{x})^2\\)'], ans:1,
+                            tip:'(x+1/x)²=x²+2+1/x²，所以减去2' },
+                        { id:'c15', type:'choice', tag:'凑完全平方', q:'\\(x^2+\\frac{1}{x^2}\\) 用 \\((x-\\frac{1}{x})^2\\) 表示为？',
+                            opts:['\\((x-\\frac{1}{x})^2\\)','\\((x-\\frac{1}{x})^2+2\\)','\\((x-\\frac{1}{x})^2-2\\)','不能表示'], ans:1,
+                            tip:'(x-1/x)²=x²-2+1/x²，所以加2补回' },
+                        { id:'c16', type:'choice', tag:'凑完全平方', q:'\\(a^2+b^2\\) 用 \\((a+b)^2\\) 表示为？',
+                            opts:['\\((a+b)^2\\)','\\((a+b)^2-2ab\\)','\\((a+b)^2+2ab\\)','不能表示'], ans:1,
+                            tip:'(a+b)²=a²+2ab+b²，所以a²+b²=(a+b)²-2ab' },
+                        { id:'c17', type:'choice', tag:'凑完全平方', q:'\\(a^2+b^2\\) 用 \\((a-b)^2\\) 表示为？',
+                            opts:['\\((a-b)^2\\)','\\((a-b)^2+2ab\\)','\\((a-b)^2-2ab\\)','不能表示'], ans:1,
+                            tip:'(a-b)²=a²-2ab+b²，所以a²+b²=(a-b)²+2ab' },
+                        { id:'c18', type:'choice', tag:'凑值思维', q:'凑值法最核心的步骤顺序是？',
+                            opts:['先计算答案再凑过程','先写目标结构再补偿差值','先补偿差值再写目标结构','随便凑就行'], ans:1,
+                            tip:'四步心法：目标导航→强制执行→补偿修正' },
+                        { id:'c19', type:'choice', tag:'凑值思维', q:'凑值法中"先斩后奏"的"斩"指的是？',
+                            opts:['先算出最终答案','先写出想要的项（不管等式是否成立）','先删掉多余的部分','先补偿差值'], ans:1,
+                            tip:'"斩"就是不管三七二十一先写出目标结构' },
+                        { id:'c20', type:'tf', tag:'凑值思维', q:'凑值法的核心是"先斩后奏"：先写出想要的项，再补回差值。对吗？', ans:true,
+                            tip:'对！这是凑值法的灵魂' },
+                        { id:'c21', type:'tf', tag:'补偿检查', q:'\\(x+\\frac{4}{x-1}=(x-1)+\\frac{4}{x-1}-1\\) 对吗？', ans:false,
+                            tip:'x=(x-1)+1，补偿应该是+1' },
+                        { id:'c22', type:'tf', tag:'凑值目标', q:'凑值的目的是为了让两项相乘后变量消失变成常数。对吗？', ans:true,
+                            tip:'对！比如(x-1)和4/(x-1)相乘得4' },
                     ]
                 };
 
+                // ==================== 状态管理 ====================
                 var currentModule = 'formula';
                 var totalCorrect = 0;
                 var totalAnswered = 0;
+                var wrongList = [];  // 错题集
                 var tabBtns = document.querySelectorAll('.tab-btn');
                 var cardGrid = document.getElementById('cardGrid');
                 var scoreBoard = document.getElementById('scoreBoard');
+                var countInfo = document.getElementById('countInfo');
+                var modalOverlay = document.getElementById('modalOverlay');
+                var wrongListDiv = document.getElementById('wrongList');
 
                 function updateScore() {
                     var pct = totalAnswered > 0 ? Math.round(totalCorrect / totalAnswered * 100) : 0;
-                    var emoji = pct >= 80 ? ' 厉害' : pct >= 60 ? ' 加油' : '';
-                    scoreBoard.textContent = '得分：' + totalCorrect + ' / ' + totalAnswered + ' (' + pct + '%)' +
-                        emoji;
+                    var emoji = pct >= 80 ? '厉害' : pct >= 60 ? '加油' : '';
+                    scoreBoard.textContent = '得分：' + totalCorrect + ' / ' + totalAnswered + ' (' + pct + '%) ' + emoji;
                 }
 
                 function getTagClass(tag) {
-                    if (tag.indexOf('展开') >= 0 || tag.indexOf('配方补') >= 0 || tag.indexOf('平方差') >= 0 || tag
-                        .indexOf('三项') >= 0) return 'formula';
-                    if (tag.indexOf('提公') >= 0 || tag.indexOf('分解') >= 0 || tag.indexOf('十字') >= 0 || tag
-                        .indexOf('先提') >= 0) return 'factor';
-                    if (tag.indexOf('变号') >= 0 || tag.indexOf('不等式') >= 0 || tag.indexOf('含分母') >= 0 || tag
-                        .indexOf('绝对值') >= 0) return 'ineq';
-                    if (tag.indexOf('顶点') >= 0 || tag.indexOf('配方求') >= 0 || tag.indexOf('开口') >= 0 || tag
-                        .indexOf('对称轴') >= 0 || tag.indexOf('判别') >= 0 || tag.indexOf('区间') >= 0 || tag
-                        .indexOf('交点') >= 0) return 'quad';
+                    if (tag.indexOf('展开') >= 0 || tag.indexOf('配方补') >= 0 || tag.indexOf('平方差') >= 0 || tag.indexOf('三项') >= 0) return 'formula';
+                    if (tag.indexOf('提公') >= 0 || tag.indexOf('分解') >= 0 || tag.indexOf('十字') >= 0 || tag.indexOf('先提') >= 0) return 'factor';
+                    if (tag.indexOf('变号') >= 0 || tag.indexOf('不等式') >= 0 || tag.indexOf('含分母') >= 0 || tag.indexOf('绝对值') >= 0) return 'ineq';
+                    if (tag.indexOf('顶点') >= 0 || tag.indexOf('配方求') >= 0 || tag.indexOf('开口') >= 0 || tag.indexOf('对称轴') >= 0 || tag.indexOf('判别') >= 0 || tag.indexOf('区间') >= 0 || tag.indexOf('交点') >= 0) return 'quad';
                     return 'couzhi';
                 }
 
@@ -610,11 +473,31 @@
 
                 function getQuestions() {
                     var all = bank[currentModule] || [];
-                    return shuffle(all).slice(0, 6);
+                    return shuffle(all).slice(0, 8);
+                }
+
+                function addToWrongList(q, userAnswer) {
+                    // 避免重复添加同一道题
+                    var exists = wrongList.some(function(item) { return item.id === q.id; });
+                    if (!exists) {
+                        wrongList.push({
+                            id: q.id,
+                            module: currentModule,
+                            tag: q.tag,
+                            q: q.q,
+                            opts: q.opts,
+                            ans: q.ans,
+                            tip: q.tip,
+                            type: q.type,
+                            userAnswer: userAnswer
+                        });
+                    }
                 }
 
                 function renderCards() {
                     var qs = getQuestions();
+                    var total = (bank[currentModule] || []).length;
+                    countInfo.textContent = '本题库共' + total + '题，本次抽取8题';
                     cardGrid.innerHTML = '';
 
                     for (var idx = 0; idx < qs.length; idx++) {
@@ -629,85 +512,84 @@
                             html += '<div class="options">';
                             var lb = ['A', 'B', 'C', 'D'];
                             for (var o = 0; o < q.opts.length; o++) {
-                                html += '<span class="opt-btn" data-opt="' + o + '">' + lb[o] + '. ' + q
-                                    .opts[o] + '</span>';
+                                html += '<span class="opt-btn" data-opt="' + o + '">' + lb[o] + '. ' + q.opts[o] + '</span>';
                             }
                             html += '</div>';
                         } else {
-                            html +=
-                                '<div class="tf-btns"><span class="tf-btn tf-true" data-opt="true">正确</span><span class="tf-btn tf-false" data-opt="false">错误</span></div>';
+                            html += '<div class="tf-btns"><span class="tf-btn tf-true" data-opt="true">正确</span><span class="tf-btn tf-false" data-opt="false">错误</span></div>';
                         }
                         html += '<div class="fb"><span class="fb-text"></span><span class="tip"></span></div>';
                         card.innerHTML = html;
 
-                        // 绑定选项点击
                         var btns = card.querySelectorAll('.opt-btn, .tf-btn');
                         for (var b = 0; b < btns.length; b++) {
                             (function(btn, c, qq) {
                                 btn.addEventListener('click', function(e) {
                                     e.stopPropagation();
                                     if (c.classList.contains('answered')) return;
-
                                     var sel = btn.getAttribute('data-opt');
                                     var ok;
                                     if (qq.type === 'choice') {
                                         ok = (parseInt(sel) === qq.ans);
                                     } else {
-                                        ok = (sel === 'true' && qq.ans === true) || (sel ===
-                                            'false' && qq.ans === false);
+                                        ok = (sel === 'true' && qq.ans === true) || (sel === 'false' && qq.ans === false);
                                     }
-
-                                    // 禁用所有按钮
                                     var allB = c.querySelectorAll('.opt-btn, .tf-btn');
-                                    for (var ab = 0; ab < allB.length; ab++) {
-                                        allB[ab].style.pointerEvents = 'none';
-                                    }
-
-                                    // 标记正确答案和用户选择
+                                    for (var ab = 0; ab < allB.length; ab++) allB[ab].style.pointerEvents = 'none';
                                     if (qq.type === 'choice') {
-                                        var correctBtn = c.querySelector('.opt-btn[data-opt="' +
-                                            qq.ans + '"]');
-                                        if (correctBtn) correctBtn.classList.add(
-                                        'correct-answer');
-                                        if (!ok) {
-                                            btn.classList.add('wrong-answer');
-                                        }
+                                        var cb = c.querySelector('.opt-btn[data-opt="' + qq.ans + '"]');
+                                        if (cb) cb.classList.add('correct-answer');
+                                        if (!ok) btn.classList.add('wrong-answer');
                                     } else {
-                                        btn.classList.add(ok ? 'selected-true' :
-                                            'selected-false');
+                                        btn.classList.add(ok ? 'selected-true' : 'selected-false');
                                         if (!ok) {
-                                            var otherBtn = (sel === 'true') ? c.querySelector(
-                                                '.tf-false') : c.querySelector('.tf-true');
-                                            if (otherBtn) {
-                                                otherBtn.classList.add('selected-true');
-                                                otherBtn.style.opacity = '0.7';
-                                            }
+                                            var ob = (sel === 'true') ? c.querySelector('.tf-false') : c.querySelector('.tf-true');
+                                            if (ob) { ob.classList.add('selected-true'); ob.style.opacity = '0.7'; }
                                         }
                                     }
-
                                     c.classList.add('answered');
                                     c.classList.add(ok ? 'correct' : 'wrong');
                                     var fb = c.querySelector('.fb');
                                     fb.classList.add(ok ? 'ok' : 'no');
-                                    fb.querySelector('.fb-text').textContent = ok ? '答对了' :
-                                        '答错了';
-                                    fb.querySelector('.tip').textContent = '提示：' + (qq.tip ||
-                                        '');
+                                    fb.querySelector('.fb-text').textContent = ok ? '答对了' : '答错了';
+                                    fb.querySelector('.tip').textContent = '提示：' + (qq.tip || '');
                                     totalAnswered++;
                                     if (ok) totalCorrect++;
+                                    else addToWrongList(qq, sel);
                                     updateScore();
-                                    if (window.MathJax && window.MathJax.typesetPromise) {
-                                        MathJax.typesetPromise([c]).catch(function() {});
-                                    }
+                                    if (window.MathJax && window.MathJax.typesetPromise) MathJax.typesetPromise([c]).catch(function() {});
                                 });
                             })(btns[b], card, q);
                         }
                         cardGrid.appendChild(card);
                     }
+                    if (window.MathJax && window.MathJax.typesetPromise) MathJax.typesetPromise([cardGrid]).catch(function() {});
+                }
 
-                    if (window.MathJax && window.MathJax.typesetPromise) {
-                        MathJax.typesetPromise([cardGrid]).catch(function() {});
+                function showWrongBook() {
+                    if (wrongList.length === 0) {
+                        wrongListDiv.innerHTML = '<div class="empty">🎉 太棒了！还没有错题，继续保持！</div>';
+                    } else {
+                        var html = '<p style="font-size:0.75rem;color:#888;margin-bottom:8px;">共 ' + wrongList.length + ' 道错题</p>';
+                        for (var i = 0; i < wrongList.length; i++) {
+                            var w = wrongList[i];
+                            html += '<div class="wrong-item">';
+                            html += '<div class="wq">' + w.tag + '：' + w.q + '</div>';
+                            if (w.type === 'choice') {
+                                html += '<div class="wa">正确答案：' + (w.opts ? w.opts[w.ans] : '') + '</div>';
+                            } else {
+                                html += '<div class="wa">正确答案：' + (w.ans ? '正确' : '错误') + '</div>';
+                            }
+                            html += '<div class="wt">提示：' + (w.tip || '') + '</div>';
+                            html += '</div>';
+                        }
+                        wrongListDiv.innerHTML = html;
                     }
+                    modalOverlay.classList.add('show');
+                }
+
+                function hideWrongBook() {
+                    modalOverlay.classList.remove('show');
                 }
 
                 function reset() {
@@ -722,8 +604,7 @@
                     (function(b) {
                         b.addEventListener('click', function(e) {
                             e.preventDefault();
-                            for (var j = 0; j < tabBtns.length; j++) tabBtns[j].classList.remove(
-                                'active');
+                            for (var j = 0; j < tabBtns.length; j++) tabBtns[j].classList.remove('active');
                             b.classList.add('active');
                             currentModule = b.getAttribute('data-module');
                             reset();
@@ -731,31 +612,23 @@
                     })(tabBtns[i]);
                 }
 
-                document.getElementById('refreshBtn').addEventListener('click', function(e) {
-                    e.preventDefault();
-                    reset();
-                });
-                document.getElementById('resetBtn').addEventListener('click', function(e) {
-                    e.preventDefault();
-                    reset();
-                });
+                document.getElementById('refreshBtn').addEventListener('click', function(e) { e.preventDefault(); reset(); });
+                document.getElementById('resetBtn').addEventListener('click', function(e) { e.preventDefault(); reset(); });
+                document.getElementById('wrongBookBtn').addEventListener('click', function(e) { e.preventDefault(); showWrongBook(); });
+                document.getElementById('closeModal').addEventListener('click', function(e) { e.preventDefault(); hideWrongBook(); });
+                modalOverlay.addEventListener('click', function(e) { if (e.target === modalOverlay) hideWrongBook(); });
 
                 updateScore();
                 renderCards();
             }
 
-            // 等待 MathJax 加载
             if (window.MathJax && window.MathJax.startup) {
                 window.MathJax.startup.promise.then(init);
             } else {
-                // MathJax 还没加载，等 load 事件
                 window.addEventListener('load', function() {
                     if (window.MathJax && window.MathJax.startup) {
                         window.MathJax.startup.promise.then(init);
-                    } else {
-                        // 最终降级：直接运行
-                        init();
-                    }
+                    } else { init(); }
                 });
             }
         })();

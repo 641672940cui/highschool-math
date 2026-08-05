@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>奇偶性 · 10题闯关</title>
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' },
+            options: { enableMenu: false, ignoreHtmlClass: 'no-mathjax' }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async>
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+        body {
+            background: #f1f5f9;
+            padding: 16px 12px 40px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+        .app {
+            max-width: 680px;
+            width: 100%;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: #fff;
+            border-radius: 28px;
+            padding: 20px 18px 18px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+        .header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header h1 small {
+            font-size: 14px;
+            font-weight: 400;
+            opacity: 0.7;
+            margin-left: auto;
+        }
+        .header .sub {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-top: 4px;
+        }
+        .back-link {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 13px;
+            text-decoration: none;
+            margin-top: 8px;
+            transition: 0.2s;
+        }
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+        .knowledge-card {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 14px 16px;
+            margin: 6px 0 14px;
+            border-left: 5px solid #3b82f6;
+            cursor: pointer;
+            user-select: none;
+        }
+        .knowledge-card .kc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #0f172a;
+            font-size: 15px;
+        }
+        .knowledge-card .kc-header .arrow {
+            transition: transform 0.25s;
+            font-size: 18px;
+        }
+        .knowledge-card .kc-header .arrow.collapsed {
+            transform: rotate(-90deg);
+        }
+        .knowledge-card .kc-body {
+            margin-top: 10px;
+            font-size: 14px;
+            line-height: 1.8;
+            color: #1e293b;
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.25s ease;
+            max-height: 1200px;
+            opacity: 1;
+        }
+        .knowledge-card .kc-body.hidden {
+            max-height: 0;
+            opacity: 0;
+            margin-top: 0;
+        }
+        .knowledge-card .kc-body .example {
+            background: #fff;
+            padding: 8px 12px;
+            border-radius: 10px;
+            margin: 6px 0 2px;
+            border: 1px solid #e2e8f0;
+            font-size: 15px;
+        }
+        .knowledge-card .kc-body .example .tag {
+            display: inline-block;
+            background: #dbeafe;
+            font-size: 12px;
+            padding: 0 10px;
+            border-radius: 20px;
+            color: #1d4ed8;
+        }
+        .knowledge-card .kc-body ul {
+            padding-left: 20px;
+            margin: 4px 0;
+        }
+        .knowledge-card .kc-body ul li {
+            margin-bottom: 2px;
+        }
+        .knowledge-card .kc-body mjx-container {
+            display: inline-block !important;
+            vertical-align: middle !important;
+        }
+        .progress-wrap {
+            background: #e2e8f0;
+            height: 6px;
+            border-radius: 10px;
+            margin: 10px 0 6px;
+            overflow: hidden;
+        }
+        .progress-wrap .fill {
+            height: 100%;
+            background: #3b82f6;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .progress-label {
+            font-size: 13px;
+            color: #64748b;
+            text-align: right;
+        }
+        .question-item {
+            background: #f8fafc;
+            border-radius: 18px;
+            padding: 16px 16px 14px;
+            margin-top: 18px;
+            border-left: 4px solid #94a3b8;
+            transition: border-color 0.2s;
+        }
+        .question-item.correct {
+            border-left-color: #22c55e;
+        }
+        .question-item.wrong {
+            border-left-color: #ef4444;
+        }
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+            gap: 4px 8px;
+        }
+        .q-header .q-label {
+            font-weight: 600;
+            font-size: 15px;
+            color: #0f172a;
+        }
+        .q-header .difficulty {
+            font-size: 12px;
+            padding: 1px 12px;
+            border-radius: 30px;
+            background: #e2e8f0;
+            color: #475569;
+            font-weight: 500;
+        }
+        .q-header .difficulty.easy {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .q-header .difficulty.medium {
+            background: #fef9c3;
+            color: #854d0e;
+        }
+        .q-header .difficulty.hard {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .q-text {
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 2.2;
+            margin-bottom: 12px;
+        }
+        .q-text mjx-container {
+            display: inline-block !important;
+            vertical-align: middle !important;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #fff;
+            padding: 10px 14px;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.15s;
+            cursor: pointer;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+        .options label:active {
+            background: #f1f5f9;
+        }
+        .options label mjx-container {
+            display: inline-block !important;
+            vertical-align: middle !important;
+        }
+        .options input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #2563eb;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .options label.disabled {
+            opacity: 0.7;
+            cursor: default;
+        }
+        .options label.disabled:active {
+            background: #fff;
+        }
+        .feedback {
+            margin-top: 14px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            font-size: 14px;
+            display: none;
+            line-height: 1.8;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback.correct {
+            background: #dcfce7;
+            color: #166534;
+            border-left: 4px solid #22c55e;
+        }
+        .feedback.wrong {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid #ef4444;
+        }
+        .feedback .explain {
+            margin-top: 6px;
+            background: #f1f5f9;
+            padding: 8px 12px;
+            border-radius: 10px;
+            color: #1e293b;
+            font-size: 14px;
+        }
+        .feedback .explain .skill {
+            display: inline-block;
+            background: #fef08a;
+            padding: 1px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            margin-right: 4px;
+        }
+        .feedback .explain mjx-container {
+            display: inline-block !important;
+            vertical-align: middle !important;
+        }
+        .reset-area {
+            text-align: center;
+            margin-top: 28px;
+        }
+        .btn-reset {
+            background: transparent;
+            border: 1px solid #cbd5e1;
+            padding: 8px 32px;
+            border-radius: 40px;
+            color: #475569;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-reset:active {
+            background: #f1f5f9;
+        }
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="header">
+            <h1>📐 函数专题 · 奇偶性 <small>10题</small></h1>
+            <div class="sub">奇函数 · 偶函数 · 图像对称性</div>
+            <a class="back-link" href="../index.html">← 返回工具箱</a>
+        </div>
+        <div id="panelContainer"></div>
+        <div class="reset-area">
+            <button class="btn-reset" id="resetBtn">⟳ 重置进度</button>
+        </div>
+        <div class="footer">内容来自 B站 @一数 · 不涉及对数</div>
+    </div>
+    <script>
+        (function() {
+            var TOTAL_QS = 10;
+            var MODULE_ID = '17_function_parity';
+
+            var levelData = {
+                knowledge: {
+                    title: '📖 奇偶性核心',
+                    points: [
+                        '① 奇函数：$f(-x)=-f(x)$，图像关于原点对称，若在 $0$ 处有定义则 $f(0)=0$',
+                        '② 偶函数：$f(-x)=f(x)$，图像关于 $y$ 轴对称',
+                        '③ 常见结论：奇函数 $+$ 奇函数 $=$ 奇函数；偶函数 $+$ 偶函数 $=$ 偶函数'
+                    ],
+                    example: '$f(x)=x^3+2x$，$f(-x)=-x^3-2x=-f(x)$，为奇函数'
+                },
+                questions: [{
+                    q: '$f(x)=x^3+2x$ 的奇偶性为？',
+                    options: ['偶函数', '奇函数', '非奇非偶', '既奇又偶'],
+                    correct: 1,
+                    difficulty: 'easy',
+                    explain: '【技巧】$f(-x)=(-x)^3+2(-x)=-x^3-2x=-(x^3+2x)=-f(x)$，为奇函数，选B。'
+                }, {
+                    q: '$f(x)=x^4+3x^2+1$ 的奇偶性为？',
+                    options: ['奇函数', '非奇非偶', '偶函数', '既奇又偶'],
+                    correct: 2,
+                    difficulty: 'easy',
+                    explain: '【技巧】$f(-x)=x^4+3x^2+1=f(x)$，所有项都是偶次幂，选C。'
+                }, {
+                    q: '$f(x)=x^2+x$ 的奇偶性为？',
+                    options: ['奇函数', '偶函数', '既奇又偶', '非奇非偶'],
+                    correct: 3,
+                    difficulty: 'easy',
+                    explain: '【技巧】$f(-x)=x^2-x$，既不等于 $f(x)$ 也不等于 $-f(x)$，选D。'
+                }, {
+                    q: '$f(x)=x^2+(a-1)x$ 是偶函数，则 $a =$ ？',
+                    options: ['$0$', '$-1$', '$1$', '$2$'],
+                    correct: 2,
+                    difficulty: 'medium',
+                    explain: '【技巧】偶函数的一次项系数必须为 $0$：$a-1=0 \\rightarrow a=1$，选C。'
+                }, {
+                    q: '$f(x)=ax^3+bx+1$，$f(2)=5$，则 $f(-2) =$ ？',
+                    options: ['$-5$', '$3$', '$-3$', '$5$'],
+                    correct: 2,
+                    difficulty: 'medium',
+                    explain: '【技巧】令 $g(x)=f(x)-1=ax^3+bx$，$g$ 为奇函数。$g(2)=f(2)-1=4$，$g(-2)=-4$，$f(-2)=g(-2)+1=-3$，选C。'
+                }, {
+                    q: '$f(x)$ 为奇函数，$g(x)$ 为偶函数，$f(x)+g(x)=x^2+x$，则 $f(x) =$ ？',
+                    options: ['$x^2$', '$x^2+x$', '$x$', '$x^2-x$'],
+                    correct: 2,
+                    difficulty: 'medium',
+                    explain: '【技巧】用 $-x$ 代入：$-f(x)+g(x)=x^2-x$，与原式相减得 $2f(x)=2x \\rightarrow f(x)=x$，选C。'
+                }, {
+                    q: '$f(x)=\\sqrt{x^2-1}+\\sqrt{1-x^2}$ 的奇偶性为？',
+                    options: ['奇函数', '非奇非偶', '既奇又偶', '偶函数'],
+                    correct: 3,
+                    difficulty: 'medium',
+                    explain: '【技巧】定义域为 $\\{-1, 1\\}$，且 $f(-x)=f(x)$，为偶函数，选D。'
+                }, {
+                    q: '$f(x)$ 是 $\\mathbb{R}$ 上的奇函数，$x>0$ 时 $f(x)=x^2-2x$，则 $f(-1) =$ ？',
+                    options: ['$-1$', '$3$', '$-3$', '$1$'],
+                    correct: 3,
+                    difficulty: 'hard',
+                    explain: '【技巧】$f(1)=1^2-2=-1$，奇函数 $f(-1)=-f(1)=1$，选D。'
+                }, {
+                    q: '$f(x)$ 是偶函数，$x\\ge0$ 时 $f(x)=x(2-x)$，则 $f(-1) =$ ？',
+                    options: ['$-1$', '$3$', '$1$', '$-3$'],
+                    correct: 2,
+                    difficulty: 'hard',
+                    explain: '【技巧】$f(1)=1\\times(2-1)=1$，偶函数 $f(-1)=f(1)=1$，选C。'
+                }, {
+                    q: '$f(x)$ 是 $\\mathbb{R}$ 上的奇函数，$f(x+2)=f(x)$，$f(1)=2$，则 $f(3) =$ ？',
+                    options: ['$-2$', '$0$', '$1$', '$2$'],
+                    correct: 3,
+                    difficulty: 'hard',
+                    explain: '【技巧】周期 $2$，$f(3)=f(1)=2$，选D。'
+                }]
+            };
+
+            var status = { answers: Array(TOTAL_QS).fill(null) };
+            var panelContainer = document.getElementById('panelContainer');
+
+            function getProgress() {
+                var correct = status.answers.filter(function(a) { return a === true; }).length;
+                return (correct / TOTAL_QS) * 100;
+            }
+
+            function getScoreStr() {
+                var correct = status.answers.filter(function(a) { return a === true; }).length;
+                return correct + '/' + TOTAL_QS;
+            }
+
+            function isAllCorrect() {
+                return status.answers.every(function(a) { return a === true; });
+            }
+
+            function syncStorage() {
+                try {
+                    var completed = JSON.parse(localStorage.getItem('dongdong_modules') || '[]');
+                    if (isAllCorrect()) {
+                        if (!completed.includes(MODULE_ID)) {
+                            completed.push(MODULE_ID);
+                            localStorage.setItem('dongdong_modules', JSON.stringify(completed));
+                        }
+                    } else {
+                        var idx = completed.indexOf(MODULE_ID);
+                        if (idx !== -1) {
+                            completed.splice(idx, 1);
+                            localStorage.setItem('dongdong_modules', JSON.stringify(completed));
+                        }
+                    }
+                } catch (e) {}
+            }
+
+            function render() {
+                var html = '';
+                var kc = levelData.knowledge;
+
+                html += '<div class="knowledge-card" data-kc="0">' +
+                    '<div class="kc-header"><span>' + kc.title + '</span><span class="arrow" id="kcArrow">▼</span></div>' +
+                    '<div class="kc-body" id="kcBody"><ul>';
+                kc.points.forEach(function(p) { html += '<li>' + p + '</li>'; });
+                html += '</ul><div class="example"><span class="tag">例</span> ' + kc.example + '</div></div></div>';
+
+                var progress = getProgress();
+                html += '<div class="progress-wrap"><div class="fill" style="width:' + progress +
+                '%;"></div></div>';
+                html += '<div class="progress-label">' + getScoreStr() + ' 题通过</div>';
+
+                levelData.questions.forEach(function(q, qIdx) {
+                    var answer = status.answers[qIdx];
+                    var isCorrect = (answer === true);
+                    var isWrong = (answer === false);
+                    var isAnswered = (answer !== null);
+                    var itemClass = 'question-item';
+                    if (isCorrect) itemClass += ' correct';
+                    else if (isWrong) itemClass += ' wrong';
+                    var diffMap = { easy: '⭐ 基础', medium: '⭐⭐ 中档', hard: '⭐⭐⭐ 拔高' };
+                    var diffLabel = diffMap[q.difficulty] || '';
+                    html += '<div class="' + itemClass + '" data-qidx="' + qIdx + '">';
+                    html += '<div class="q-header"><span class="q-label">第 ' + (qIdx + 1) +
+                        ' 题</span><span class="difficulty ' + q.difficulty + '">' + diffLabel + '</span></div>';
+                    html += '<div class="q-text">' + q.q + '</div><div class="options">';
+                    q.options.forEach(function(opt, oIdx) {
+                        var checked = (isAnswered && q.correct === oIdx) ? 'checked' : '';
+                        var disabled = isAnswered ? 'disabled' : '';
+                        var labelClass = isAnswered ? 'disabled' : '';
+                        html += '<label class="' + labelClass + '"><input type="radio" name="q' + qIdx +
+                            '" value="' + oIdx + '" ' + checked + ' ' + disabled +
+                            ' data-q="' + qIdx + '" data-opt="' + oIdx + '">' +
+                            String.fromCharCode(65 + oIdx) + '. ' + opt + '</label>';
+                    });
+                    html += '</div>';
+                    var feedbackClass = 'feedback';
+                    var showClass = '';
+                    var correctText = '';
+                    var explainHtml = '';
+                    if (isAnswered) {
+                        showClass = 'show';
+                        if (isCorrect) { feedbackClass += ' correct';
+                            correctText = '✅ 正确！'; } else { feedbackClass += ' wrong';
+                            correctText = '❌ 再想想'; }
+                        var explainText = q.explain || '';
+                        explainText = explainText.replace(/【技巧】/g, '<span class="skill">【技巧】</span>');
+                        explainHtml = '<div class="explain">' + explainText + '</div>';
+                    }
+                    html += '<div class="' + feedbackClass + ' ' + showClass + '">' + correctText + explainHtml +
+                        '</div></div>';
+                });
+
+                panelContainer.innerHTML = html;
+
+                var card = document.querySelector('.knowledge-card');
+                if (card) {
+                    card.addEventListener('click', function() {
+                        var body = document.getElementById('kcBody');
+                        var arrow = document.getElementById('kcArrow');
+                        if (body && arrow) { body.classList.toggle('hidden');
+                            arrow.classList.toggle('collapsed'); }
+                    });
+                }
+
+                document.querySelectorAll('.options input[type="radio"]:not([disabled])').forEach(function(radio) {
+                    radio.addEventListener('change', function() {
+                        var qIdx = parseInt(this.dataset.q, 10);
+                        var optIdx = parseInt(this.dataset.opt, 10);
+                        if (isNaN(qIdx) || isNaN(optIdx)) return;
+                        if (status.answers[qIdx] !== null) return;
+                        var correct = levelData.questions[qIdx].correct;
+                        status.answers[qIdx] = (optIdx === correct);
+                        syncStorage();
+                        render();
+                        if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+                    });
+                });
+            }
+
+            function resetAll() {
+                if (confirm('重置本模块进度？')) {
+                    status.answers = Array(TOTAL_QS).fill(null);
+                    try {
+                        var completed = JSON.parse(localStorage.getItem('dongdong_modules') || '[]');
+                        var idx = completed.indexOf(MODULE_ID);
+                        if (idx !== -1) { completed.splice(idx, 1);
+                            localStorage.setItem('dongdong_modules', JSON.stringify(completed)); }
+                    } catch (e) {}
+                    render();
+                    if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+                }
+            }
+
+            document.getElementById('resetBtn').addEventListener('click', resetAll);
+            render();
+            if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); }
+        })();
+    </script>
+</body>
+</html>
